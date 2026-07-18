@@ -75,12 +75,6 @@
     min-width: 8px;
   }
 
-  /* The search input grows to fill the row itself once present, so the spacer only needs to
-     hold a small gap rather than compete with it for the remaining width. */
-  &__toolbar-row:has(&__search-input) &__toolbar-spacer {
-    flex-grow: 0;
-  }
-
   &__filter-toggle.uikit-button--active {
     --uikit-btn-bg: var(--uikit-color-primary-soft);
     --uikit-btn-bg-hover: var(--uikit-color-primary-soft);
@@ -142,7 +136,9 @@
   /* ---- search ---- */
 
   &__search-input {
-    flex: 1 1 12rem;
+    /* Fixed comfortable width — the spacer absorbs the remaining row. */
+    flex: 0 1 22rem;
+    width: 22rem;
     min-width: 12rem;
     height: var(--uikit-control-h-md);
     padding: 0 var(--uikit-control-pad-x);
