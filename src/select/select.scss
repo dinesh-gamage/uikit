@@ -1,3 +1,5 @@
+@use '../styles/control' as *;
+
 .uikit-select {
   position: relative;
   display: inline-flex;
@@ -23,18 +25,11 @@
     min-width: 0;
     min-height: var(--uikit-control-h-md);
     padding: 3px var(--uikit-control-pad-x);
-    background: var(--uikit-bg);
-    border: 1px solid var(--uikit-border);
-    border-radius: var(--uikit-radius);
     color: var(--uikit-text);
     font-size: var(--uikit-text-md);
     cursor: pointer;
     user-select: none;
     outline: none;
-    transition:
-      border-color var(--uikit-speed) var(--uikit-ease),
-      box-shadow var(--uikit-speed) var(--uikit-ease),
-      background var(--uikit-speed) var(--uikit-ease);
 
     &:hover {
       border-color: var(--uikit-border-strong);
@@ -44,6 +39,13 @@
       border-color: var(--uikit-color-primary);
       box-shadow: var(--uikit-focus-ring);
     }
+
+    @include control-box;
+
+    transition:
+      border-color var(--uikit-speed) var(--uikit-ease),
+      box-shadow var(--uikit-speed) var(--uikit-ease),
+      background var(--uikit-speed) var(--uikit-ease);
   }
 
   &--sm &__trigger {
@@ -119,17 +121,6 @@
       background: var(--uikit-bg-muted);
       color: var(--uikit-text);
     }
-  }
-
-  &__chevron {
-    flex: none;
-    display: inline-flex;
-    color: var(--uikit-text-muted);
-    transition: transform var(--uikit-speed) var(--uikit-ease);
-  }
-
-  &--open &__chevron {
-    transform: rotate(180deg);
   }
 
   /* Pills inside the MultiSelect trigger */

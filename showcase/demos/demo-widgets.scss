@@ -88,3 +88,56 @@
     box-shadow: 0 0 0 2px var(--uikit-color-primary);
   }
 }
+
+.sc-dropdown-scroll {
+  height: 400px;
+  width: 100%;
+  max-width: 480px;
+  overflow: auto;
+  border: 1px dashed var(--uikit-border);
+  border-radius: var(--uikit-radius);
+  padding: 16px;
+
+  &__spacer {
+    height: 280px;
+    color: var(--uikit-text-faint);
+    font-size: var(--uikit-text-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+.sc-dropdown-trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid var(--uikit-border);
+  background: var(--uikit-bg);
+  color: var(--uikit-text);
+  border-radius: var(--uikit-radius);
+  padding: 8px 14px;
+  font-size: var(--uikit-text-md);
+  cursor: pointer;
+}
+
+.sc-dropdown-panel {
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+
+  &__item {
+    border: none;
+    background: none;
+    color: var(--uikit-text);
+    text-align: left;
+    padding: 7px 10px;
+    border-radius: var(--uikit-radius-sm);
+    font-size: var(--uikit-text-md);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--uikit-bg-subtle);
+    }
+  }
+}

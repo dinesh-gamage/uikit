@@ -22,44 +22,6 @@
     min-width: 0;
   }
 
-  &__breadcrumb {
-    display: flex;
-    align-items: center;
-    flex-wrap: wrap;
-    font-size: var(--uikit-text-sm);
-    color: var(--uikit-text-muted);
-  }
-
-  &__crumb-item {
-    display: inline-flex;
-    align-items: center;
-  }
-
-  &__crumb {
-    color: var(--uikit-text-muted);
-
-    &--link {
-      appearance: none;
-      background: none;
-      border: 0;
-      padding: 0;
-      margin: 0;
-      font: inherit;
-      color: var(--uikit-text-muted);
-      cursor: pointer;
-
-      &:hover {
-        color: var(--uikit-color-primary);
-        text-decoration: underline;
-      }
-    }
-  }
-
-  &__crumb-sep {
-    margin: 0 6px;
-    color: var(--uikit-text-faint);
-  }
-
   &__title {
     margin: 0;
     font-size: 20px;
@@ -343,64 +305,10 @@
     }
   }
 
-  /* ---- pagination ---- */
+  /* ---- pagination (styling lives in Pagination itself; just spacing here) ---- */
 
   &__pagination {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 12px;
     padding-top: 10px;
-    font-size: var(--uikit-text-sm);
-    color: var(--uikit-text-muted);
-  }
-
-  &__pagination-controls {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-
-  &__page-size {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-
-    select {
-      font: inherit;
-      font-size: var(--uikit-text-sm);
-      color: var(--uikit-text);
-      background: var(--uikit-bg);
-      border: 1px solid var(--uikit-border);
-      border-radius: var(--uikit-radius-sm);
-      height: var(--uikit-control-h-sm);
-      padding: 0 6px;
-      cursor: pointer;
-    }
-  }
-
-  &__page-btn {
-    appearance: none;
-    font: inherit;
-    font-size: var(--uikit-text-lg);
-    line-height: 1;
-    color: var(--uikit-text);
-    background: var(--uikit-bg);
-    border: 1px solid var(--uikit-border);
-    border-radius: var(--uikit-radius-sm);
-    width: var(--uikit-control-h-sm);
-    height: var(--uikit-control-h-sm);
-    cursor: pointer;
-    transition: background var(--uikit-speed) var(--uikit-ease);
-
-    &:hover:not(:disabled) {
-      background: var(--uikit-bg-subtle);
-    }
-
-    &:disabled {
-      color: var(--uikit-text-faint);
-      cursor: default;
-    }
   }
 
   /* ---- infinite mode ---- */

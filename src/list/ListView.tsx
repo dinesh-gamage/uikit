@@ -12,6 +12,8 @@ import { cx } from '../utils/cx';
 import { Skeleton } from '../skeleton';
 import { Spinner } from '../spinner';
 import { InfoCard, type InfoField } from '../info-card';
+import { Pagination } from '../pagination';
+import { Breadcrumb } from '../breadcrumb';
 import { applyQuery, applySort, paginate, type ListSort } from './list-utils';
 import './list.scss';
 
@@ -294,8 +296,6 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
   const showLoadMore = loading && paginationMode === 'infinite' && page > 1;
   const showProgress = loading && hasLoaded && !showLoadMore;
   const colCount = columns.length + (selectable ? 1 : 0);
-  const rangeStart = total === 0 ? 0 : (page - 1) * pageSize + 1;
-  const rangeEnd = Math.min(page * pageSize, total);
   const rowsClickable = !!(onRowClick || detailsPanel);
 
   const defaultCell = (value: unknown): ReactNode => (value == null ? '—' : (value as ReactNode));
@@ -354,22 +354,10 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
         <div className="uikit-list__head">
           <div className="uikit-list__head-main">
             {breadcrumb && breadcrumb.length > 0 && (
-              <nav className="uikit-list__breadcrumb" aria-label="Breadcrumb">
-                {breadcrumb.map((crumb, i) => (
-                  <span className="uikit-list__crumb-item" key={i}>
-                    {crumb.onClick ? (
-                      <button type="button" className="uikit-list__crumb uikit-list__crumb--link" onClick={crumb.onClick}>
-                        {crumb.label}
-                      </button>
-                    ) : (
-                      <span className="uikit-list__crumb">{crumb.label}</span>
-                    )}
-                    {i < breadcrumb.length - 1 && (
-                      <span className="uikit-list__crumb-sep" aria-hidden="true">/</span>
-                    )}
-                  </span>
-                ))}
-              </nav>
+              <Breadcrumb
+                className="uikit-list__breadcrumb"
+                items={breadcrumb.map((crumb) => ({ label: crumb.label, onClick: crumb.onClick }))}
+              />
             )}
             {title != null && <h2 className="uikit-list__title">{title}</h2>}
           </div>
@@ -489,49 +477,19 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
           )}
 
           {paginationMode === 'paged' && error == null && (
-            <div className="uikit-list__pagination">
-              <span className="uikit-list__range">
-                {total === 0 ? '0 of 0' : `${rangeStart}–${rangeEnd} of ${total}`}
-              </span>
-              <div className="uikit-list__pagination-controls">
-                {allowPageSizeChange && (
-                  <label className="uikit-list__page-size">
-                    <span>Rows</span>
-                    <select
-                      value={pageSize}
-                      onChange={(e) => {
-                        setPageSize(Number(e.target.value));
-                        setPage(1);
-                      }}
-                    >
-                      {PAGE_SIZE_OPTIONS.map((n) => (
-                        <option key={n} value={n}>
-                          {n}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                )}
-                <button
-                  type="button"
-                  className="uikit-list__page-btn"
-                  disabled={page <= 1}
-                  onClick={() => setPage((p) => p - 1)}
-                  aria-label="Previous page"
-                >
-                  ‹
-                </button>
-                <button
-                  type="button"
-                  className="uikit-list__page-btn"
-                  disabled={rangeEnd >= total}
-                  onClick={() => setPage((p) => p + 1)}
-                  aria-label="Next page"
-                >
-                  ›
-                </button>
-              </div>
-            </div>
+            <Pagination
+              className="uikit-list__pagination"
+              page={page}
+              pageSize={pageSize}
+              total={total}
+              onPageChange={setPage}
+              onPageSizeChange={(size) => {
+                setPageSize(size);
+                setPage(1);
+              }}
+              pageSizeOptions={PAGE_SIZE_OPTIONS}
+              allowPageSizeChange={allowPageSizeChange}
+            />
           )}
 
           {paginationMode === 'infinite' && error == null && (

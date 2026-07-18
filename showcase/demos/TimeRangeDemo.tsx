@@ -12,7 +12,7 @@ function StatefulTimeRangePicker(props: Omit<TimeRangePickerProps, 'start' | 'en
 const demo: DemoDef = {
   title: 'Time Range',
   description:
-    'From/To time editors ("HH:mm" strings) in a popover with a Done button. A backwards range auto-swaps on Done. The step control sets the minute stepper increment.',
+    'From/To time editors ("HH:mm" strings) in a dropdown with a Done button. A backwards range auto-swaps on Done. The step control sets the minute stepper increment.',
   controls: [
     { type: 'number', name: 'step', defaultValue: 15, min: 1, max: 60 },
     { type: 'text', name: 'label', defaultValue: 'Working hours' },

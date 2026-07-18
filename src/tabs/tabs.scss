@@ -1,0 +1,186 @@
+.uikit-tabs {
+  display: flex;
+  flex-direction: column;
+  font-family: var(--uikit-font);
+  min-width: 0;
+  /* Fill the parent so shrink-to-fit flex parents can't feed the overflow
+     measurement its own collapsed width back (death-spiral to one tab). */
+  width: 100%;
+  align-self: stretch;
+
+  &--sm {
+    --uikit-tabs-h: 30px;
+    --uikit-tabs-pad-x: 10px;
+    --uikit-tabs-font: var(--uikit-text-sm);
+  }
+
+  &--md {
+    --uikit-tabs-h: 36px;
+    --uikit-tabs-pad-x: 12px;
+    --uikit-tabs-font: var(--uikit-text-md);
+  }
+}
+
+.uikit-tabs__header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+  border-bottom: 1px solid var(--uikit-border);
+}
+
+.uikit-tabs--pills .uikit-tabs__header {
+  border-bottom: none;
+  padding-bottom: 2px;
+}
+
+.uikit-tabs__list {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.uikit-tabs__right {
+  flex: none;
+  display: flex;
+  align-items: center;
+  margin-left: auto;
+}
+
+.uikit-tabs__tab,
+.uikit-tabs__more {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  height: var(--uikit-tabs-h);
+  padding: 0 var(--uikit-tabs-pad-x);
+  border: none;
+  background: transparent;
+  color: var(--uikit-text-muted);
+  font: inherit;
+  font-size: var(--uikit-tabs-font);
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    color var(--uikit-speed) var(--uikit-ease),
+    background var(--uikit-speed) var(--uikit-ease),
+    border-color var(--uikit-speed) var(--uikit-ease);
+
+  &:hover:not(:disabled) {
+    color: var(--uikit-text);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--uikit-focus-ring);
+    border-radius: var(--uikit-radius-sm);
+  }
+
+  &:disabled {
+    color: var(--uikit-text-faint);
+    cursor: not-allowed;
+  }
+}
+
+.uikit-tabs--underline .uikit-tabs__tab {
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+
+  &--active {
+    color: var(--uikit-color-primary);
+    border-bottom-color: var(--uikit-color-primary);
+  }
+}
+
+.uikit-tabs--pills .uikit-tabs__tab {
+  border-radius: var(--uikit-radius-full);
+
+  &--active {
+    color: var(--uikit-color-primary);
+    background: var(--uikit-color-primary-soft);
+  }
+}
+
+.uikit-tabs__icon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.uikit-tabs__badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--uikit-radius-full);
+  background: var(--uikit-bg-muted);
+  color: var(--uikit-text-muted);
+  font-size: var(--uikit-text-xs);
+  font-weight: 600;
+}
+
+.uikit-tabs__tab--active .uikit-tabs__badge {
+  background: var(--uikit-color-primary-soft);
+  color: var(--uikit-color-primary);
+}
+
+.uikit-tabs__more-wrap {
+  display: inline-flex;
+}
+
+.uikit-tabs__measure {
+  position: absolute;
+  visibility: hidden;
+  pointer-events: none;
+  top: -9999px;
+  left: -9999px;
+  display: flex;
+  gap: 4px;
+  white-space: nowrap;
+}
+
+.uikit-tabs__menu {
+  display: flex;
+  flex-direction: column;
+  padding: 4px;
+  min-width: 0;
+}
+
+.uikit-tabs__menu-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 10px;
+  border: none;
+  border-radius: var(--uikit-radius-sm);
+  background: transparent;
+  color: var(--uikit-text);
+  font: inherit;
+  font-size: var(--uikit-text-sm);
+  text-align: left;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--uikit-bg-subtle);
+  }
+
+  &:disabled {
+    color: var(--uikit-text-faint);
+    cursor: not-allowed;
+  }
+
+  &--active {
+    color: var(--uikit-color-primary);
+    font-weight: 600;
+  }
+}
+
+.uikit-tabs__panel {
+  padding-top: 12px;
+  color: var(--uikit-text);
+}

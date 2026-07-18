@@ -2,7 +2,7 @@ import { useId, useRef, useState } from 'react';
 import { cx } from '../utils/cx';
 import type { FieldBaseProps } from '../types';
 import { Field } from '../field/Field';
-import { Popover } from '../popover/Popover';
+import { Dropdown } from '../dropdown';
 import { TimeField } from './TimeField';
 import { CrossGlyph, ClockGlyph } from './glyphs';
 import './datetime.scss';
@@ -108,7 +108,7 @@ export function TimeRangePicker({
           </button>
         )}
       </div>
-      <Popover open={open && !disabled} anchorRef={anchorRef} onClose={() => setOpen(false)}>
+      <Dropdown open={open && !disabled} anchorRef={anchorRef} onClose={() => setOpen(false)}>
         <div className="uikit-datetime-panel">
           <div className="uikit-datetime-panel__time">
             <TimeField label="From" value={draftStart} onChange={setDraftStart} hourCycle={hourCycle} minuteStep={step} />
@@ -120,7 +120,7 @@ export function TimeRangePicker({
             </button>
           </div>
         </div>
-      </Popover>
+      </Dropdown>
     </Field>
   );
 }

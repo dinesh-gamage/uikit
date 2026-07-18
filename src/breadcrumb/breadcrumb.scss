@@ -1,0 +1,134 @@
+.uikit-breadcrumb {
+  font-family: var(--uikit-font);
+  font-size: var(--uikit-text-sm);
+  color: var(--uikit-text-muted);
+
+  &__list {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  &__item {
+    display: inline-flex;
+    align-items: center;
+    min-width: 0;
+  }
+
+  &__crumb {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 220px;
+    color: var(--uikit-text-muted);
+    text-decoration: none;
+    border-radius: var(--uikit-radius-sm);
+
+    &--link {
+      appearance: none;
+      background: none;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      cursor: pointer;
+    }
+
+    &:hover:not(&--current) {
+      color: var(--uikit-color-primary);
+      text-decoration: underline;
+    }
+
+    &--current {
+      color: var(--uikit-text);
+      font-weight: 600;
+      cursor: default;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+  &__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__icon {
+    display: inline-flex;
+    flex: none;
+  }
+
+  &__sep {
+    display: inline-flex;
+    align-items: center;
+    margin: 0 4px;
+    color: var(--uikit-text-faint);
+  }
+
+  &__ellipsis {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    padding: 0;
+    border: 0;
+    border-radius: var(--uikit-radius-sm);
+    background: none;
+    color: var(--uikit-text-muted);
+    font-size: var(--uikit-text-md);
+    line-height: 1;
+    cursor: pointer;
+    transition:
+      background var(--uikit-speed) var(--uikit-ease),
+      color var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      background: var(--uikit-bg-muted);
+      color: var(--uikit-text);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+  &__menu {
+    display: flex;
+    flex-direction: column;
+    padding: 4px;
+  }
+
+  &__menu-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 10px;
+    border: 0;
+    border-radius: var(--uikit-radius-sm);
+    background: none;
+    color: var(--uikit-text);
+    font: inherit;
+    font-size: var(--uikit-text-sm);
+    text-align: left;
+    text-decoration: none;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--uikit-bg-subtle);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+}

@@ -1,0 +1,145 @@
+.uikit-button {
+  --uikit-btn-bg: var(--uikit-color-primary);
+  --uikit-btn-bg-hover: var(--uikit-color-primary-hover);
+  --uikit-btn-color: var(--uikit-text-on-primary);
+  --uikit-btn-border: var(--uikit-btn-bg);
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  appearance: none;
+  font: inherit;
+  font-family: var(--uikit-font);
+  font-weight: 500;
+  border-radius: var(--uikit-radius);
+  border: 1px solid var(--uikit-btn-border);
+  background: var(--uikit-btn-bg);
+  color: var(--uikit-btn-color);
+  cursor: pointer;
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition:
+    background var(--uikit-speed) var(--uikit-ease),
+    border-color var(--uikit-speed) var(--uikit-ease),
+    color var(--uikit-speed) var(--uikit-ease),
+    opacity var(--uikit-speed) var(--uikit-ease),
+    filter var(--uikit-speed) var(--uikit-ease);
+
+  &:hover:not(:disabled) {
+    background: var(--uikit-btn-bg-hover);
+    border-color: var(--uikit-btn-bg-hover);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--uikit-focus-ring);
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.55;
+  }
+
+  &--active:not(:disabled) {
+    filter: brightness(0.94);
+  }
+
+  &--full-width {
+    width: 100%;
+  }
+
+  /* ---- sizes ---- */
+
+  &--sm {
+    height: var(--uikit-control-h-sm);
+    padding: 0 12px;
+    font-size: var(--uikit-text-sm);
+    gap: 5px;
+  }
+
+  &--md {
+    height: var(--uikit-control-h-md);
+    padding: 0 16px;
+    font-size: var(--uikit-text-md);
+  }
+
+  &--lg {
+    height: var(--uikit-control-h-lg);
+    padding: 0 20px;
+    font-size: var(--uikit-text-lg);
+    gap: 7px;
+  }
+
+  &--icon-only {
+    padding: 0;
+    flex: none;
+
+    &.uikit-button--sm {
+      width: var(--uikit-control-h-sm);
+    }
+
+    &.uikit-button--md {
+      width: var(--uikit-control-h-md);
+    }
+
+    &.uikit-button--lg {
+      width: var(--uikit-control-h-lg);
+    }
+  }
+
+  /* ---- variants ---- */
+
+  &--secondary {
+    --uikit-btn-bg: var(--uikit-bg);
+    --uikit-btn-bg-hover: var(--uikit-bg-subtle);
+    --uikit-btn-color: var(--uikit-text);
+    --uikit-btn-border: var(--uikit-border-strong);
+  }
+
+  &--danger {
+    --uikit-btn-bg: var(--uikit-color-danger);
+    --uikit-btn-bg-hover: var(--uikit-color-danger);
+    --uikit-btn-color: var(--uikit-text-on-primary);
+    --uikit-btn-border: var(--uikit-color-danger);
+
+    &:hover:not(:disabled) {
+      filter: brightness(0.92);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 3px var(--uikit-color-danger-soft), 0 0 0 1px var(--uikit-color-danger);
+    }
+  }
+
+  &--ghost {
+    --uikit-btn-bg: transparent;
+    --uikit-btn-bg-hover: var(--uikit-bg-muted);
+    --uikit-btn-color: var(--uikit-text);
+    --uikit-btn-border: transparent;
+  }
+
+  &--link {
+    --uikit-btn-bg: transparent;
+    --uikit-btn-bg-hover: transparent;
+    --uikit-btn-color: var(--uikit-color-primary);
+    --uikit-btn-border: transparent;
+    height: auto;
+    padding: 0;
+
+    &:hover:not(:disabled) {
+      color: var(--uikit-color-primary-hover);
+      text-decoration: underline;
+    }
+  }
+
+  &__icon {
+    display: inline-flex;
+    flex: none;
+  }
+
+  &__label {
+    display: inline-flex;
+    align-items: center;
+  }
+}

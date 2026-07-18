@@ -2,7 +2,7 @@ import { useEffect, useId, useRef, useState } from 'react';
 import { cx } from '../utils/cx';
 import type { FieldBaseProps } from '../types';
 import { Field } from '../field/Field';
-import { Popover } from '../popover/Popover';
+import { Dropdown } from '../dropdown';
 import { Calendar } from './Calendar';
 import { formatDate, isAfterDay, isBeforeDay, parseDate } from './date-utils';
 import { CalendarGlyph, CrossGlyph } from './glyphs';
@@ -21,7 +21,7 @@ export interface DatePickerProps extends FieldBaseProps {
   clearable?: boolean;
   /** Allow typing a date directly; validated on blur/Enter, invalid input reverts. Default true. */
   typedInput?: boolean;
-  /** Close the popover after picking a day. Default true. */
+  /** Close the dropdown after picking a day. Default true. */
   closeOnSelect?: boolean;
 }
 
@@ -136,9 +136,9 @@ export function DatePicker({
           </button>
         )}
       </div>
-      <Popover open={open && !disabled} anchorRef={anchorRef} onClose={() => setOpen(false)}>
+      <Dropdown open={open && !disabled} anchorRef={anchorRef} onClose={() => setOpen(false)}>
         <Calendar value={value} onSelect={select} min={min} max={max} disabledDate={disabledDate} />
-      </Popover>
+      </Dropdown>
     </Field>
   );
 }

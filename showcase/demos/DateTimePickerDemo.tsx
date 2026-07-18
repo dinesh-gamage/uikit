@@ -10,7 +10,7 @@ function StatefulDateTimePicker(props: Omit<DateTimePickerProps, 'value' | 'onCh
 const demo: DemoDef = {
   title: 'DateTime Picker',
   description:
-    'Calendar plus a compact 24h time editor in one popover. Pick a day, adjust hours/minutes, then hit Done. The trigger shows the value as yyyy-MM-dd HH:mm.',
+    'Calendar plus a compact 24h time editor in one dropdown. Pick a day, adjust hours/minutes, then hit Done. The trigger shows the value as yyyy-MM-dd HH:mm.',
   controls: [
     { type: 'text', name: 'label', defaultValue: 'Due at' },
     { type: 'boolean', name: 'disabled', defaultValue: false },

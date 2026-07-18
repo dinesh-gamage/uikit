@@ -10,7 +10,7 @@ function StatefulDatePicker(props: Omit<DatePickerProps, 'value' | 'onChange'>) 
 const demo: DemoDef = {
   title: 'Date Picker',
   description:
-    'Controlled date input with a calendar popover. Type a date directly (validated on blur/Enter) or pick from the grid. Arrow keys move the focused day, PageUp/PageDown change month, Enter selects, Escape closes.',
+    'Controlled date input with a calendar dropdown. Type a date directly (validated on blur/Enter) or pick from the grid. Arrow keys move the focused day, PageUp/PageDown change month, Enter selects, Escape closes.',
   controls: [
     { type: 'text', name: 'label', defaultValue: 'Start date' },
     { type: 'select', name: 'size', options: ['sm', 'md', 'lg'], defaultValue: 'md' },

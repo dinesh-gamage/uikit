@@ -1,0 +1,77 @@
+.uikit-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  font-family: var(--uikit-font);
+  font-size: var(--uikit-text-sm);
+  color: var(--uikit-text-muted);
+
+  &--compact {
+    justify-content: flex-end;
+  }
+
+  &__range {
+    white-space: nowrap;
+  }
+
+  &__controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__page-size {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    select {
+      font: inherit;
+      font-size: var(--uikit-text-sm);
+      color: var(--uikit-text);
+      background: var(--uikit-bg);
+      border: 1px solid var(--uikit-border);
+      border-radius: var(--uikit-radius-sm);
+      height: var(--uikit-control-h-sm);
+      padding: 0 6px;
+      cursor: pointer;
+
+      &:focus-visible {
+        outline: none;
+        box-shadow: var(--uikit-focus-ring);
+      }
+    }
+  }
+
+  &__btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    appearance: none;
+    font: inherit;
+    color: var(--uikit-text);
+    background: var(--uikit-bg);
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius-sm);
+    width: var(--uikit-control-h-sm);
+    height: var(--uikit-control-h-sm);
+    padding: 0;
+    cursor: pointer;
+    transition: background var(--uikit-speed) var(--uikit-ease);
+
+    &:hover:not(:disabled) {
+      background: var(--uikit-bg-subtle);
+    }
+
+    &:disabled {
+      color: var(--uikit-text-faint);
+      cursor: default;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+}

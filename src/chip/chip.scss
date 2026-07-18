@@ -1,0 +1,170 @@
+.uikit-chip {
+  --uikit-chip-accent: var(--uikit-text-muted);
+  --uikit-chip-bg: var(--uikit-bg-muted);
+  --uikit-chip-color: var(--uikit-text);
+
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  appearance: none;
+  font: inherit;
+  font-family: var(--uikit-font);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  box-sizing: border-box;
+  border: 1px solid transparent;
+  border-radius: var(--uikit-radius-full);
+  background: var(--uikit-chip-bg);
+  color: var(--uikit-chip-color);
+  transition:
+    background var(--uikit-speed) var(--uikit-ease),
+    border-color var(--uikit-speed) var(--uikit-ease),
+    opacity var(--uikit-speed) var(--uikit-ease),
+    filter var(--uikit-speed) var(--uikit-ease);
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--uikit-focus-ring);
+  }
+
+  /* ---- sizes ---- */
+
+  &--sm {
+    height: 22px;
+    padding: 0 9px;
+    font-size: var(--uikit-text-xs);
+    gap: 4px;
+  }
+
+  &--md {
+    height: 26px;
+    padding: 0 11px;
+    font-size: var(--uikit-text-sm);
+  }
+
+  &--icon-only {
+    padding: 0;
+    justify-content: center;
+
+    &.uikit-chip--sm {
+      width: 22px;
+    }
+
+    &.uikit-chip--md {
+      width: 26px;
+    }
+  }
+
+  /* ---- tones (soft variant colors, reused as the outline accent) ---- */
+
+  &--neutral {
+    --uikit-chip-accent: var(--uikit-text-muted);
+    --uikit-chip-bg: var(--uikit-bg-muted);
+    --uikit-chip-color: var(--uikit-text);
+  }
+
+  &--primary {
+    --uikit-chip-accent: var(--uikit-color-primary);
+    --uikit-chip-bg: var(--uikit-color-primary-soft);
+    --uikit-chip-color: var(--uikit-color-primary);
+  }
+
+  &--success {
+    --uikit-chip-accent: var(--uikit-color-success);
+    --uikit-chip-bg: var(--uikit-color-success-soft);
+    --uikit-chip-color: var(--uikit-color-success);
+  }
+
+  &--warning {
+    --uikit-chip-accent: var(--uikit-color-warning);
+    --uikit-chip-bg: var(--uikit-color-warning-soft);
+    --uikit-chip-color: var(--uikit-color-warning);
+  }
+
+  &--danger {
+    --uikit-chip-accent: var(--uikit-color-danger);
+    --uikit-chip-bg: var(--uikit-color-danger-soft);
+    --uikit-chip-color: var(--uikit-color-danger);
+  }
+
+  &--info {
+    --uikit-chip-accent: var(--uikit-color-info);
+    --uikit-chip-bg: var(--uikit-color-info-soft);
+    --uikit-chip-color: var(--uikit-color-info);
+  }
+
+  /* ---- outline variant ---- */
+
+  &--outline {
+    background: var(--uikit-bg);
+    border-color: var(--uikit-chip-accent);
+    color: var(--uikit-chip-accent);
+
+    &.uikit-chip--neutral {
+      border-color: var(--uikit-border-strong);
+      color: var(--uikit-text);
+    }
+  }
+
+  /* ---- interaction states ---- */
+
+  &--clickable {
+    cursor: pointer;
+
+    &:hover:not(:disabled) {
+      filter: brightness(0.97);
+    }
+  }
+
+  &--disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  &__icon {
+    display: inline-flex;
+    flex: none;
+    font-size: 0;
+  }
+
+  &__label {
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__remove {
+    display: inline-flex;
+    flex: none;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    margin-left: 1px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: none;
+    color: inherit;
+    cursor: pointer;
+    opacity: 0.7;
+    transition:
+      opacity var(--uikit-speed) var(--uikit-ease),
+      background var(--uikit-speed) var(--uikit-ease);
+
+    &:hover:not(:disabled) {
+      opacity: 1;
+      background: rgba(127, 127, 127, 0.25);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+}

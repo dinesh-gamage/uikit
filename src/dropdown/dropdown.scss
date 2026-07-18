@@ -1,0 +1,39 @@
+.uikit-dropdown {
+  box-sizing: border-box;
+  background: var(--uikit-bg);
+  border: 1px solid var(--uikit-border);
+  border-radius: var(--uikit-radius);
+  box-shadow: var(--uikit-shadow);
+  z-index: var(--uikit-z-dropdown);
+  overflow-y: auto;
+  font-family: var(--uikit-font);
+  opacity: 0;
+  transform: translateY(-4px);
+  transition:
+    opacity var(--uikit-dropdown-duration, 150ms) var(--uikit-ease),
+    transform var(--uikit-dropdown-duration, 150ms) var(--uikit-ease);
+
+  &--measuring {
+    /* Rendered off-screen with real width constraints so it can be measured accurately before placement. */
+    visibility: hidden;
+    transition: none;
+  }
+
+  &--entered {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.uikit-dropdown-indicator {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  color: var(--uikit-text-muted);
+  transition: transform var(--uikit-speed) var(--uikit-ease);
+
+  &--open {
+    transform: rotate(180deg);
+  }
+}

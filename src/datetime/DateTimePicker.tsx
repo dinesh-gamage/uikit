@@ -2,7 +2,7 @@ import { useId, useRef, useState } from 'react';
 import { cx } from '../utils/cx';
 import type { FieldBaseProps } from '../types';
 import { Field } from '../field/Field';
-import { Popover } from '../popover/Popover';
+import { Dropdown } from '../dropdown';
 import { Calendar } from './Calendar';
 import { TimeField } from './TimeField';
 import { formatDate, formatTime, parseTime, startOfDay } from './date-utils';
@@ -104,7 +104,7 @@ export function DateTimePicker({
           </button>
         )}
       </div>
-      <Popover open={open && !disabled} anchorRef={anchorRef} onClose={() => setOpen(false)} maxHeight={420}>
+      <Dropdown open={open && !disabled} anchorRef={anchorRef} onClose={() => setOpen(false)} maxHeight={420}>
         <div className="uikit-datetime-panel">
           <Calendar value={value} onSelect={selectDay} min={min} max={max} disabledDate={disabledDate} />
           <div className="uikit-datetime-panel__divider" />
@@ -122,7 +122,7 @@ export function DateTimePicker({
             </button>
           </div>
         </div>
-      </Popover>
+      </Dropdown>
     </Field>
   );
 }

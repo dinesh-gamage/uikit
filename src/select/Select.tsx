@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { cx } from '../utils/cx';
 import { Field } from '../field';
-import { Popover } from '../popover';
+import { Dropdown, DropdownIndicator } from '../dropdown';
 import type { FieldBaseProps, SelectOption } from '../types';
 import { useSelectEngine, type OptionsSource } from './use-select-engine';
-import { ChevronIcon, ClearIcon, SelectDropdown } from './SelectDropdown';
+import { ClearIcon, SelectDropdown } from './SelectDropdown';
 import './select.scss';
 
 export interface SelectProps extends FieldBaseProps {
@@ -144,11 +144,16 @@ export function Select({
               {ClearIcon}
             </span>
           )}
-          <span className="uikit-select__chevron" aria-hidden="true">
-            {ChevronIcon}
-          </span>
+          <DropdownIndicator open={open} />
         </div>
-        <Popover open={open} anchorRef={triggerRef} onClose={close} matchWidth={!pill} className={cx('uikit-select__panel', { 'uikit-select__panel--detached': !!pill })}>
+        <Dropdown
+          open={open}
+          anchorRef={triggerRef}
+          onClose={close}
+          matchTriggerWidth={!pill}
+          position="bottom-start"
+          className={cx('uikit-select__panel', { 'uikit-select__panel--detached': !!pill })}
+        >
           <SelectDropdown
             engine={engine}
             searchable={isSearchable}
@@ -157,7 +162,7 @@ export function Select({
             loadingText={loadingText}
             emptyText={emptyText}
           />
-        </Popover>
+        </Dropdown>
       </div>
     </Field>
   );

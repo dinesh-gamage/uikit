@@ -2,7 +2,7 @@ import { useId, useRef, useState } from 'react';
 import { cx } from '../utils/cx';
 import type { FieldBaseProps } from '../types';
 import { Field } from '../field/Field';
-import { Popover } from '../popover/Popover';
+import { Dropdown } from '../dropdown';
 import { Calendar } from './Calendar';
 import { addDays, addMonths, endOfMonth, formatDate, isAfterDay, startOfDay, startOfMonth } from './date-utils';
 import { CalendarGlyph, CrossGlyph } from './glyphs';
@@ -167,7 +167,7 @@ export function DateRangePicker({
           </button>
         )}
       </div>
-      <Popover open={open && !disabled} anchorRef={anchorRef} onClose={() => setOpen(false)} maxHeight={400}>
+      <Dropdown open={open && !disabled} anchorRef={anchorRef} onClose={() => setOpen(false)} maxHeight={400}>
         <div className="uikit-daterange-panel">
           {presets.length > 0 && (
             <div className="uikit-daterange-panel__presets" role="listbox" aria-label="Range presets">
@@ -189,7 +189,7 @@ export function DateRangePicker({
             disabledDate={disabledDate}
           />
         </div>
-      </Popover>
+      </Dropdown>
     </Field>
   );
 }

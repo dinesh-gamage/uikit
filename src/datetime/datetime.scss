@@ -1,4 +1,6 @@
-/* Shared trigger + popover panel styles for the datetime pickers. */
+/* Shared trigger + dropdown panel styles for the datetime pickers. */
+
+@use '../styles/control' as *;
 
 .uikit-datetime-trigger {
   display: flex;
@@ -6,21 +8,18 @@
   gap: 6px;
   height: var(--uikit-control-h-md);
   padding: 0 var(--uikit-control-pad-x);
-  background: var(--uikit-bg);
-  border: 1px solid var(--uikit-border);
-  border-radius: var(--uikit-radius);
   cursor: text;
-  transition: border-color var(--uikit-speed) var(--uikit-ease), box-shadow var(--uikit-speed) var(--uikit-ease);
 
   &:hover:not(&--disabled) {
     border-color: var(--uikit-border-strong);
   }
 
-  &:focus-within,
   &--open {
     border-color: var(--uikit-color-primary);
     box-shadow: var(--uikit-focus-ring);
   }
+
+  @include control-box;
 
   &--sm {
     height: var(--uikit-control-h-sm);

@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useId, useRef, useState, type KeyboardEvent, type MouseEvent, type ReactNode } from 'react';
 import { cx } from '../utils/cx';
 import { Field } from '../field';
-import { Popover } from '../popover';
+import { Dropdown, DropdownIndicator } from '../dropdown';
 import type { FieldBaseProps, SelectOption } from '../types';
 import { useSelectEngine, type OptionsSource } from './use-select-engine';
-import { ChevronIcon, ClearIcon, SelectDropdown, type SelectAllState } from './SelectDropdown';
+import { ClearIcon, SelectDropdown, type SelectAllState } from './SelectDropdown';
 import './select.scss';
 
 export interface MultiSelectProps extends FieldBaseProps {
@@ -213,11 +213,9 @@ export function MultiSelect({
               {ClearIcon}
             </span>
           )}
-          <span className="uikit-select__chevron" aria-hidden="true">
-            {ChevronIcon}
-          </span>
+          <DropdownIndicator open={open} />
         </div>
-        <Popover open={open} anchorRef={triggerRef} onClose={close} matchWidth className="uikit-select__panel">
+        <Dropdown open={open} anchorRef={triggerRef} onClose={close} matchTriggerWidth position="bottom-start" className="uikit-select__panel">
           <SelectDropdown
             engine={engine}
             searchable={isSearchable}
@@ -229,7 +227,7 @@ export function MultiSelect({
             selectAllState={selectAllState}
             footer={footer}
           />
-        </Popover>
+        </Dropdown>
       </div>
     </Field>
   );

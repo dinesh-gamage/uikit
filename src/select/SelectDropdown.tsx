@@ -22,12 +22,6 @@ export const ClearIcon = (
   </svg>
 );
 
-export const ChevronIcon = (
-  <svg viewBox="0 0 16 16" width="12" height="12" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-    <path d="m3.5 6 4.5 4.5L12.5 6" />
-  </svg>
-);
-
 export interface SelectAllState {
   checked: boolean;
   indeterminate: boolean;
