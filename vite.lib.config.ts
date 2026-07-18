@@ -30,6 +30,9 @@ export default defineConfig({
       output: {
         chunkFileNames: 'chunks/[name]-[hash].js',
         assetFileNames: 'assets/[name][extname]',
+        // Every component uses hooks — mark all emitted modules as client
+        // components for React Server Component bundlers (Next.js).
+        banner: "'use client';",
       },
     },
     sourcemap: true,
