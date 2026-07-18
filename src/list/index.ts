@@ -14,3 +14,4 @@ export type {
 } from './ListView';
 export { applyQuery, applySort, paginate } from './list-utils';
 export type { ListSort } from './list-utils';
+export { useBreakpoint } from '../utils/use-breakpoint';

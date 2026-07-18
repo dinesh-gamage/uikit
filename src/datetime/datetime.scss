@@ -183,6 +183,20 @@
     border-right: 1px solid var(--uikit-border);
   }
 
+  // The presets rail (~116px) plus the calendar (~240px) don't fit a 320px viewport side by
+  // side. Stack them instead — the calendar alone fits comfortably (7 * 32px + padding = 240px).
+  @media (max-width: 22.5rem) {
+    flex-direction: column;
+
+    &__presets {
+      flex-direction: row;
+      flex-wrap: wrap;
+      min-width: 0;
+      border-right: none;
+      border-bottom: 1px solid var(--uikit-border);
+    }
+  }
+
   &__preset {
     border: none;
     background: transparent;

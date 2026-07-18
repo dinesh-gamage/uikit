@@ -61,6 +61,10 @@
   --uikit-z-dropdown: 1000;
   --uikit-z-modal: 1100;
   --uikit-z-toast: 1200;
+
+  /* breakpoints (informational — JS hooks like useBreakpoint take numbers, not these) */
+  --uikit-breakpoint-sm: 640px;
+  --uikit-breakpoint-md: 960px;
 }
 
 [data-theme='dark'] {

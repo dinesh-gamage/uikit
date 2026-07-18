@@ -104,4 +104,18 @@ describe('computePlacement', () => {
     expect(p.left).toBe(500 - 8 - 200);
     expect(p.top).toBe(100);
   });
+
+  it('leaves maxWidth undefined when the panel already fits the viewport', () => {
+    const p = computePlacement(anchor(), panel(), viewport, 'bottom-start', 8);
+    expect(p.maxWidth).toBeUndefined();
+  });
+
+  it('clamps maxWidth to the viewport minus edge margins on a narrow (mobile) viewport', () => {
+    const narrowViewport: Viewport = { width: 320, height: 600 };
+    const wideAnchor = anchor({ left: 20, width: 100 });
+    const widePanel = panel({ width: 360 }); // wider than the 320px viewport
+    const p = computePlacement(wideAnchor, widePanel, narrowViewport, 'bottom-start', 8);
+    expect(p.maxWidth).toBe(320 - 8 * 2);
+    expect(p.left).toBe(8); // pinned to the left edge since it can't fit at its natural width
+  });
 });

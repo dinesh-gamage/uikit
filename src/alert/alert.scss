@@ -16,7 +16,7 @@
 
   &__panel {
     position: relative;
-    width: min(420px, calc(100vw - 32px));
+    width: min(28rem, calc(100vw - 2rem));
     padding: 20px;
     background: var(--uikit-bg);
     color: var(--uikit-text);

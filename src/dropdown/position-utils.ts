@@ -27,6 +27,8 @@ export interface Placement {
   left: number;
   /** Set only when neither side has room for the panel's natural height and it had to be clamped. */
   maxHeight?: number;
+  /** Set only when the panel's natural width overflows the viewport (minus edge margins). */
+  maxWidth?: number;
   /** True when the panel was flipped to the opposite side of its requested position. */
   flipped: boolean;
 }
@@ -135,11 +137,19 @@ function computeSidePlacement(anchor: Rect, panel: Rect, viewport: Viewport, pos
  * dropdown panel relative to its anchor. Overflow correction order: (1) flip to the opposite
  * side on the primary axis when the requested side doesn't have room but the opposite does; if
  * neither does, keep whichever side has more room and clamp maxHeight to it (min 120px). (2)
- * clamp the cross axis so the panel stays inside the viewport with an 8px margin.
+ * clamp the cross axis so the panel stays inside the viewport with an 8px margin. (3) clamp
+ * maxWidth to the viewport width minus a margin on each edge, so a naturally wide panel (e.g. one
+ * sized with `width: max-content`) never forces horizontal page scroll on a narrow viewport.
  */
 export function computePlacement(anchor: Rect, panel: Rect, viewport: Viewport, position: DropdownPosition, gap = EDGE): Placement {
-  if (position === 'right-start' || position === 'left-start') {
-    return computeSidePlacement(anchor, panel, viewport, position, gap);
+  const base =
+    position === 'right-start' || position === 'left-start'
+      ? computeSidePlacement(anchor, panel, viewport, position, gap)
+      : computeVerticalPlacement(anchor, panel, viewport, position, gap);
+
+  const availableWidth = viewport.width - EDGE * 2;
+  if (panel.width > availableWidth) {
+    return { ...base, maxWidth: Math.max(availableWidth, MIN_SPACE) };
   }
-  return computeVerticalPlacement(anchor, panel, viewport, position, gap);
+  return base;
 }

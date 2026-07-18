@@ -9,6 +9,7 @@ import {
   type Ref,
 } from 'react';
 import { cx } from '../utils/cx';
+import { useBreakpoint } from '../utils/use-breakpoint';
 import { Skeleton } from '../skeleton';
 import { Spinner } from '../spinner';
 import { InfoCard, type InfoField } from '../info-card';
@@ -92,6 +93,23 @@ export interface ListViewProps<T extends Record<string, any>> {
   allowPageSizeChange?: boolean;
   className?: string;
   ref?: Ref<ListViewHandle>;
+  /**
+   * Viewport width (px) at or below which the table switches to a stacked card layout. Default
+   * 640 (matches `--uikit-breakpoint-sm`). Sorting stays desktop-only for v1 — cards have no
+   * header row to click, so a previously-applied sort still orders the cards but there's no
+   * mobile control to change it.
+   */
+  mobileBreakpoint?: number;
+  /** Column ids to show per card on mobile, in `columns` order. Defaults to all `columns`. */
+  mobileColumns?: string[];
+  /** Override the mobile card body. `defaultCard` is the standard label/value card for the row. */
+  renderMobileCard?: (item: T, defaultCard: ReactNode) => ReactNode;
+  /**
+   * @internal Showcase-only escape hatch that forces the mobile card layout regardless of
+   * viewport width, so demos can preview it without resizing the window. Not part of the
+   * supported public API — do not rely on this in application code.
+   */
+  forceMobile?: boolean;
 }
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
@@ -121,9 +139,14 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
     allowPageSizeChange = true,
     className,
     ref,
+    mobileBreakpoint = 640,
+    mobileColumns,
+    renderMobileCard,
+    forceMobile,
   } = props;
 
   const isStatic = Array.isArray(data);
+  const isMobile = useBreakpoint(mobileBreakpoint) || !!forceMobile;
 
   const [page, setPage] = useState(1);
   const [pageSize, setPageSize] = useState(pageSizeProp);
@@ -348,6 +371,63 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
     </tr>
   ));
 
+  // Mobile card layout: same columns/render functions as the table, one card per row.
+  const mobileCols = mobileColumns && mobileColumns.length > 0
+    ? columns.filter((col) => mobileColumns.includes(col.id))
+    : columns;
+
+  const buildDefaultCard = (item: T): ReactNode => (
+    <div className="uikit-list__card-fields">
+      {mobileCols.map((col) => (
+        <div className="uikit-list__card-field" key={col.id}>
+          <span className="uikit-list__card-label">{col.label}</span>
+          <span className="uikit-list__card-value">{col.render ? col.render(item) : defaultCell(item[col.id])}</span>
+        </div>
+      ))}
+    </div>
+  );
+
+  const mobileCards = items.map((item) => {
+    const defaultCard = buildDefaultCard(item);
+    return (
+      <div
+        key={String(item[idField])}
+        className={cx('uikit-list__card', {
+          'uikit-list__card--clickable': rowsClickable,
+          'uikit-list__card--active': detailsItem != null && detailsItem[idField] === item[idField],
+          'uikit-list__card--selected': !!selectable && isItemSelected(item),
+        })}
+        onClick={() => handleRowClick(item)}
+      >
+        {selectable && (
+          <input
+            type="checkbox"
+            className="uikit-list__card-checkbox"
+            checked={isItemSelected(item)}
+            onChange={() => toggleItem(item)}
+            onClick={(e) => e.stopPropagation()}
+            aria-label="Select row"
+          />
+        )}
+        {renderMobileCard ? renderMobileCard(item, defaultCard) : defaultCard}
+      </div>
+    );
+  });
+
+  const mobileSkeletonCards = Array.from({ length: Math.min(pageSize, MAX_SKELETON_ROWS) }, (_, i) => (
+    <div className="uikit-list__card uikit-list__card--skeleton" key={i}>
+      {selectable && <Skeleton className="uikit-list__card-checkbox" variant="rect" width={15} height={15} />}
+      <div className="uikit-list__card-fields">
+        {mobileCols.map((col, j) => (
+          <div className="uikit-list__card-field" key={col.id}>
+            <span className="uikit-list__card-label">{col.label}</span>
+            <Skeleton width={`${45 + ((i * 17 + j * 23) % 40)}%`} />
+          </div>
+        ))}
+      </div>
+    </div>
+  ));
+
   return (
     <div className={cx('uikit-list', className)}>
       {(title != null || (breadcrumb && breadcrumb.length > 0) || toolbar != null) && (
@@ -410,6 +490,16 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
               <button type="button" className="uikit-list__retry" onClick={() => setRefreshTick((t) => t + 1)}>
                 Retry
               </button>
+            </div>
+          ) : isMobile ? (
+            <div className="uikit-list__cards">
+              {showSkeleton ? (
+                mobileSkeletonCards
+              ) : items.length === 0 && !loading ? (
+                <div className="uikit-list__empty uikit-list__empty--cards">{emptyMessage}</div>
+              ) : (
+                mobileCards
+              )}
             </div>
           ) : (
             <div className="uikit-list__table-wrap">
@@ -505,7 +595,7 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
         </div>
 
         {detailsPanel && detailsItem != null && (
-          <aside className="uikit-list__panel" aria-label="Details">
+          <aside className={cx('uikit-list__panel', { 'uikit-list__panel--mobile': isMobile })} aria-label="Details">
             <div className="uikit-list__panel-head">
               <div className="uikit-list__panel-title">{detailsPanel.title(detailsItem)}</div>
               <button type="button" className="uikit-list__panel-close" onClick={closeDetails} aria-label="Close details">

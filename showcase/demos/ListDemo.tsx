@@ -116,6 +116,10 @@ function Example({ v }: { v: ControlValues }) {
           ? { title: (p) => p.name, fields: personFields }
           : undefined
       }
+      // @internal showcase-only prop — previews the mobile card layout without resizing the
+      // window. Not part of the public API; omitted from the copyable code sample below.
+      forceMobile={v.forceMobile}
+      mobileColumns={v.mobileColumns ? ['name', 'role'] : undefined}
     />
   );
 }
@@ -123,7 +127,7 @@ function Example({ v }: { v: ControlValues }) {
 const demo: DemoDef = {
   title: 'List',
   description:
-    'Generic master list with async or static data: search, sorting, paged or infinite pagination, tabs, selection, and a slide-in details panel powered by InfoCard.',
+    "Generic master list with async or static data: search, sorting, paged or infinite pagination, tabs, selection, and a slide-in details panel powered by InfoCard. Below `mobileBreakpoint` (640px by default) rows collapse into stacked cards automatically — use \"Force mobile card view\" to preview that without resizing the window.",
   controls: [
     { type: 'select', name: 'paginationMode', options: ['paged', 'infinite'], defaultValue: 'paged' },
     { type: 'boolean', name: 'searchable', defaultValue: true },
@@ -131,6 +135,8 @@ const demo: DemoDef = {
     { type: 'boolean', name: 'detailsPanel', defaultValue: true },
     { type: 'boolean', name: 'tabs', defaultValue: true },
     { type: 'select', name: 'pageSize', options: ['10', '20', '50'], defaultValue: '10' },
+    { type: 'boolean', name: 'mobileColumns', label: 'Limit mobile card fields (name, role)', defaultValue: false },
+    { type: 'boolean', name: 'forceMobile', label: 'Force mobile card view', defaultValue: false },
   ],
   render: (v) => <Example v={v} />,
   code: (v) => `import { ListView, type ListFetcher } from '@dinesh-gamage/uikit/list';
@@ -180,7 +186,8 @@ const fetchPeople: ListFetcher<Person> = async ({ page, pageSize, query, sort })
       { label: 'City', value: p.city },
       { label: 'Joined', value: p.joined, render: (d) => new Date(d).toLocaleDateString() },
     ],
-  }}` : ''}
+  }}` : ''}${v.mobileColumns ? `
+  mobileColumns={['name', 'role']} // shown per-card below the 640px breakpoint` : ''}
 />`,
 };
 

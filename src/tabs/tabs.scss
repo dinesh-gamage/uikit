@@ -184,3 +184,15 @@
   padding-top: 12px;
   color: var(--uikit-text);
 }
+
+/* Touch-friendly tap targets on small screens. `min-height` (rather than overriding `height`)
+   grows the box without disturbing the desktop-sized `--uikit-tabs-h` used for layout math. The
+   header itself never needs a width-overflow fix here — the ResizeObserver-driven overflow menu
+   in Tabs.tsx already keeps the visible tab row within the container's measured width at any
+   viewport size, moving anything that doesn't fit into "More". */
+@media (max-width: 640px) {
+  .uikit-tabs__tab,
+  .uikit-tabs__more {
+    min-height: 2.75rem;
+  }
+}

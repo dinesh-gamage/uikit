@@ -12,7 +12,9 @@
     display: flex;
     align-items: flex-end;
     justify-content: space-between;
+    flex-wrap: wrap;
     gap: 12px;
+    row-gap: 8px;
   }
 
   &__head-main {
@@ -41,6 +43,7 @@
 
   &__tabs {
     display: flex;
+    flex-wrap: wrap;
     gap: 4px;
     border-bottom: 1px solid var(--uikit-border);
   }
@@ -388,6 +391,105 @@
       padding: 0;
     }
   }
+
+  /* Full-width overlay instead of the 40% side panel, driven by useBreakpoint (not a media
+     query) so it matches whatever breakpoint the ListView instance was configured with. */
+  &__panel--mobile {
+    position: fixed;
+    inset: 0;
+    z-index: var(--uikit-z-modal);
+    width: 100%;
+    min-width: 0;
+    max-height: none;
+    border: 0;
+    border-radius: 0;
+    align-self: auto;
+    animation: uikit-list-panel-in-mobile var(--uikit-speed) var(--uikit-ease);
+  }
+
+  /* ---- mobile cards (rendered instead of the table below `mobileBreakpoint`) ---- */
+
+  &__cards {
+    display: flex;
+    flex-direction: column;
+    gap: 0.625rem;
+  }
+
+  &__card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 0.75rem 0.875rem;
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius);
+    background: var(--uikit-bg);
+    transition: background var(--uikit-speed) var(--uikit-ease), border-color var(--uikit-speed) var(--uikit-ease);
+
+    &--clickable {
+      cursor: pointer;
+
+      &:hover {
+        background: var(--uikit-bg-subtle);
+      }
+    }
+
+    &--selected {
+      background: var(--uikit-bg-subtle);
+    }
+
+    &--active {
+      background: var(--uikit-color-primary-soft);
+      border-color: var(--uikit-color-primary);
+    }
+  }
+
+  &__card-checkbox {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.875rem;
+    accent-color: var(--uikit-color-primary);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+  }
+
+  &__card-fields {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-right: 1.5rem;
+    min-width: 0;
+  }
+
+  &__card-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+  }
+
+  &__card-label {
+    font-size: var(--uikit-text-xs);
+    font-weight: 600;
+    color: var(--uikit-text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+
+  &__card-value {
+    font-size: var(--uikit-text-md);
+    color: var(--uikit-text);
+    overflow-wrap: anywhere;
+  }
+
+  &__empty--cards {
+    padding: 2rem 0.75rem;
+    text-align: center;
+    color: var(--uikit-text-muted);
+    font-size: var(--uikit-text-md);
+    border: 1px dashed var(--uikit-border);
+    border-radius: var(--uikit-radius);
+  }
 }
 
 @keyframes uikit-list-progress {
@@ -403,6 +505,18 @@
 @keyframes uikit-list-panel-in {
   from {
     transform: translateX(16px);
+    opacity: 0;
+  }
+
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes uikit-list-panel-in-mobile {
+  from {
+    transform: translateY(16px);
     opacity: 0;
   }
 

@@ -169,3 +169,16 @@
     transform: translateX(-24px);
   }
 }
+
+// Stack full-width (minus a margin) on narrow screens, overriding whichever corner the variant
+// anchors to. Placed last so it wins the cascade over the `--top-right`/`--top-left`/etc rules
+// above at equal specificity.
+@media (max-width: 30rem) {
+  .uikit-toast-stack {
+    left: 1rem;
+    right: 1rem;
+    width: auto;
+    max-width: none;
+    padding: 1rem 0;
+  }
+}

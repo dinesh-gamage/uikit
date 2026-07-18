@@ -66,13 +66,22 @@ export function Dropdown({
       GAP,
     );
     const resolvedMaxHeight = placement.maxHeight != null ? Math.min(placement.maxHeight, maxHeight) : maxHeight;
+    // `placement.maxWidth` is the viewport-derived clamp (only set when the panel would
+    // otherwise overflow horizontally). It only combines with a numeric `maxWidth` prop — a
+    // string prop (e.g. '90%') is an explicit author choice we leave alone.
+    const resolvedMaxWidth =
+      placement.maxWidth != null
+        ? typeof maxWidth === 'number'
+          ? Math.min(maxWidth, placement.maxWidth)
+          : (maxWidth ?? placement.maxWidth)
+        : maxWidth;
     setStyle({
       position: 'fixed',
       top: placement.top,
       left: placement.left,
       width: matchTriggerWidth ? anchorRect.width : undefined,
       minWidth,
-      maxWidth,
+      maxWidth: resolvedMaxWidth,
       maxHeight: resolvedMaxHeight,
     });
     setPhase((p) => (p === 'measuring' ? 'positioned' : p));
