@@ -8,8 +8,11 @@ import {
   type ListViewHandle,
 } from '../../src/list';
 import type { InfoField } from '../../src/info-card';
+import { Select } from '../../src/select';
+import { Input } from '../../src/input';
 import { DemoPage, type DemoDef } from '../framework/DemoPage';
 import type { ControlValues } from '../framework/controls';
+import './demo-widgets.scss';
 
 interface Person {
   id: number;
@@ -56,6 +59,8 @@ function personFields(p: Person): InfoField[] {
 function Example({ v }: { v: ControlValues }) {
   const [tab, setTab] = useState('all');
   const [selected, setSelected] = useState<Person[]>([]);
+  const [roleFilter, setRoleFilter] = useState<string | number | null>(null);
+  const [cityQuery, setCityQuery] = useState('');
   const listRef = useRef<ListViewHandle>(null);
 
   // Fake async API over the generated rows, with 500ms latency.
@@ -64,13 +69,32 @@ function Example({ v }: { v: ControlValues }) {
       await new Promise((resolve) => setTimeout(resolve, 500));
       let rows = PEOPLE;
       if (v.tabs && tab !== 'all') rows = rows.filter((p) => p.active === (tab === 'active'));
+      if (v.filters && roleFilter) rows = rows.filter((p) => p.role === roleFilter);
+      if (v.filters && cityQuery.trim()) {
+        const q = cityQuery.trim().toLowerCase();
+        rows = rows.filter((p) => p.city.toLowerCase().includes(q));
+      }
       rows = applySort(applyQuery(rows, query, ['name', 'email', 'role', 'city']), sort);
       return paginate(rows, page, pageSize);
     },
-    [tab, v.tabs]
+    [tab, v.tabs, v.filters, roleFilter, cityQuery]
   );
 
-  return (
+  const filtersContent = (
+    <div className="sc-list-filters">
+      <Select
+        label="Role"
+        placeholder="Any role"
+        value={roleFilter}
+        onChange={setRoleFilter}
+        options={ROLES.map((r) => ({ value: r, label: r }))}
+        fullWidth
+      />
+      <Input label="City" placeholder="Filter by city…" value={cityQuery} onChange={setCityQuery} />
+    </div>
+  );
+
+  const list = (
     <ListView<Person>
       key={String(v.searchable)}
       ref={listRef}
@@ -78,6 +102,7 @@ function Example({ v }: { v: ControlValues }) {
       idField="id"
       pageSize={Number(v.pageSize)}
       paginationMode={v.paginationMode}
+      fillHeight={!!v.fillHeight}
       columns={[
         { id: 'name', label: 'Name', sortable: true, width: '22%' },
         { id: 'email', label: 'Email', sortable: true },
@@ -87,11 +112,13 @@ function Example({ v }: { v: ControlValues }) {
       ]}
       title="Team"
       breadcrumb={[{ label: 'Home', onClick: () => {} }, { label: 'Team' }]}
+      headerRight={v.headerRight ? 'Home / Team' : undefined}
       toolbar={
         <button type="button" onClick={() => listRef.current?.refresh()}>
           Refresh
         </button>
       }
+      filters={v.filters ? { content: filtersContent, defaultOpen: true } : undefined}
       tabs={
         v.tabs
           ? [
@@ -122,14 +149,19 @@ function Example({ v }: { v: ControlValues }) {
       mobileColumns={v.mobileColumns ? ['name', 'role'] : undefined}
     />
   );
+
+  return v.fillHeight ? <div className="sc-list-fill-container">{list}</div> : list;
 }
 
 const demo: DemoDef = {
   title: 'List',
   description:
-    "Generic master list with async or static data: search, sorting, paged or infinite pagination, tabs, selection, and a slide-in details panel powered by InfoCard. Below `mobileBreakpoint` (640px by default) rows collapse into stacked cards automatically — use \"Force mobile card view\" to preview that without resizing the window.",
+    "Generic master list with async or static data: search, sorting, paged or infinite pagination, tabs, selection, a collapsible filter rail, and a details panel powered by InfoCard. Below `mobileBreakpoint` (640px by default) rows collapse into stacked cards automatically — use \"Force mobile card view\" to preview that without resizing the window. `fillHeight` switches to the app-like layout: header/toolbar/pagination stay fixed inside a bounded-height container while the table scrolls internally — toggle Filters and click a row (with Details on) to see the rail, table, and details panel open together.",
   controls: [
     { type: 'select', name: 'paginationMode', options: ['paged', 'infinite'], defaultValue: 'paged' },
+    { type: 'boolean', name: 'fillHeight', label: 'Fill-height layout (~560px container)', defaultValue: true },
+    { type: 'boolean', name: 'filters', label: 'Filter rail (Role, City)', defaultValue: true },
+    { type: 'boolean', name: 'headerRight', label: 'Header right slot', defaultValue: true },
     { type: 'boolean', name: 'searchable', defaultValue: true },
     { type: 'boolean', name: 'selectable', defaultValue: false },
     { type: 'boolean', name: 'detailsPanel', defaultValue: true },
@@ -165,7 +197,10 @@ const fetchPeople: ListFetcher<Person> = async ({ page, pageSize, query, sort })
     { id: 'joined', label: 'Joined', sortable: true },
   ]}
   title="Team"
-  breadcrumb={[{ label: 'Home', onClick: () => navigate('/') }, { label: 'Team' }]}
+  breadcrumb={[{ label: 'Home', onClick: () => navigate('/') }, { label: 'Team' }]}${v.fillHeight ? `
+  fillHeight` : ''}${v.headerRight ? `
+  headerRight="Home / Team"` : ''}${v.filters ? `
+  filters={{ content: <FiltersForm />, defaultOpen: true }}` : ''}
   toolbar={<button onClick={addPerson}>Add person</button>}${v.tabs ? `
   tabs={[
     { id: 'all', label: 'All' },

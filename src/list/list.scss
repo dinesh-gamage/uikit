@@ -6,6 +6,22 @@
   gap: 12px;
   min-width: 0;
 
+  /* ---- fill-height layout: component fills its container, table scrolls internally ---- */
+
+  &--fill-height {
+    height: 100%;
+    min-height: 0;
+
+    .uikit-list__body {
+      flex: 1;
+      min-height: 0;
+    }
+
+    .uikit-list__main {
+      min-height: 0;
+    }
+  }
+
   /* ---- header block ---- */
 
   &__head {
@@ -24,6 +40,12 @@
     min-width: 0;
   }
 
+  &__head-right {
+    color: var(--uikit-text-muted);
+    font-size: var(--uikit-text-sm);
+    flex: none;
+  }
+
   &__title {
     margin: 0;
     font-size: 20px;
@@ -37,6 +59,27 @@
     align-items: center;
     gap: 8px;
     flex: none;
+  }
+
+  /* ---- toolbar row: filter toggle + search + spacer + actions ---- */
+
+  &__toolbar-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+  }
+
+  &__toolbar-spacer {
+    flex: 1 1 auto;
+    min-width: 8px;
+  }
+
+  &__filter-toggle.uikit-button--active {
+    --uikit-btn-bg: var(--uikit-color-primary-soft);
+    --uikit-btn-bg-hover: var(--uikit-color-primary-soft);
+    --uikit-btn-color: var(--uikit-color-primary);
+    --uikit-btn-border: var(--uikit-color-primary);
   }
 
   /* ---- tabs ---- */
@@ -93,7 +136,8 @@
   /* ---- search ---- */
 
   &__search-input {
-    width: min(320px, 100%);
+    width: min(18rem, 100%);
+    flex: none;
     height: var(--uikit-control-h-md);
     padding: 0 var(--uikit-control-pad-x);
     font: inherit;
@@ -115,7 +159,7 @@
     }
   }
 
-  /* ---- body: table + details panel ---- */
+  /* ---- body: filter rail + table + details panel ---- */
 
   &__body {
     display: flex;
@@ -130,6 +174,51 @@
     position: relative;
     display: flex;
     flex-direction: column;
+  }
+
+  /* ---- filter rail ---- */
+
+  &__filters {
+    flex: none;
+    box-sizing: border-box;
+    padding: 12px;
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius);
+    background: var(--uikit-bg);
+    overflow-y: auto;
+    align-self: flex-start;
+    max-height: 100%;
+    animation: uikit-list-filters-in var(--uikit-speed) var(--uikit-ease);
+  }
+
+  &__filters--fill {
+    border: 0;
+    border-right: 1px solid var(--uikit-border);
+    border-radius: 0;
+    align-self: stretch;
+    max-height: none;
+    height: 100%;
+  }
+
+  &__filters--mobile {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: var(--uikit-z-modal);
+    height: 100%;
+    max-height: none;
+    border: 0;
+    border-right: 1px solid var(--uikit-border);
+    border-radius: 0;
+    box-shadow: var(--uikit-shadow-lg);
+    align-self: auto;
+    animation: uikit-list-filters-in var(--uikit-speed) var(--uikit-ease);
+  }
+
+  &__filters-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: var(--uikit-z-modal);
+    background: var(--uikit-bg-overlay);
   }
 
   &__progress {
@@ -160,6 +249,12 @@
     background: var(--uikit-bg);
   }
 
+  &__table-wrap--fill {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+  }
+
   &__table {
     width: 100%;
     border-collapse: collapse;
@@ -173,6 +268,9 @@
     color: var(--uikit-text-muted);
     background: var(--uikit-bg-subtle);
     border-bottom: 1px solid var(--uikit-border);
+    position: sticky;
+    top: 0;
+    z-index: 1;
     padding: 10px 12px;
     white-space: nowrap;
     user-select: none;
@@ -314,6 +412,13 @@
     padding-top: 10px;
   }
 
+  /* fillHeight mode: pinned footer, no longer just trailing content inside __main. */
+  &__pagination--pinned {
+    flex: none;
+    padding-top: 10px;
+    border-top: 1px solid var(--uikit-border);
+  }
+
   /* ---- infinite mode ---- */
 
   &__load-more {
@@ -342,6 +447,19 @@
     align-self: flex-start;
     max-height: 100%;
     animation: uikit-list-panel-in var(--uikit-speed) var(--uikit-ease);
+  }
+
+  /* fillHeight mode: full-height right column instead of a content-height card. */
+  &__panel--fill {
+    width: 24rem;
+    min-width: 0;
+    height: 100%;
+    max-height: none;
+    border: 0;
+    border-left: 1px solid var(--uikit-border);
+    border-radius: 0;
+    box-shadow: none;
+    align-self: stretch;
   }
 
   &__panel-head {
@@ -413,6 +531,12 @@
     display: flex;
     flex-direction: column;
     gap: 0.625rem;
+  }
+
+  &__cards--fill {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
   }
 
   &__card {
@@ -517,6 +641,18 @@
 @keyframes uikit-list-panel-in-mobile {
   from {
     transform: translateY(16px);
+    opacity: 0;
+  }
+
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}
+
+@keyframes uikit-list-filters-in {
+  from {
+    transform: translateX(-16px);
     opacity: 0;
   }
 

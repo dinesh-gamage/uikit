@@ -15,8 +15,20 @@ import { Spinner } from '../spinner';
 import { InfoCard, type InfoField } from '../info-card';
 import { Pagination } from '../pagination';
 import { Breadcrumb } from '../breadcrumb';
+import { Button } from '../button';
 import { applyQuery, applySort, paginate, type ListSort } from './list-utils';
 import './list.scss';
+
+function FilterIcon() {
+  return (
+    <svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true" focusable="false">
+      <path
+        fill="currentColor"
+        d="M1.5 2h13a.5.5 0 0 1 .38.82L10 8.62V13a.5.5 0 0 1-.74.44l-2-1.1A.5.5 0 0 1 7 11.9V8.62L1.12 2.82A.5.5 0 0 1 1.5 2Z"
+      />
+    </svg>
+  );
+}
 
 export interface ListFetcherArgs {
   page: number;
@@ -59,6 +71,15 @@ export interface ListDetailsPanel<T> {
   render?: (item: T, close: () => void) => ReactNode;
 }
 
+export interface ListFiltersConfig {
+  /** Filter rail body — any form controls. */
+  content: ReactNode;
+  /** Whether the rail starts open. Read once on mount. Default false. */
+  defaultOpen?: boolean;
+  /** Rail width. Default '16rem'. */
+  width?: string;
+}
+
 export interface ListViewHandle {
   /** Refetch the current page (fetcher mode). */
   refresh(): void;
@@ -77,12 +98,21 @@ export interface ListViewProps<T extends Record<string, any>> {
   renderRow?: (item: T, defaultCells: ReactNode[]) => ReactNode;
   title?: ReactNode;
   breadcrumb?: ListBreadcrumbItem[];
+  /**
+   * Right-aligned content on the title row (e.g. a breadcrumb-like string), same line as
+   * `title`. If `breadcrumb` is also given, it keeps its legacy position above the title;
+   * `headerRight` takes the right-of-title slot that `toolbar` used to occupy there — `toolbar`
+   * has moved to the toolbar row (with search) below.
+   */
+  headerRight?: ReactNode;
   tabs?: ListTab[];
   activeTab?: string;
   onTabChange?: (id: string) => void;
-  /** Right-aligned actions area. */
+  /** Right-aligned actions area, rendered in the toolbar row alongside search. */
   toolbar?: ReactNode;
   search?: ListSearchConfig<T>;
+  /** Collapsible left filter rail. Toggle button renders in the toolbar row before search. */
+  filters?: ListFiltersConfig;
   selectable?: boolean;
   selected?: T[];
   onSelect?: (items: T[]) => void;
@@ -110,6 +140,12 @@ export interface ListViewProps<T extends Record<string, any>> {
    * supported public API — do not rely on this in application code.
    */
   forceMobile?: boolean;
+  /**
+   * App-like layout: the component fills its container's height (parent must give it a bounded
+   * height); header/toolbar/pagination stay fixed while the table scrolls internally. Default
+   * layout (`false`) is the original block layout that grows with its content.
+   */
+  fillHeight?: boolean;
 }
 
 const PAGE_SIZE_OPTIONS = [10, 20, 50, 100];
@@ -125,11 +161,13 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
     renderRow,
     title,
     breadcrumb,
+    headerRight,
     tabs,
     activeTab,
     onTabChange,
     toolbar,
     search,
+    filters,
     selectable,
     selected,
     onSelect,
@@ -143,6 +181,7 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
     mobileColumns,
     renderMobileCard,
     forceMobile,
+    fillHeight,
   } = props;
 
   const isStatic = Array.isArray(data);
@@ -160,6 +199,7 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
   const [refreshTick, setRefreshTick] = useState(0);
   const [detailsItem, setDetailsItem] = useState<T | null>(null);
   const [internalSelected, setInternalSelected] = useState<T[]>([]);
+  const [filtersOpen, setFiltersOpen] = useState(filters?.defaultOpen ?? false);
 
   // Reset to page 1 when the view context changes (tab, debounced query, page size prop, mode).
   const [prevContext, setPrevContext] = useState({ activeTab, query, pageSizeProp, paginationMode });
@@ -250,6 +290,16 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
   }, [detailsItem]);
+
+  // Escape closes the mobile filters drawer.
+  useEffect(() => {
+    if (!isMobile || !filtersOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setFiltersOpen(false);
+    };
+    window.addEventListener('keydown', onKey);
+    return () => window.removeEventListener('keydown', onKey);
+  }, [isMobile, filtersOpen]);
 
   // Infinite mode sentinel.
   const sentinelRef = useRef<HTMLDivElement | null>(null);
@@ -428,9 +478,65 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
     </div>
   ));
 
+  const infiniteBlock =
+    paginationMode === 'infinite' && error == null ? (
+      <>
+        {showLoadMore && (
+          <div className="uikit-list__load-more">
+            <Spinner size="sm" label="Loading more…" />
+          </div>
+        )}
+        <div ref={sentinelRef} className="uikit-list__sentinel" aria-hidden="true" />
+      </>
+    ) : null;
+
+  const paginationEl =
+    paginationMode === 'paged' && error == null ? (
+      <Pagination
+        className={cx('uikit-list__pagination', { 'uikit-list__pagination--pinned': !!fillHeight })}
+        page={page}
+        pageSize={pageSize}
+        total={total}
+        onPageChange={setPage}
+        onPageSizeChange={(size) => {
+          setPageSize(size);
+          setPage(1);
+        }}
+        pageSizeOptions={PAGE_SIZE_OPTIONS}
+        allowPageSizeChange={allowPageSizeChange}
+      />
+    ) : null;
+
+  const filtersRail = filters ? (
+    isMobile ? (
+      filtersOpen && (
+        <>
+          <div className="uikit-list__filters-backdrop" onClick={() => setFiltersOpen(false)} />
+          <aside
+            className="uikit-list__filters uikit-list__filters--mobile"
+            style={{ width: filters.width ?? '16rem' }}
+            aria-label="Filters"
+          >
+            {filters.content}
+          </aside>
+        </>
+      )
+    ) : (
+      filtersOpen && (
+        <aside
+          className={cx('uikit-list__filters', { 'uikit-list__filters--fill': !!fillHeight })}
+          style={{ width: filters.width ?? '16rem' }}
+          aria-label="Filters"
+        >
+          {filters.content}
+        </aside>
+      )
+    )
+  ) : null;
+
   return (
-    <div className={cx('uikit-list', className)}>
-      {(title != null || (breadcrumb && breadcrumb.length > 0) || toolbar != null) && (
+    <div className={cx('uikit-list', { 'uikit-list--fill-height': !!fillHeight }, className)}>
+      {(title != null || (breadcrumb && breadcrumb.length > 0) || headerRight != null) && (
         <div className="uikit-list__head">
           <div className="uikit-list__head-main">
             {breadcrumb && breadcrumb.length > 0 && (
@@ -441,7 +547,7 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
             )}
             {title != null && <h2 className="uikit-list__title">{title}</h2>}
           </div>
-          {toolbar != null && <div className="uikit-list__toolbar">{toolbar}</div>}
+          {headerRight != null && <div className="uikit-list__head-right">{headerRight}</div>}
         </div>
       )}
 
@@ -463,20 +569,36 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
         </div>
       )}
 
-      {search?.enabled && (
-        <div className="uikit-list__search">
-          <input
-            type="search"
-            className="uikit-list__search-input"
-            placeholder={search.placeholder ?? 'Search…'}
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            aria-label="Search list"
-          />
+      {(search?.enabled || toolbar != null || filters) && (
+        <div className="uikit-list__toolbar-row">
+          {filters && (
+            <Button
+              variant="secondary"
+              className="uikit-list__filter-toggle"
+              active={filtersOpen}
+              leftIcon={<FilterIcon />}
+              onClick={() => setFiltersOpen((o) => !o)}
+            >
+              Filters
+            </Button>
+          )}
+          {search?.enabled && (
+            <input
+              type="search"
+              className="uikit-list__search-input"
+              placeholder={search.placeholder ?? 'Search…'}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              aria-label="Search list"
+            />
+          )}
+          <div className="uikit-list__toolbar-spacer" aria-hidden="true" />
+          {toolbar != null && <div className="uikit-list__toolbar">{toolbar}</div>}
         </div>
       )}
 
       <div className="uikit-list__body">
+        {filtersRail}
         <div className="uikit-list__main">
           {showProgress && (
             <div className="uikit-list__progress" role="progressbar" aria-label="Loading">
@@ -492,7 +614,7 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
               </button>
             </div>
           ) : isMobile ? (
-            <div className="uikit-list__cards">
+            <div className={cx('uikit-list__cards', { 'uikit-list__cards--fill': !!fillHeight })}>
               {showSkeleton ? (
                 mobileSkeletonCards
               ) : items.length === 0 && !loading ? (
@@ -500,9 +622,10 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
               ) : (
                 mobileCards
               )}
+              {infiniteBlock}
             </div>
           ) : (
-            <div className="uikit-list__table-wrap">
+            <div className={cx('uikit-list__table-wrap', { 'uikit-list__table-wrap--fill': !!fillHeight })}>
               <table className="uikit-list__table">
                 <thead>
                   <tr>
@@ -563,39 +686,21 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
                   )}
                 </tbody>
               </table>
+              {infiniteBlock}
             </div>
           )}
 
-          {paginationMode === 'paged' && error == null && (
-            <Pagination
-              className="uikit-list__pagination"
-              page={page}
-              pageSize={pageSize}
-              total={total}
-              onPageChange={setPage}
-              onPageSizeChange={(size) => {
-                setPageSize(size);
-                setPage(1);
-              }}
-              pageSizeOptions={PAGE_SIZE_OPTIONS}
-              allowPageSizeChange={allowPageSizeChange}
-            />
-          )}
-
-          {paginationMode === 'infinite' && error == null && (
-            <>
-              {showLoadMore && (
-                <div className="uikit-list__load-more">
-                  <Spinner size="sm" label="Loading more…" />
-                </div>
-              )}
-              <div ref={sentinelRef} className="uikit-list__sentinel" aria-hidden="true" />
-            </>
-          )}
+          {!fillHeight && paginationEl}
         </div>
 
         {detailsPanel && detailsItem != null && (
-          <aside className={cx('uikit-list__panel', { 'uikit-list__panel--mobile': isMobile })} aria-label="Details">
+          <aside
+            className={cx('uikit-list__panel', {
+              'uikit-list__panel--mobile': isMobile,
+              'uikit-list__panel--fill': !!fillHeight && !isMobile,
+            })}
+            aria-label="Details"
+          >
             <div className="uikit-list__panel-head">
               <div className="uikit-list__panel-title">{detailsPanel.title(detailsItem)}</div>
               <button type="button" className="uikit-list__panel-close" onClick={closeDetails} aria-label="Close details">
@@ -612,6 +717,8 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
           </aside>
         )}
       </div>
+
+      {fillHeight && paginationEl}
     </div>
   );
 }

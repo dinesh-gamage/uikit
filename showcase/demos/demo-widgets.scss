@@ -89,6 +89,23 @@
   }
 }
 
+.sc-list-fill-container {
+  width: 100%;
+  height: 560px;
+  overflow: hidden;
+  border: 1px dashed var(--uikit-border);
+  border-radius: var(--uikit-radius);
+  padding: 4px;
+  box-sizing: border-box;
+}
+
+.sc-list-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+}
+
 .sc-dropdown-scroll {
   height: 400px;
   width: 100%;
