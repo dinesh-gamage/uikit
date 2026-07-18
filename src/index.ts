@@ -28,3 +28,6 @@ export * from './tabs';
 export * from './tree-view';
 export * from './pagination';
 export * from './breadcrumb';
+export * from './modal';
+export * from './tooltip';
+export * from './icon-button';

@@ -12,6 +12,7 @@ export const demos: DemoEntry[] = [
   { id: 'icon', title: 'Icon', group: 'Display', component: lazy(() => import('./demos/IconDemo')) },
   { id: 'button', title: 'Button', group: 'Display', component: lazy(() => import('./demos/ButtonDemo')) },
   { id: 'chip', title: 'Chip', group: 'Display', component: lazy(() => import('./demos/ChipDemo')) },
+  { id: 'icon-button', title: 'Icon Button', group: 'Display', component: lazy(() => import('./demos/IconButtonDemo')) },
   { id: 'dropdown', title: 'Dropdown', group: 'Display', component: lazy(() => import('./demos/DropdownDemo')) },
   { id: 'input', title: 'Input', group: 'Inputs', component: lazy(() => import('./demos/InputDemo')) },
   { id: 'checkbox', title: 'Checkbox / Switch', group: 'Inputs', component: lazy(() => import('./demos/CheckboxDemo')) },
@@ -36,4 +37,5 @@ export const demos: DemoEntry[] = [
   { id: 'toast', title: 'Toast', group: 'Feedback', component: lazy(() => import('./demos/ToastDemo')) },
   { id: 'alert', title: 'Alert', group: 'Feedback', component: lazy(() => import('./demos/AlertDemo')) },
   { id: 'notification-block', title: 'Notification Block', group: 'Feedback', component: lazy(() => import('./demos/NotificationBlockDemo')) },
+  { id: 'modal', title: 'Modal', group: 'Feedback', component: lazy(() => import('./demos/ModalDemo')) },
 ];

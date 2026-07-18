@@ -76,7 +76,6 @@
 
   &:focus-visible {
     outline: none;
-    box-shadow: var(--uikit-focus-ring);
     border-radius: var(--uikit-radius-sm);
   }
 
@@ -84,6 +83,10 @@
     color: var(--uikit-text-faint);
     cursor: not-allowed;
   }
+}
+
+.uikit-tabs__more:focus-visible {
+  background: var(--uikit-bg-subtle);
 }
 
 .uikit-tabs--underline .uikit-tabs__tab {
@@ -94,6 +97,14 @@
     color: var(--uikit-color-primary);
     border-bottom-color: var(--uikit-color-primary);
   }
+
+  /* Keyboard focus indication: a dashed underline, distinct from the solid active underline
+     above and carrying no box/outline (see roving-focus .focus() calls in Tabs.tsx). Excluded
+     when the tab is also active so the solid active underline always wins. */
+  &:focus-visible:not(.uikit-tabs__tab--active) {
+    border-bottom-style: dashed;
+    border-bottom-color: var(--uikit-color-primary);
+  }
 }
 
 .uikit-tabs--pills .uikit-tabs__tab {
@@ -102,6 +113,12 @@
   &--active {
     color: var(--uikit-color-primary);
     background: var(--uikit-color-primary-soft);
+  }
+
+  /* Same box-free focus requirement as the underline variant; pills have no border-bottom, so a
+     soft background tint stands in for the underline as the keyboard focus indicator. */
+  &:focus-visible:not(.uikit-tabs__tab--active) {
+    background: var(--uikit-bg-subtle);
   }
 }
 

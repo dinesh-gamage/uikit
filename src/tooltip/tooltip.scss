@@ -1,0 +1,25 @@
+.uikit-tooltip-anchor {
+  display: inline-flex;
+  max-width: 100%;
+}
+
+.uikit-tooltip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: var(--uikit-z-toast);
+  max-width: 18rem;
+  padding: 3px 8px;
+  background: var(--uikit-text);
+  color: var(--uikit-bg);
+  font-family: var(--uikit-font);
+  font-size: var(--uikit-text-xs);
+  line-height: 1.4;
+  border-radius: var(--uikit-radius-sm);
+  box-shadow: var(--uikit-shadow-sm);
+  pointer-events: none;
+
+  &--measuring {
+    visibility: hidden;
+  }
+}

@@ -1,0 +1,84 @@
+.uikit-icon-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: none;
+  padding: 0;
+  border: none;
+  border-radius: var(--uikit-radius-sm);
+  background: transparent;
+  color: var(--uikit-text-muted);
+  cursor: pointer;
+  transition:
+    background var(--uikit-speed) var(--uikit-ease),
+    color var(--uikit-speed) var(--uikit-ease);
+
+  &--sm {
+    width: var(--uikit-control-h-sm);
+    height: var(--uikit-control-h-sm);
+    font-size: 13px;
+  }
+
+  &--md {
+    width: var(--uikit-control-h-md);
+    height: var(--uikit-control-h-md);
+    font-size: 15px;
+  }
+
+  svg {
+    width: 1em;
+    height: 1em;
+  }
+
+  &:hover:not(:disabled) {
+    background: var(--uikit-bg-subtle);
+    color: var(--uikit-text);
+  }
+
+  &:focus-visible {
+    outline: none;
+    box-shadow: var(--uikit-focus-ring);
+  }
+
+  &:disabled {
+    color: var(--uikit-text-faint);
+    cursor: not-allowed;
+  }
+
+  &--loading {
+    cursor: default;
+  }
+
+  &--active {
+    background: var(--uikit-bg-subtle);
+    color: var(--uikit-text);
+  }
+
+  &--primary {
+    color: var(--uikit-color-primary);
+
+    &:hover:not(:disabled) {
+      background: var(--uikit-color-primary-soft);
+      color: var(--uikit-color-primary);
+    }
+
+    &.uikit-icon-button--active {
+      background: var(--uikit-color-primary-soft);
+      color: var(--uikit-color-primary);
+    }
+  }
+
+  &--danger {
+    color: var(--uikit-color-danger);
+
+    &:hover:not(:disabled) {
+      background: var(--uikit-color-danger-soft);
+      color: var(--uikit-color-danger);
+    }
+
+    &.uikit-icon-button--active {
+      background: var(--uikit-color-danger-soft);
+      color: var(--uikit-color-danger);
+    }
+  }
+}
