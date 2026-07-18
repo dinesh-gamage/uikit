@@ -1,0 +1,21 @@
+.uikit-popover {
+  background: var(--uikit-bg);
+  border: 1px solid var(--uikit-border);
+  border-radius: var(--uikit-radius);
+  box-shadow: var(--uikit-shadow);
+  z-index: var(--uikit-z-dropdown);
+  overflow-y: auto;
+  font-family: var(--uikit-font);
+  animation: uikit-popover-in var(--uikit-speed) var(--uikit-ease);
+}
+
+@keyframes uikit-popover-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

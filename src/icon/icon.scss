@@ -1,0 +1,23 @@
+.uikit-icon {
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  user-select: none;
+
+  &--clickable {
+    cursor: pointer;
+  }
+
+  &--spin {
+    animation: uikit-icon-spin 1s linear infinite;
+  }
+}
+
+img.uikit-icon {
+  object-fit: contain;
+}
+
+@keyframes uikit-icon-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

@@ -1,0 +1,153 @@
+.sc-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  height: 100%;
+
+  &__head {
+    h1 {
+      margin: 0 0 4px;
+      font-size: 22px;
+      color: var(--uikit-text);
+    }
+    p {
+      margin: 0;
+      color: var(--uikit-text-muted);
+      font-size: var(--uikit-text-md);
+      max-width: 640px;
+    }
+  }
+
+  &__body {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    min-height: 0;
+    flex: 1;
+  }
+
+  &__stage {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  &__preview {
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius-lg);
+    background: var(--uikit-bg);
+    padding: 32px;
+    min-height: 220px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    overflow: auto;
+  }
+
+  &__codebar {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+
+    button {
+      border: 1px solid var(--uikit-border);
+      background: var(--uikit-bg-subtle);
+      color: var(--uikit-text);
+      border-radius: var(--uikit-radius);
+      padding: 6px 14px;
+      font-size: var(--uikit-text-sm);
+      cursor: pointer;
+
+      &:hover {
+        background: var(--uikit-bg-muted);
+      }
+    }
+  }
+
+  &__code {
+    margin: 0;
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius);
+    background: var(--uikit-bg-subtle);
+    color: var(--uikit-text);
+    padding: 16px;
+    font-family: var(--uikit-font-mono);
+    font-size: 12.5px;
+    line-height: 1.6;
+    overflow: auto;
+    white-space: pre;
+  }
+
+  &__controls {
+    width: 260px;
+    flex-shrink: 0;
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius-lg);
+    background: var(--uikit-bg);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+
+    h2 {
+      margin: 0;
+      font-size: 13px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--uikit-text-muted);
+    }
+  }
+}
+
+.sc-control {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  > label {
+    font-size: var(--uikit-text-sm);
+    font-weight: 500;
+    color: var(--uikit-text);
+  }
+
+  input[type='text'],
+  input[type='number'],
+  select,
+  textarea {
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius-sm);
+    background: var(--uikit-bg);
+    color: var(--uikit-text);
+    padding: 6px 8px;
+    font-size: var(--uikit-text-sm);
+    font-family: inherit;
+
+    &:focus {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+  &__json {
+    font-family: var(--uikit-font-mono) !important;
+    font-size: 11.5px !important;
+
+    &--invalid {
+      border-color: var(--uikit-color-danger) !important;
+    }
+  }
+
+  &__toggle {
+    display: inline-flex;
+
+    input {
+      width: 34px;
+      height: 18px;
+      accent-color: var(--uikit-color-primary);
+    }
+  }
+}

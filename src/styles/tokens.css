@@ -1,0 +1,95 @@
+/* Design tokens. Override any of these in your app to theme the kit. */
+:root {
+  /* palette */
+  --uikit-color-primary: #4f6df5;
+  --uikit-color-primary-hover: #3d5ae3;
+  --uikit-color-primary-soft: rgba(79, 109, 245, 0.12);
+  --uikit-color-danger: #e5484d;
+  --uikit-color-danger-soft: rgba(229, 72, 77, 0.12);
+  --uikit-color-success: #30a46c;
+  --uikit-color-success-soft: rgba(48, 164, 108, 0.12);
+  --uikit-color-warning: #f5a623;
+  --uikit-color-warning-soft: rgba(245, 166, 35, 0.14);
+  --uikit-color-info: #0091ff;
+  --uikit-color-info-soft: rgba(0, 145, 255, 0.12);
+
+  /* surfaces */
+  --uikit-bg: #ffffff;
+  --uikit-bg-subtle: #f6f7f9;
+  --uikit-bg-muted: #eceef2;
+  --uikit-bg-overlay: rgba(17, 24, 39, 0.55);
+
+  /* text */
+  --uikit-text: #1a2130;
+  --uikit-text-muted: #5b6472;
+  --uikit-text-faint: #99a1ad;
+  --uikit-text-on-primary: #ffffff;
+
+  /* borders */
+  --uikit-border: #d8dde5;
+  --uikit-border-strong: #b6bec9;
+  --uikit-focus-ring: 0 0 0 3px var(--uikit-color-primary-soft), 0 0 0 1px var(--uikit-color-primary);
+
+  /* shape & elevation */
+  --uikit-radius-sm: 4px;
+  --uikit-radius: 8px;
+  --uikit-radius-lg: 12px;
+  --uikit-radius-full: 999px;
+  --uikit-shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06);
+  --uikit-shadow: 0 4px 12px rgba(16, 24, 40, 0.1);
+  --uikit-shadow-lg: 0 12px 32px rgba(16, 24, 40, 0.16);
+
+  /* typography */
+  --uikit-font: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  --uikit-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --uikit-text-xs: 11px;
+  --uikit-text-sm: 12.5px;
+  --uikit-text-md: 14px;
+  --uikit-text-lg: 16px;
+
+  /* controls */
+  --uikit-control-h-sm: 28px;
+  --uikit-control-h-md: 34px;
+  --uikit-control-h-lg: 40px;
+  --uikit-control-pad-x: 10px;
+
+  /* motion */
+  --uikit-ease: cubic-bezier(0.4, 0, 0.2, 1);
+  --uikit-speed: 150ms;
+
+  /* z-index layers */
+  --uikit-z-dropdown: 1000;
+  --uikit-z-modal: 1100;
+  --uikit-z-toast: 1200;
+}
+
+[data-theme='dark'] {
+  --uikit-color-primary: #6c86ff;
+  --uikit-color-primary-hover: #8299ff;
+  --uikit-color-primary-soft: rgba(108, 134, 255, 0.18);
+  --uikit-color-danger: #ff6369;
+  --uikit-color-danger-soft: rgba(255, 99, 105, 0.16);
+  --uikit-color-success: #3dd68c;
+  --uikit-color-success-soft: rgba(61, 214, 140, 0.16);
+  --uikit-color-warning: #ffb224;
+  --uikit-color-warning-soft: rgba(255, 178, 36, 0.16);
+  --uikit-color-info: #52a9ff;
+  --uikit-color-info-soft: rgba(82, 169, 255, 0.16);
+
+  --uikit-bg: #16181d;
+  --uikit-bg-subtle: #1d2026;
+  --uikit-bg-muted: #262a31;
+  --uikit-bg-overlay: rgba(0, 0, 0, 0.65);
+
+  --uikit-text: #e8eaee;
+  --uikit-text-muted: #9aa3b0;
+  --uikit-text-faint: #6b7280;
+  --uikit-text-on-primary: #ffffff;
+
+  --uikit-border: #33383f;
+  --uikit-border-strong: #4a515a;
+
+  --uikit-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --uikit-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+  --uikit-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+}

@@ -1,0 +1,104 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  height: 100%;
+}
+
+body {
+  font-family: var(--uikit-font);
+  background: var(--uikit-bg-subtle);
+  color: var(--uikit-text);
+}
+
+.sc-app {
+  display: flex;
+  height: 100%;
+
+  &__sidebar {
+    width: 220px;
+    flex-shrink: 0;
+    border-right: 1px solid var(--uikit-border);
+    background: var(--uikit-bg);
+    padding: 16px 12px;
+    overflow-y: auto;
+  }
+
+  &__brand {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 8px 16px;
+  }
+
+  &__logo {
+    font-weight: 700;
+    font-size: 17px;
+    letter-spacing: -0.02em;
+  }
+
+  &__theme {
+    border: 1px solid var(--uikit-border);
+    background: var(--uikit-bg-subtle);
+    color: var(--uikit-text);
+    border-radius: var(--uikit-radius);
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1;
+  }
+
+  &__group {
+    margin-bottom: 14px;
+  }
+
+  &__group-title {
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--uikit-text-faint);
+    padding: 0 8px 6px;
+  }
+
+  &__navitem {
+    display: block;
+    width: 100%;
+    text-align: left;
+    border: none;
+    background: none;
+    color: var(--uikit-text-muted);
+    font-size: 13.5px;
+    padding: 6px 8px;
+    border-radius: var(--uikit-radius);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--uikit-bg-subtle);
+      color: var(--uikit-text);
+    }
+
+    &--active {
+      background: var(--uikit-color-primary-soft);
+      color: var(--uikit-color-primary);
+      font-weight: 500;
+    }
+  }
+
+  &__main {
+    flex: 1;
+    min-width: 0;
+    padding: 28px 32px;
+    overflow-y: auto;
+  }
+
+  &__loading {
+    color: var(--uikit-text-muted);
+    padding: 40px;
+  }
+}

@@ -1,0 +1,34 @@
+.uikit-field {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--uikit-font);
+  min-width: 0;
+
+  &__label {
+    font-size: var(--uikit-text-sm);
+    font-weight: 500;
+    color: var(--uikit-text);
+    display: inline-flex;
+    align-items: center;
+    gap: 3px;
+  }
+
+  &__required {
+    color: var(--uikit-color-danger);
+  }
+
+  &__hint {
+    font-size: var(--uikit-text-xs);
+    color: var(--uikit-text-muted);
+  }
+
+  &__error {
+    font-size: var(--uikit-text-xs);
+    color: var(--uikit-color-danger);
+  }
+
+  &--disabled &__label {
+    color: var(--uikit-text-faint);
+  }
+}

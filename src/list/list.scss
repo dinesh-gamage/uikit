@@ -1,0 +1,505 @@
+.uikit-list {
+  font-family: var(--uikit-font);
+  color: var(--uikit-text);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+
+  /* ---- header block ---- */
+
+  &__head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  &__head-main {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+  }
+
+  &__breadcrumb {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: var(--uikit-text-sm);
+    color: var(--uikit-text-muted);
+  }
+
+  &__crumb-item {
+    display: inline-flex;
+    align-items: center;
+  }
+
+  &__crumb {
+    color: var(--uikit-text-muted);
+
+    &--link {
+      appearance: none;
+      background: none;
+      border: 0;
+      padding: 0;
+      margin: 0;
+      font: inherit;
+      color: var(--uikit-text-muted);
+      cursor: pointer;
+
+      &:hover {
+        color: var(--uikit-color-primary);
+        text-decoration: underline;
+      }
+    }
+  }
+
+  &__crumb-sep {
+    margin: 0 6px;
+    color: var(--uikit-text-faint);
+  }
+
+  &__title {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 650;
+    line-height: 1.3;
+    color: var(--uikit-text);
+  }
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: none;
+  }
+
+  /* ---- tabs ---- */
+
+  &__tabs {
+    display: flex;
+    gap: 4px;
+    border-bottom: 1px solid var(--uikit-border);
+  }
+
+  &__tab {
+    appearance: none;
+    background: none;
+    border: 0;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    padding: 8px 12px;
+    font: inherit;
+    font-size: var(--uikit-text-md);
+    color: var(--uikit-text-muted);
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: color var(--uikit-speed) var(--uikit-ease), border-color var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      color: var(--uikit-text);
+    }
+
+    &--active {
+      color: var(--uikit-color-primary);
+      border-bottom-color: var(--uikit-color-primary);
+      font-weight: 500;
+    }
+  }
+
+  &__tab-count {
+    font-size: var(--uikit-text-xs);
+    background: var(--uikit-bg-muted);
+    color: var(--uikit-text-muted);
+    border-radius: var(--uikit-radius-full);
+    padding: 1px 7px;
+    min-width: 18px;
+    text-align: center;
+  }
+
+  &__tab--active &__tab-count {
+    background: var(--uikit-color-primary-soft);
+    color: var(--uikit-color-primary);
+  }
+
+  /* ---- search ---- */
+
+  &__search-input {
+    width: min(320px, 100%);
+    height: var(--uikit-control-h-md);
+    padding: 0 var(--uikit-control-pad-x);
+    font: inherit;
+    font-size: var(--uikit-text-md);
+    color: var(--uikit-text);
+    background: var(--uikit-bg);
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius);
+    outline: none;
+    transition: box-shadow var(--uikit-speed) var(--uikit-ease), border-color var(--uikit-speed) var(--uikit-ease);
+
+    &::placeholder {
+      color: var(--uikit-text-faint);
+    }
+
+    &:focus {
+      border-color: var(--uikit-color-primary);
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+  /* ---- body: table + details panel ---- */
+
+  &__body {
+    display: flex;
+    align-items: stretch;
+    gap: 12px;
+    min-width: 0;
+  }
+
+  &__main {
+    flex: 1;
+    min-width: 0;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__progress {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--uikit-color-primary-soft);
+    border-radius: var(--uikit-radius-full);
+    overflow: hidden;
+    z-index: 1;
+
+    span {
+      display: block;
+      height: 100%;
+      width: 40%;
+      background: var(--uikit-color-primary);
+      border-radius: inherit;
+      animation: uikit-list-progress 1.1s var(--uikit-ease) infinite;
+    }
+  }
+
+  &__table-wrap {
+    overflow-x: auto;
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius);
+    background: var(--uikit-bg);
+  }
+
+  &__table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--uikit-text-md);
+  }
+
+  &__th {
+    text-align: left;
+    font-size: var(--uikit-text-sm);
+    font-weight: 600;
+    color: var(--uikit-text-muted);
+    background: var(--uikit-bg-subtle);
+    border-bottom: 1px solid var(--uikit-border);
+    padding: 10px 12px;
+    white-space: nowrap;
+    user-select: none;
+
+    &--sortable {
+      cursor: pointer;
+
+      &:hover {
+        color: var(--uikit-text);
+      }
+    }
+
+    &--check {
+      width: 36px;
+      padding-right: 0;
+    }
+  }
+
+  &__th-inner {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+  }
+
+  &__sort {
+    color: var(--uikit-text-faint);
+    font-size: var(--uikit-text-xs);
+    line-height: 1;
+
+    &::after {
+      content: '↕';
+    }
+
+    &--asc {
+      color: var(--uikit-color-primary);
+
+      &::after {
+        content: '↑';
+      }
+    }
+
+    &--desc {
+      color: var(--uikit-color-primary);
+
+      &::after {
+        content: '↓';
+      }
+    }
+  }
+
+  &__row {
+    &:not(:last-child) .uikit-list__td {
+      border-bottom: 1px solid var(--uikit-border);
+    }
+
+    &--clickable {
+      cursor: pointer;
+
+      &:hover .uikit-list__td {
+        background: var(--uikit-bg-subtle);
+      }
+    }
+
+    &--selected .uikit-list__td {
+      background: var(--uikit-bg-subtle);
+    }
+
+    &--active .uikit-list__td,
+    &--active:hover .uikit-list__td {
+      background: var(--uikit-color-primary-soft);
+    }
+  }
+
+  &__td {
+    padding: 10px 12px;
+    color: var(--uikit-text);
+    transition: background var(--uikit-speed) var(--uikit-ease);
+
+    &--check {
+      width: 36px;
+      padding-right: 0;
+    }
+  }
+
+  &__checkbox {
+    accent-color: var(--uikit-color-primary);
+    width: 15px;
+    height: 15px;
+    cursor: pointer;
+  }
+
+  &__empty {
+    padding: 32px 12px;
+    text-align: center;
+    color: var(--uikit-text-muted);
+    font-size: var(--uikit-text-md);
+  }
+
+  /* ---- error state ---- */
+
+  &__error {
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius);
+    background: var(--uikit-bg);
+    padding: 32px 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__error-message {
+    margin: 0;
+    color: var(--uikit-color-danger);
+    font-size: var(--uikit-text-md);
+  }
+
+  &__retry {
+    appearance: none;
+    font: inherit;
+    font-size: var(--uikit-text-md);
+    color: var(--uikit-text);
+    background: var(--uikit-bg);
+    border: 1px solid var(--uikit-border-strong);
+    border-radius: var(--uikit-radius);
+    height: var(--uikit-control-h-sm);
+    padding: 0 14px;
+    cursor: pointer;
+    transition: background var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      background: var(--uikit-bg-subtle);
+    }
+  }
+
+  /* ---- pagination ---- */
+
+  &__pagination {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding-top: 10px;
+    font-size: var(--uikit-text-sm);
+    color: var(--uikit-text-muted);
+  }
+
+  &__pagination-controls {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__page-size {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+
+    select {
+      font: inherit;
+      font-size: var(--uikit-text-sm);
+      color: var(--uikit-text);
+      background: var(--uikit-bg);
+      border: 1px solid var(--uikit-border);
+      border-radius: var(--uikit-radius-sm);
+      height: var(--uikit-control-h-sm);
+      padding: 0 6px;
+      cursor: pointer;
+    }
+  }
+
+  &__page-btn {
+    appearance: none;
+    font: inherit;
+    font-size: var(--uikit-text-lg);
+    line-height: 1;
+    color: var(--uikit-text);
+    background: var(--uikit-bg);
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius-sm);
+    width: var(--uikit-control-h-sm);
+    height: var(--uikit-control-h-sm);
+    cursor: pointer;
+    transition: background var(--uikit-speed) var(--uikit-ease);
+
+    &:hover:not(:disabled) {
+      background: var(--uikit-bg-subtle);
+    }
+
+    &:disabled {
+      color: var(--uikit-text-faint);
+      cursor: default;
+    }
+  }
+
+  /* ---- infinite mode ---- */
+
+  &__load-more {
+    display: flex;
+    justify-content: center;
+    padding: 12px;
+    color: var(--uikit-text-muted);
+  }
+
+  &__sentinel {
+    height: 1px;
+  }
+
+  /* ---- details panel ---- */
+
+  &__panel {
+    width: 40%;
+    min-width: 260px;
+    flex: none;
+    background: var(--uikit-bg);
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius);
+    box-shadow: var(--uikit-shadow-sm);
+    display: flex;
+    flex-direction: column;
+    align-self: flex-start;
+    max-height: 100%;
+    animation: uikit-list-panel-in var(--uikit-speed) var(--uikit-ease);
+  }
+
+  &__panel-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--uikit-border);
+  }
+
+  &__panel-title {
+    font-size: var(--uikit-text-lg);
+    font-weight: 600;
+    color: var(--uikit-text);
+    min-width: 0;
+    overflow-wrap: anywhere;
+  }
+
+  &__panel-close {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    width: 26px;
+    height: 26px;
+    flex: none;
+    font-size: 18px;
+    line-height: 1;
+    color: var(--uikit-text-muted);
+    border-radius: var(--uikit-radius-sm);
+    cursor: pointer;
+    transition: background var(--uikit-speed) var(--uikit-ease), color var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      background: var(--uikit-bg-muted);
+      color: var(--uikit-text);
+    }
+  }
+
+  &__panel-body {
+    padding: 16px;
+    overflow-y: auto;
+
+    .uikit-info-card {
+      border: 0;
+      padding: 0;
+    }
+  }
+}
+
+@keyframes uikit-list-progress {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(350%);
+  }
+}
+
+@keyframes uikit-list-panel-in {
+  from {
+    transform: translateX(16px);
+    opacity: 0;
+  }
+
+  to {
+    transform: none;
+    opacity: 1;
+  }
+}

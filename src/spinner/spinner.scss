@@ -1,0 +1,31 @@
+.uikit-spinner {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--uikit-font);
+
+  &--block {
+    display: flex;
+    justify-content: center;
+    padding: 24px;
+  }
+
+  &__ring {
+    border-style: solid;
+    border-color: var(--uikit-bg-muted);
+    border-top-color: var(--uikit-color-primary);
+    border-radius: var(--uikit-radius-full);
+    animation: uikit-spinner-rotate 0.8s linear infinite;
+    box-sizing: border-box;
+    flex-shrink: 0;
+  }
+
+  &__label {
+    color: var(--uikit-text-muted);
+    font-size: var(--uikit-text-sm);
+  }
+}
+
+@keyframes uikit-spinner-rotate {
+  to { transform: rotate(360deg); }
+}

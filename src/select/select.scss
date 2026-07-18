@@ -1,0 +1,370 @@
+.uikit-select {
+  position: relative;
+  display: inline-flex;
+  min-width: 200px;
+  max-width: 100%;
+  font-family: var(--uikit-font);
+
+  &--full {
+    display: flex;
+    width: 100%;
+  }
+
+  &--pill {
+    min-width: 0;
+  }
+
+  &__trigger {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    min-width: 0;
+    min-height: var(--uikit-control-h-md);
+    padding: 3px var(--uikit-control-pad-x);
+    background: var(--uikit-bg);
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius);
+    color: var(--uikit-text);
+    font-size: var(--uikit-text-md);
+    cursor: pointer;
+    user-select: none;
+    outline: none;
+    transition:
+      border-color var(--uikit-speed) var(--uikit-ease),
+      box-shadow var(--uikit-speed) var(--uikit-ease),
+      background var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      border-color: var(--uikit-border-strong);
+    }
+
+    &:focus-visible {
+      border-color: var(--uikit-color-primary);
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+  &--sm &__trigger {
+    min-height: var(--uikit-control-h-sm);
+    font-size: var(--uikit-text-sm);
+  }
+
+  &--lg &__trigger {
+    min-height: var(--uikit-control-h-lg);
+    font-size: var(--uikit-text-lg);
+  }
+
+  &--open &__trigger {
+    border-color: var(--uikit-color-primary);
+    box-shadow: var(--uikit-focus-ring);
+  }
+
+  &--error &__trigger {
+    border-color: var(--uikit-color-danger);
+  }
+
+  &--error.uikit-select--open &__trigger,
+  &--error &__trigger:focus-visible {
+    box-shadow: 0 0 0 3px var(--uikit-color-danger-soft);
+  }
+
+  &--disabled &__trigger {
+    background: var(--uikit-bg-subtle);
+    color: var(--uikit-text-faint);
+    cursor: not-allowed;
+  }
+
+  &--pill &__trigger {
+    width: auto;
+    min-height: unset;
+    padding: 4px 12px;
+    gap: 4px;
+    background: var(--uikit-bg-subtle);
+    border-color: transparent;
+    border-radius: var(--uikit-radius-full);
+    font-size: var(--uikit-text-sm);
+
+    &:hover {
+      background: var(--uikit-bg-muted);
+    }
+  }
+
+  &__value {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+
+    &--placeholder {
+      color: var(--uikit-text-faint);
+    }
+  }
+
+  &__clear {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 18px;
+    height: 18px;
+    border-radius: var(--uikit-radius-full);
+    color: var(--uikit-text-muted);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--uikit-bg-muted);
+      color: var(--uikit-text);
+    }
+  }
+
+  &__chevron {
+    flex: none;
+    display: inline-flex;
+    color: var(--uikit-text-muted);
+    transition: transform var(--uikit-speed) var(--uikit-ease);
+  }
+
+  &--open &__chevron {
+    transform: rotate(180deg);
+  }
+
+  /* Pills inside the MultiSelect trigger */
+  &__pills {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    max-width: 100%;
+    padding: 1px 6px 1px 8px;
+    background: var(--uikit-bg-muted);
+    border-radius: var(--uikit-radius-full);
+    font-size: var(--uikit-text-sm);
+    color: var(--uikit-text);
+
+    &--more {
+      padding: 1px 8px;
+      color: var(--uikit-text-muted);
+    }
+  }
+
+  &__pill-custom {
+    display: inline-flex;
+    max-width: 100%;
+  }
+
+  &__pill-label {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__pill-remove {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 14px;
+    height: 14px;
+    border-radius: var(--uikit-radius-full);
+    color: var(--uikit-text-muted);
+    cursor: pointer;
+
+    &:hover {
+      background: var(--uikit-border);
+      color: var(--uikit-text);
+    }
+  }
+
+  /* Dropdown panel (portaled, so these compile to standalone class selectors) */
+  &__panel {
+    display: flex;
+    flex-direction: column;
+
+    &--detached {
+      min-width: 200px;
+    }
+  }
+
+  &__dropdown {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  &__search {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px;
+    background: var(--uikit-bg);
+    border-bottom: 1px solid var(--uikit-border);
+  }
+
+  &__search-input {
+    flex: 1;
+    min-width: 0;
+    box-sizing: border-box;
+    height: var(--uikit-control-h-sm);
+    padding: 0 8px;
+    background: var(--uikit-bg);
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius-sm);
+    color: var(--uikit-text);
+    font-family: inherit;
+    font-size: var(--uikit-text-sm);
+    outline: none;
+
+    &::placeholder {
+      color: var(--uikit-text-faint);
+    }
+
+    &:focus {
+      border-color: var(--uikit-color-primary);
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+  &__search-spinner {
+    flex: none;
+  }
+
+  &__status {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 12px;
+    color: var(--uikit-text-muted);
+    font-size: var(--uikit-text-sm);
+  }
+
+  &__list {
+    margin: 0;
+    padding: 4px;
+    list-style: none;
+  }
+
+  &__option {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 8px;
+    border-radius: var(--uikit-radius-sm);
+    color: var(--uikit-text);
+    font-size: var(--uikit-text-md);
+    cursor: pointer;
+
+    &--highlighted {
+      background: var(--uikit-bg-muted);
+    }
+
+    &--selected {
+      color: var(--uikit-color-primary);
+      font-weight: 500;
+    }
+
+    &--disabled {
+      color: var(--uikit-text-faint);
+      cursor: not-allowed;
+    }
+
+    &--select-all {
+      margin-bottom: 4px;
+      border-bottom: 1px solid var(--uikit-border);
+      border-radius: 0;
+
+      &:hover {
+        background: var(--uikit-bg-subtle);
+      }
+    }
+  }
+
+  &__option-label {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__check {
+    flex: none;
+    display: inline-flex;
+    color: var(--uikit-color-primary);
+  }
+
+  &__checkbox {
+    flex: none;
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    background: var(--uikit-bg);
+    border: 1px solid var(--uikit-border-strong);
+    border-radius: var(--uikit-radius-sm);
+    color: var(--uikit-text-on-primary);
+    transition:
+      background var(--uikit-speed) var(--uikit-ease),
+      border-color var(--uikit-speed) var(--uikit-ease);
+
+    &--checked,
+    &--indeterminate {
+      background: var(--uikit-color-primary);
+      border-color: var(--uikit-color-primary);
+    }
+  }
+
+  &__footer {
+    position: sticky;
+    bottom: 0;
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 6px;
+    background: var(--uikit-bg);
+    border-top: 1px solid var(--uikit-border);
+  }
+
+  &__footer-btn {
+    padding: 4px 10px;
+    background: var(--uikit-bg);
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius-sm);
+    color: var(--uikit-text);
+    font-family: inherit;
+    font-size: var(--uikit-text-sm);
+    cursor: pointer;
+    transition: background var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      background: var(--uikit-bg-subtle);
+    }
+
+    &--primary {
+      background: var(--uikit-color-primary);
+      border-color: var(--uikit-color-primary);
+      color: var(--uikit-text-on-primary);
+
+      &:hover {
+        background: var(--uikit-color-primary-hover);
+      }
+    }
+  }
+}

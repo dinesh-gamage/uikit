@@ -1,0 +1,208 @@
+/* Shared trigger + popover panel styles for the datetime pickers. */
+
+.uikit-datetime-trigger {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  height: var(--uikit-control-h-md);
+  padding: 0 var(--uikit-control-pad-x);
+  background: var(--uikit-bg);
+  border: 1px solid var(--uikit-border);
+  border-radius: var(--uikit-radius);
+  cursor: text;
+  transition: border-color var(--uikit-speed) var(--uikit-ease), box-shadow var(--uikit-speed) var(--uikit-ease);
+
+  &:hover:not(&--disabled) {
+    border-color: var(--uikit-border-strong);
+  }
+
+  &:focus-within,
+  &--open {
+    border-color: var(--uikit-color-primary);
+    box-shadow: var(--uikit-focus-ring);
+  }
+
+  &--sm {
+    height: var(--uikit-control-h-sm);
+
+    .uikit-datetime-trigger__input {
+      font-size: var(--uikit-text-sm);
+    }
+  }
+
+  &--lg {
+    height: var(--uikit-control-h-lg);
+
+    .uikit-datetime-trigger__input {
+      font-size: var(--uikit-text-lg);
+    }
+  }
+
+  &--pill {
+    border-radius: var(--uikit-radius-full);
+  }
+
+  &--error {
+    border-color: var(--uikit-color-danger);
+
+    &:focus-within,
+    &.uikit-datetime-trigger--open {
+      box-shadow: 0 0 0 3px var(--uikit-color-danger-soft), 0 0 0 1px var(--uikit-color-danger);
+    }
+  }
+
+  &--disabled {
+    background: var(--uikit-bg-subtle);
+    cursor: not-allowed;
+
+    .uikit-datetime-trigger__input {
+      cursor: not-allowed;
+      color: var(--uikit-text-faint);
+    }
+  }
+
+  &__icon {
+    display: inline-flex;
+    flex: none;
+    color: var(--uikit-text-muted);
+    pointer-events: none;
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+  }
+
+  &__input {
+    flex: 1;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0;
+    font-family: var(--uikit-font);
+    font-size: var(--uikit-text-md);
+    color: var(--uikit-text);
+
+    &::placeholder {
+      color: var(--uikit-text-faint);
+    }
+
+    &[readonly] {
+      cursor: pointer;
+    }
+  }
+
+  &__clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 18px;
+    height: 18px;
+    border: none;
+    background: transparent;
+    border-radius: var(--uikit-radius-full);
+    color: var(--uikit-text-faint);
+    cursor: pointer;
+    padding: 0;
+    transition: color var(--uikit-speed) var(--uikit-ease), background var(--uikit-speed) var(--uikit-ease);
+
+    svg {
+      width: 11px;
+      height: 11px;
+    }
+
+    &:hover {
+      color: var(--uikit-text);
+      background: var(--uikit-bg-muted);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+}
+
+.uikit-datetime-panel {
+  display: flex;
+  flex-direction: column;
+
+  &__divider {
+    height: 1px;
+    background: var(--uikit-border);
+    margin: 0 8px;
+  }
+
+  &__time {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding: 10px 12px;
+  }
+
+  &__footer {
+    display: flex;
+    justify-content: flex-end;
+    padding: 8px;
+    border-top: 1px solid var(--uikit-border);
+  }
+
+  &__done {
+    border: none;
+    background: var(--uikit-color-primary);
+    color: var(--uikit-text-on-primary);
+    font-family: var(--uikit-font);
+    font-size: var(--uikit-text-sm);
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: var(--uikit-radius-sm);
+    cursor: pointer;
+    transition: background var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      background: var(--uikit-color-primary-hover);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+}
+
+.uikit-daterange-panel {
+  display: flex;
+
+  &__presets {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 8px;
+    min-width: 116px;
+    border-right: 1px solid var(--uikit-border);
+  }
+
+  &__preset {
+    border: none;
+    background: transparent;
+    text-align: left;
+    padding: 5px 8px;
+    border-radius: var(--uikit-radius-sm);
+    font-family: var(--uikit-font);
+    font-size: var(--uikit-text-sm);
+    color: var(--uikit-text);
+    cursor: pointer;
+    transition: background var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      background: var(--uikit-bg-muted);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+}

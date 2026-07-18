@@ -1,0 +1,113 @@
+.uikit-radio {
+  display: flex;
+  gap: 8px;
+  font-family: var(--uikit-font);
+
+  &--vertical {
+    flex-direction: column;
+  }
+
+  &--horizontal {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  &--sm {
+    --uikit-radio-dot: 14px;
+    font-size: var(--uikit-text-sm);
+  }
+
+  &--md {
+    --uikit-radio-dot: 16px;
+    font-size: var(--uikit-text-md);
+  }
+
+  &--lg {
+    --uikit-radio-dot: 18px;
+    font-size: var(--uikit-text-lg);
+  }
+
+  &__option {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    color: var(--uikit-text);
+
+    &--disabled {
+      cursor: not-allowed;
+      color: var(--uikit-text-faint);
+    }
+  }
+
+  &__input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    padding: 0;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  &__dot {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    box-sizing: border-box;
+    width: var(--uikit-radio-dot);
+    height: var(--uikit-radio-dot);
+    border: 1px solid var(--uikit-border-strong);
+    border-radius: var(--uikit-radius-full);
+    background: var(--uikit-bg);
+    transition:
+      background var(--uikit-speed) var(--uikit-ease),
+      border-color var(--uikit-speed) var(--uikit-ease),
+      box-shadow var(--uikit-speed) var(--uikit-ease);
+
+    &::after {
+      content: '';
+      width: 40%;
+      height: 40%;
+      border-radius: var(--uikit-radius-full);
+      background: var(--uikit-text-on-primary);
+      transform: scale(0);
+      transition: transform var(--uikit-speed) var(--uikit-ease);
+    }
+  }
+
+  &__input:checked + &__dot {
+    background: var(--uikit-color-primary);
+    border-color: var(--uikit-color-primary);
+
+    &::after {
+      transform: scale(1);
+    }
+  }
+
+  &__input:focus-visible + &__dot {
+    box-shadow: var(--uikit-focus-ring);
+  }
+
+  &--error &__dot {
+    border-color: var(--uikit-color-danger);
+  }
+
+  &__option--disabled &__dot {
+    background: var(--uikit-bg-subtle);
+    border-color: var(--uikit-border);
+  }
+
+  &__option--disabled &__input:checked + &__dot {
+    background: var(--uikit-text-faint);
+    border-color: var(--uikit-text-faint);
+  }
+
+  &__label {
+    min-width: 0;
+  }
+}

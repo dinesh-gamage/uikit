@@ -1,0 +1,37 @@
+.uikit-skeleton {
+  display: inline-block;
+  background: linear-gradient(90deg, var(--uikit-bg-muted) 25%, var(--uikit-bg-subtle) 50%, var(--uikit-bg-muted) 75%);
+  background-size: 200% 100%;
+  animation: uikit-skeleton-shimmer 1.4s ease infinite;
+  vertical-align: middle;
+
+  &--text {
+    width: 100%;
+    height: 0.9em;
+    border-radius: var(--uikit-radius-sm);
+  }
+
+  &--rect {
+    width: 100%;
+    height: 80px;
+    border-radius: var(--uikit-radius);
+  }
+
+  &--circle {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--uikit-radius-full);
+  }
+
+  &__stack {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+  }
+}
+
+@keyframes uikit-skeleton-shimmer {
+  from { background-position: 200% 0; }
+  to { background-position: -200% 0; }
+}

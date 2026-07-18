@@ -1,0 +1,129 @@
+.uikit-input {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  max-width: 100%;
+  box-sizing: border-box;
+  background: var(--uikit-bg);
+  border: 1px solid var(--uikit-border);
+  border-radius: var(--uikit-radius);
+  padding: 0 var(--uikit-control-pad-x);
+  font-family: var(--uikit-font);
+  color: var(--uikit-text);
+  transition:
+    border-color var(--uikit-speed) var(--uikit-ease),
+    box-shadow var(--uikit-speed) var(--uikit-ease);
+
+  &:hover:not(.uikit-input--disabled):not(.uikit-input--error) {
+    border-color: var(--uikit-border-strong);
+  }
+
+  &:focus-within {
+    border-color: var(--uikit-color-primary);
+    box-shadow: var(--uikit-focus-ring);
+  }
+
+  &--sm {
+    height: var(--uikit-control-h-sm);
+    font-size: var(--uikit-text-sm);
+  }
+
+  &--md {
+    height: var(--uikit-control-h-md);
+    font-size: var(--uikit-text-md);
+  }
+
+  &--lg {
+    height: var(--uikit-control-h-lg);
+    font-size: var(--uikit-text-lg);
+  }
+
+  &--full {
+    align-self: stretch;
+    width: 100%;
+  }
+
+  &--error {
+    border-color: var(--uikit-color-danger);
+
+    &:focus-within {
+      border-color: var(--uikit-color-danger);
+      box-shadow: 0 0 0 3px var(--uikit-color-danger-soft), 0 0 0 1px var(--uikit-color-danger);
+    }
+  }
+
+  &--disabled {
+    background: var(--uikit-bg-subtle);
+    color: var(--uikit-text-faint);
+    cursor: not-allowed;
+  }
+
+  &__control {
+    flex: 1 1 auto;
+    width: 140px;
+    min-width: 0;
+    border: none;
+    outline: none;
+    background: transparent;
+    padding: 0;
+    color: inherit;
+    font: inherit;
+
+    &::placeholder {
+      color: var(--uikit-text-faint);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+    }
+  }
+
+  &__prefix,
+  &__suffix {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    color: var(--uikit-text-muted);
+  }
+
+  &--disabled &__prefix,
+  &--disabled &__suffix {
+    color: var(--uikit-text-faint);
+  }
+
+  &__clear,
+  &__toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 18px;
+    height: 18px;
+    padding: 0;
+    border: none;
+    border-radius: var(--uikit-radius-sm);
+    background: transparent;
+    color: var(--uikit-text-faint);
+    cursor: pointer;
+    transition:
+      color var(--uikit-speed) var(--uikit-ease),
+      background var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      color: var(--uikit-text);
+      background: var(--uikit-bg-muted);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      color: var(--uikit-text-faint);
+      background: transparent;
+    }
+  }
+}

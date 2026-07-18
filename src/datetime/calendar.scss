@@ -1,0 +1,132 @@
+.uikit-calendar {
+  font-family: var(--uikit-font);
+  padding: 8px;
+  width: max-content;
+  user-select: none;
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px;
+    margin-bottom: 4px;
+  }
+
+  &__label {
+    font-size: var(--uikit-text-md);
+    font-weight: 600;
+    color: var(--uikit-text);
+  }
+
+  &__nav {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    border: none;
+    background: transparent;
+    border-radius: var(--uikit-radius-sm);
+    color: var(--uikit-text-muted);
+    cursor: pointer;
+    transition: background var(--uikit-speed) var(--uikit-ease);
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover {
+      background: var(--uikit-bg-muted);
+      color: var(--uikit-text);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+  &__weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, 32px);
+    text-align: center;
+    font-size: var(--uikit-text-xs);
+    color: var(--uikit-text-faint);
+    margin-bottom: 2px;
+
+    span {
+      line-height: 22px;
+    }
+  }
+
+  &__row {
+    display: grid;
+    grid-template-columns: repeat(7, 32px);
+  }
+
+  &__day {
+    height: 32px;
+    border: none;
+    background: transparent;
+    font-family: var(--uikit-font);
+    font-size: var(--uikit-text-sm);
+    color: var(--uikit-text);
+    border-radius: var(--uikit-radius-sm);
+    cursor: pointer;
+    padding: 0;
+    position: relative;
+    transition: background var(--uikit-speed) var(--uikit-ease);
+
+    &:hover:not(:disabled):not(.uikit-calendar__day--selected) {
+      background: var(--uikit-bg-muted);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+      z-index: 1;
+    }
+
+    &--outside {
+      color: var(--uikit-text-faint);
+    }
+
+    &--today {
+      font-weight: 700;
+      color: var(--uikit-color-primary);
+    }
+
+    &--in-range {
+      background: var(--uikit-color-primary-soft);
+      border-radius: 0;
+    }
+
+    &--selected {
+      background: var(--uikit-color-primary);
+      color: var(--uikit-text-on-primary);
+
+      &:hover {
+        background: var(--uikit-color-primary-hover);
+      }
+    }
+
+    &--range-start {
+      border-radius: var(--uikit-radius-sm) 0 0 var(--uikit-radius-sm);
+    }
+
+    &--range-end {
+      border-radius: 0 var(--uikit-radius-sm) var(--uikit-radius-sm) 0;
+    }
+
+    &--range-start.uikit-calendar__day--range-end {
+      border-radius: var(--uikit-radius-sm);
+    }
+
+    &:disabled {
+      color: var(--uikit-text-faint);
+      opacity: 0.45;
+      cursor: not-allowed;
+    }
+  }
+}

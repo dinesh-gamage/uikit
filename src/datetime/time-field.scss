@@ -1,0 +1,99 @@
+.uikit-timefield {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-family: var(--uikit-font);
+
+  &__label {
+    font-size: var(--uikit-text-xs);
+    font-weight: 500;
+    color: var(--uikit-text-muted);
+  }
+
+  &__inputs {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+  }
+
+  &__input {
+    width: 52px;
+    height: var(--uikit-control-h-sm);
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius-sm);
+    background: var(--uikit-bg);
+    color: var(--uikit-text);
+    font-family: var(--uikit-font-mono);
+    font-size: var(--uikit-text-md);
+    text-align: center;
+    padding: 0 2px;
+    transition: border-color var(--uikit-speed) var(--uikit-ease), box-shadow var(--uikit-speed) var(--uikit-ease);
+
+    &::placeholder {
+      color: var(--uikit-text-faint);
+    }
+
+    &:focus {
+      outline: none;
+      border-color: var(--uikit-color-primary);
+      box-shadow: var(--uikit-focus-ring);
+    }
+
+    &:disabled {
+      background: var(--uikit-bg-subtle);
+      color: var(--uikit-text-faint);
+      cursor: not-allowed;
+    }
+  }
+
+  &__sep {
+    color: var(--uikit-text-muted);
+    font-weight: 600;
+  }
+
+  &__meridiem {
+    display: flex;
+    margin-left: 4px;
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius-sm);
+    overflow: hidden;
+  }
+
+  &__meridiem-btn {
+    border: none;
+    background: transparent;
+    padding: 4px 8px;
+    font-family: var(--uikit-font);
+    font-size: var(--uikit-text-xs);
+    color: var(--uikit-text-muted);
+    cursor: pointer;
+    transition: background var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      background: var(--uikit-bg-muted);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+
+    &--active {
+      background: var(--uikit-color-primary);
+      color: var(--uikit-text-on-primary);
+
+      &:hover {
+        background: var(--uikit-color-primary-hover);
+      }
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.6;
+    }
+  }
+
+  &--disabled &__label {
+    color: var(--uikit-text-faint);
+  }
+}

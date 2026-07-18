@@ -1,0 +1,77 @@
+.uikit-info-card {
+  font-family: var(--uikit-font);
+  background: var(--uikit-bg);
+  border: 1px solid var(--uikit-border);
+  border-radius: var(--uikit-radius);
+  padding: 16px;
+  color: var(--uikit-text);
+  min-width: 0;
+
+  &__title {
+    margin: 0 0 14px;
+    font-size: var(--uikit-text-lg);
+    font-weight: 600;
+    color: var(--uikit-text);
+  }
+
+  &__grid {
+    display: grid;
+    gap: 14px 20px;
+  }
+
+  &--cols-1 &__grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  &--cols-2 &__grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  &--cols-3 &__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  &__field {
+    display: flex;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &__icon {
+    display: inline-flex;
+    flex: none;
+    margin-top: 2px;
+    color: var(--uikit-text-muted);
+  }
+
+  &__content {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  &--horizontal &__content {
+    flex-direction: row;
+    align-items: baseline;
+    gap: 6px;
+  }
+
+  &__label {
+    font-size: var(--uikit-text-sm);
+    font-weight: 500;
+    color: var(--uikit-text-muted);
+  }
+
+  &--horizontal &__label::after {
+    content: ':';
+  }
+
+  &__value {
+    font-size: var(--uikit-text-md);
+    color: var(--uikit-text);
+    overflow-wrap: anywhere;
+    min-width: 0;
+  }
+}

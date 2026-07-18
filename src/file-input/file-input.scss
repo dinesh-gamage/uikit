@@ -1,0 +1,230 @@
+.uikit-file {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-family: var(--uikit-font);
+  color: var(--uikit-text);
+
+  &--sm {
+    font-size: var(--uikit-text-sm);
+  }
+
+  &--md {
+    font-size: var(--uikit-text-md);
+  }
+
+  &--lg {
+    font-size: var(--uikit-text-lg);
+  }
+
+  &__native {
+    display: none;
+  }
+
+  &__dropzone {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 84px;
+    padding: 16px;
+    box-sizing: border-box;
+    border: 1px dashed var(--uikit-border-strong);
+    border-radius: var(--uikit-radius);
+    background: var(--uikit-bg-subtle);
+    color: var(--uikit-text-muted);
+    text-align: center;
+    cursor: pointer;
+    transition:
+      border-color var(--uikit-speed) var(--uikit-ease),
+      background var(--uikit-speed) var(--uikit-ease),
+      box-shadow var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      border-color: var(--uikit-color-primary);
+    }
+
+    &:focus-visible {
+      outline: none;
+      border-color: var(--uikit-color-primary);
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+  &--dragging &__dropzone {
+    border-color: var(--uikit-color-primary);
+    background: var(--uikit-color-primary-soft);
+    color: var(--uikit-color-primary);
+  }
+
+  &--error &__dropzone {
+    border-color: var(--uikit-color-danger);
+  }
+
+  &--disabled &__dropzone {
+    cursor: not-allowed;
+    color: var(--uikit-text-faint);
+    background: var(--uikit-bg-subtle);
+    border-color: var(--uikit-border);
+
+    &:hover {
+      border-color: var(--uikit-border);
+    }
+  }
+
+  &__list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+    padding: 6px 8px;
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius);
+    background: var(--uikit-bg);
+  }
+
+  &__thumb {
+    flex: none;
+    width: 36px;
+    height: 36px;
+    object-fit: cover;
+    border-radius: var(--uikit-radius-sm);
+    background: var(--uikit-bg-muted);
+  }
+
+  &__doc {
+    flex: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--uikit-radius-sm);
+    background: var(--uikit-bg-muted);
+    color: var(--uikit-text-muted);
+  }
+
+  &__name {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  &__size {
+    flex: none;
+    color: var(--uikit-text-muted);
+    font-size: var(--uikit-text-xs);
+  }
+
+  &__remove,
+  &__clear {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: none;
+    width: 20px;
+    height: 20px;
+    padding: 0;
+    border: none;
+    border-radius: var(--uikit-radius-sm);
+    background: transparent;
+    color: var(--uikit-text-faint);
+    cursor: pointer;
+    transition:
+      color var(--uikit-speed) var(--uikit-ease),
+      background var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      color: var(--uikit-text);
+      background: var(--uikit-bg-muted);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      color: var(--uikit-text-faint);
+      background: transparent;
+    }
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &__browse {
+    display: inline-flex;
+    align-items: center;
+    flex: none;
+    padding: 0 12px;
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius);
+    background: var(--uikit-bg-subtle);
+    color: var(--uikit-text);
+    font: inherit;
+    cursor: pointer;
+    transition:
+      background var(--uikit-speed) var(--uikit-ease),
+      border-color var(--uikit-speed) var(--uikit-ease),
+      box-shadow var(--uikit-speed) var(--uikit-ease);
+
+    &:hover:not(:disabled) {
+      background: var(--uikit-bg-muted);
+      border-color: var(--uikit-border-strong);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      color: var(--uikit-text-faint);
+    }
+  }
+
+  &--sm &__browse {
+    height: var(--uikit-control-h-sm);
+  }
+
+  &--md &__browse {
+    height: var(--uikit-control-h-md);
+  }
+
+  &--lg &__browse {
+    height: var(--uikit-control-h-lg);
+  }
+
+  &--error &__browse {
+    border-color: var(--uikit-color-danger);
+  }
+
+  &__names {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: var(--uikit-text-muted);
+
+    &--empty {
+      color: var(--uikit-text-faint);
+    }
+  }
+}

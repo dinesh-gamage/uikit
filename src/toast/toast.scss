@@ -1,0 +1,171 @@
+.uikit-toast-stack {
+  position: fixed;
+  z-index: var(--uikit-z-toast);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  width: 100%;
+  max-width: 380px;
+  box-sizing: border-box;
+  pointer-events: none;
+
+  &--top-right {
+    top: 0;
+    right: 0;
+  }
+
+  &--top-left {
+    top: 0;
+    left: 0;
+  }
+
+  &--bottom-right {
+    bottom: 0;
+    right: 0;
+  }
+
+  &--bottom-left {
+    bottom: 0;
+    left: 0;
+  }
+}
+
+.uikit-toast {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--uikit-bg);
+  color: var(--uikit-text);
+  border: 1px solid var(--uikit-border);
+  border-left-width: 3px;
+  border-radius: var(--uikit-radius);
+  box-shadow: var(--uikit-shadow);
+  font-family: var(--uikit-font);
+  font-size: var(--uikit-text-md);
+  animation: uikit-toast-in-right 200ms var(--uikit-ease);
+
+  &--exiting {
+    animation: uikit-toast-out-right 200ms var(--uikit-ease) forwards;
+  }
+
+  &--success {
+    border-left-color: var(--uikit-color-success);
+    .uikit-toast__icon {
+      color: var(--uikit-color-success);
+    }
+  }
+
+  &--error {
+    border-left-color: var(--uikit-color-danger);
+    .uikit-toast__icon {
+      color: var(--uikit-color-danger);
+    }
+  }
+
+  &--warning {
+    border-left-color: var(--uikit-color-warning);
+    .uikit-toast__icon {
+      color: var(--uikit-color-warning);
+    }
+  }
+
+  &--info {
+    border-left-color: var(--uikit-color-info);
+    .uikit-toast__icon {
+      color: var(--uikit-color-info);
+    }
+  }
+
+  &__icon {
+    display: inline-flex;
+    flex-shrink: 0;
+    margin-top: 1px;
+  }
+
+  &__content {
+    flex: 1;
+    min-width: 0;
+  }
+
+  &__title {
+    font-weight: 600;
+    margin-bottom: 2px;
+  }
+
+  &__message {
+    color: var(--uikit-text-muted);
+    overflow-wrap: break-word;
+  }
+
+  &__close {
+    display: inline-flex;
+    flex-shrink: 0;
+    padding: 2px;
+    margin: 0;
+    border: none;
+    background: none;
+    border-radius: var(--uikit-radius-sm);
+    color: var(--uikit-text-faint);
+    cursor: pointer;
+
+    &:hover {
+      color: var(--uikit-text);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+}
+
+// Left-anchored stacks slide in from the left instead.
+.uikit-toast-stack--top-left,
+.uikit-toast-stack--bottom-left {
+  .uikit-toast {
+    animation-name: uikit-toast-in-left;
+
+    &.uikit-toast--exiting {
+      animation-name: uikit-toast-out-left;
+    }
+  }
+}
+
+@keyframes uikit-toast-in-right {
+  from {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes uikit-toast-out-right {
+  to {
+    opacity: 0;
+    transform: translateX(24px);
+  }
+}
+
+@keyframes uikit-toast-in-left {
+  from {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes uikit-toast-out-left {
+  to {
+    opacity: 0;
+    transform: translateX(-24px);
+  }
+}
