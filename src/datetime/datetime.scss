@@ -6,6 +6,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  width: 100%;
   height: var(--uikit-control-h-md);
   padding: 0 var(--uikit-control-pad-x);
   cursor: text;
@@ -38,6 +39,7 @@
   }
 
   &--pill {
+    width: auto;
     border-radius: var(--uikit-radius-full);
   }
 

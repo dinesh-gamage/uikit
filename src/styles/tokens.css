@@ -58,9 +58,10 @@
   --uikit-speed: 150ms;
 
   /* z-index layers */
-  --uikit-z-dropdown: 1000;
   --uikit-z-modal: 1100;
+  --uikit-z-dropdown: 1150; /* above modal, so a Select opened inside a Modal isn't hidden behind it */
   --uikit-z-toast: 1200;
+  --uikit-z-tooltip: 1250; /* above everything, including dropdowns and toasts */
 
   /* breakpoints (informational — JS hooks like useBreakpoint take numbers, not these) */
   --uikit-breakpoint-sm: 640px;

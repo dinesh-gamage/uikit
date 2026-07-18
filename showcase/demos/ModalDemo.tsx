@@ -2,14 +2,22 @@ import { useState } from 'react';
 import { Modal, type ModalProps } from '../../src/modal';
 import { Button } from '../../src/button';
 import { Input } from '../../src/input';
+import { Select } from '../../src/select';
 import { DemoPage, type DemoDef } from '../framework/DemoPage';
 import type { ControlValues } from '../framework/controls';
 import './demo-widgets.scss';
+
+const ROLE_OPTIONS = [
+  { value: 'admin', label: 'Admin' },
+  { value: 'editor', label: 'Editor' },
+  { value: 'viewer', label: 'Viewer' },
+];
 
 function Stage({ v }: { v: ControlValues }) {
   const [open, setOpen] = useState(false);
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [role, setRole] = useState<string | number | null>(null);
 
   const footer = v.withFooter ? (
     <>
@@ -41,6 +49,8 @@ function Stage({ v }: { v: ControlValues }) {
           <p>Tab through the fields below to see focus trapped visually inside the panel — it's the first thing focused on open, and focus returns to the "Open modal" button when this closes.</p>
           <Input label="Name" placeholder="Ada Lovelace" value={name} onChange={setName} />
           <Input label="Email" type="email" placeholder="ada@example.com" value={email} onChange={setEmail} />
+          {/* Proves the dropdown z-order fix: opened, this panel must render above the Modal, not behind it. */}
+          <Select label="Role" placeholder="Select a role…" options={ROLE_OPTIONS} value={role} onChange={setRole} />
         </div>
       </Modal>
     </div>

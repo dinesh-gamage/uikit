@@ -4,7 +4,8 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  align-self: flex-start;
+  align-self: stretch;
+  width: 100%;
   max-width: 100%;
   box-sizing: border-box;
   padding: 0 var(--uikit-control-pad-x);

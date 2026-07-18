@@ -106,81 +106,14 @@
     border-radius: var(--uikit-radius);
   }
 
+  /* Submit/cancel are real Button components now (see DynamicForm's `buttonSize` prop) — their
+     appearance comes entirely from button.scss. `__cancel`/`__submit` remain as stable className
+     hooks for consumers who want to target them, but carry no styling of their own here. */
   &__buttons {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     gap: 8px;
-  }
-
-  &__cancel,
-  &__submit {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    min-height: var(--uikit-control-h-md);
-    padding: 0 16px;
-    border-radius: var(--uikit-radius);
-    font-family: inherit;
-    font-size: var(--uikit-text-md);
-    font-weight: 500;
-    cursor: pointer;
-    transition:
-      background var(--uikit-speed) var(--uikit-ease),
-      border-color var(--uikit-speed) var(--uikit-ease),
-      color var(--uikit-speed) var(--uikit-ease);
-
-    &:disabled {
-      cursor: not-allowed;
-      opacity: 0.6;
-    }
-
-    &:focus-visible {
-      outline: none;
-      box-shadow: var(--uikit-focus-ring);
-    }
-  }
-
-  &__cancel {
-    background: var(--uikit-bg);
-    border: 1px solid var(--uikit-border);
-    color: var(--uikit-text);
-
-    &:hover:not(:disabled) {
-      background: var(--uikit-bg-subtle);
-    }
-  }
-
-  &__submit {
-    border: 1px solid var(--uikit-color-primary);
-    background: var(--uikit-color-primary);
-    color: var(--uikit-text-on-primary);
-
-    &:hover:not(:disabled) {
-      background: var(--uikit-color-primary-hover);
-      border-color: var(--uikit-color-primary-hover);
-    }
-  }
-
-  &__submit-busy {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-  }
-
-  &--sm &__cancel,
-  &--sm &__submit {
-    min-height: var(--uikit-control-h-sm);
-    padding: 0 12px;
-    font-size: var(--uikit-text-sm);
-  }
-
-  &--lg &__cancel,
-  &--lg &__submit {
-    min-height: var(--uikit-control-h-lg);
-    padding: 0 20px;
-    font-size: var(--uikit-text-lg);
   }
 }
 

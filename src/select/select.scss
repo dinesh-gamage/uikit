@@ -5,6 +5,7 @@
   display: inline-flex;
   min-width: 200px;
   max-width: 100%;
+  width: 100%;
   font-family: var(--uikit-font);
 
   &--full {
@@ -13,6 +14,7 @@
   }
 
   &--pill {
+    width: auto;
     min-width: 0;
   }
 

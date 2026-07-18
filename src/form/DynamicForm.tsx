@@ -21,7 +21,7 @@ import { FileInput } from '../file-input';
 import { Select, MultiSelect } from '../select';
 import { DatePicker, DateTimePicker, DateRangePicker, TimeRangePicker } from '../datetime';
 import { Skeleton } from '../skeleton';
-import { Spinner } from '../spinner';
+import { Button } from '../button';
 import type { Size, SelectOption } from '../types';
 import type { FormData, FormFieldDef, FormSchema, FormSectionDef } from './types';
 import { validateAll, validateField } from './validators';
@@ -54,6 +54,12 @@ export interface DynamicFormProps {
   /** Disables every field plus the submit/cancel buttons. */
   disabled?: boolean;
   size?: Size;
+  /** Size of the submit/cancel footer Buttons. Independent of the fields' `size`. Default 'md'. */
+  buttonSize?: Size;
+  /** Rendered as the submit Button's leftIcon. */
+  submitIcon?: ReactNode;
+  /** Rendered as the cancel Button's leftIcon. */
+  cancelIcon?: ReactNode;
   className?: string;
   ref?: Ref<DynamicFormHandle>;
 }
@@ -359,6 +365,9 @@ export function DynamicForm({
   loading,
   disabled,
   size = 'md',
+  buttonSize = 'md',
+  submitIcon,
+  cancelIcon,
   className,
   ref,
 }: DynamicFormProps) {
@@ -619,20 +628,30 @@ export function DynamicForm({
       {!hideButtons && (
         <div className="uikit-form__buttons">
           {onCancel && (
-            <button type="button" className="uikit-form__cancel" disabled={disabled || submitting} onClick={onCancel}>
+            <Button
+              type="button"
+              variant="secondary"
+              size={buttonSize}
+              leftIcon={cancelIcon}
+              disabled={disabled || submitting}
+              onClick={onCancel}
+              className="uikit-form__cancel"
+            >
               {cancelLabel}
-            </button>
+            </Button>
           )}
-          <button type="submit" className="uikit-form__submit" disabled={disabled || submitting}>
-            {submitting ? (
-              <span className="uikit-form__submit-busy">
-                <Spinner size="sm" />
-                <span>Submitting…</span>
-              </span>
-            ) : (
-              submitLabel
-            )}
-          </button>
+          <Button
+            type="submit"
+            variant="primary"
+            size={buttonSize}
+            leftIcon={submitIcon}
+            loading={submitting}
+            loadingLabel="Submitting…"
+            disabled={disabled}
+            className="uikit-form__submit"
+          >
+            {submitLabel}
+          </Button>
         </div>
       )}
     </form>
