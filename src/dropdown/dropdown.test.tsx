@@ -101,12 +101,12 @@ describe('Dropdown Escape handling', () => {
 });
 
 describe('Dropdown outside interaction', () => {
-  it('closes on mousedown outside the anchor/panel', () => {
+  it('closes on pointerdown outside the anchor/panel', () => {
     render(<Picker label="Field A" />);
     fireEvent.click(screen.getByText('Field A'));
     expect(screen.getByText('panel')).toBeTruthy();
 
-    fireEvent.mouseDown(document.body);
+    fireEvent.pointerDown(document.body);
     expect(screen.queryByText('panel')).toBeNull();
   });
 
@@ -144,5 +144,33 @@ describe('Dropdown outside interaction', () => {
     fireEvent.click(screen.getByText('Field A'));
     fireEvent.focusIn(screen.getByText('inside panel'));
     expect(screen.getByText('inside panel')).toBeTruthy();
+  });
+
+  // Regression: v0.6.0's focusin-based close fired even when focus "fell back" to
+  // document.body — which is exactly what happens on a mousedown over a panel element the
+  // browser doesn't natively focus on click (e.g. Safari does not focus <button> elements from
+  // a mouse click). That closed (and unmounted) a DatePicker's calendar popover mid-click,
+  // before the click event landed, so the day selection was silently lost. Clicking inside the
+  // panel must not close the popover even if the resulting focus change lands on body/html/
+  // document rather than a real element.
+  it('does not close when focus falls back to document.body after a click inside the panel', () => {
+    render(
+      <Picker label="Field A" />,
+    );
+    fireEvent.click(screen.getByText('Field A'));
+    expect(screen.getByText('panel')).toBeTruthy();
+
+    fireEvent.pointerDown(screen.getByText('panel'));
+    fireEvent.focusIn(document.body);
+    expect(screen.getByText('panel')).toBeTruthy();
+  });
+
+  it('does not close when focus falls back to document.documentElement', () => {
+    render(<Picker label="Field A" />);
+    fireEvent.click(screen.getByText('Field A'));
+    expect(screen.getByText('panel')).toBeTruthy();
+
+    fireEvent.focusIn(document.documentElement);
+    expect(screen.getByText('panel')).toBeTruthy();
   });
 });

@@ -154,15 +154,28 @@ export function Dropdown({
 
   useEffect(() => {
     if (!open) return;
-    const onDown = (e: MouseEvent) => {
+    // Primary outside-interaction close: pointerdown (covers mouse, touch, and pen in one
+    // listener, and fires before the browser's mousedown default action runs — see the
+    // focusin guard below for why that ordering matters).
+    const onPointerDown = (e: PointerEvent) => {
       const t = e.target as Node;
       if (panelRef.current?.contains(t) || anchorRef.current?.contains(t)) return;
       onClose();
     };
-    // Focus moving to anything outside the anchor/panel (e.g. Tab-ing to the next field, or a
-    // programmatic focus change) closes the popover too — not just a mouse click outside.
+    // Keyboard-driven focus moving to a real element outside the anchor/panel (e.g. Tab-ing to
+    // the next field) closes the popover too. This must NOT fire for focus landing on
+    // document/body/html: a mousedown on a panel element that the browser doesn't natively
+    // focus on click (e.g. Safari's long-standing behavior of not focusing <button> from a
+    // mouse click) still blurs whatever was previously focused, and per the focus-fixup
+    // algorithm that blur falls back to the document/body with its own focusin event. That
+    // fallback target is never "outside" in any meaningful sense — it's an artifact of the
+    // click, not a real focus-away — so treating it as an outside signal here would close (and
+    // unmount) the panel mid-click, before the click event that follows the pointerdown can
+    // reach the element the user actually clicked. The same fallback-to-body/html pattern also
+    // covers the window regaining OS-level focus.
     const onFocusIn = (e: FocusEvent) => {
-      const t = e.target as Node;
+      const t = e.target as Node | null;
+      if (t === null || t === document.body || t === document.documentElement || (t as unknown) === document) return;
       if (panelRef.current?.contains(t) || anchorRef.current?.contains(t)) return;
       onClose();
     };
@@ -176,11 +189,11 @@ export function Dropdown({
         onClose();
       }
     };
-    document.addEventListener('mousedown', onDown);
+    document.addEventListener('pointerdown', onPointerDown);
     document.addEventListener('focusin', onFocusIn);
     document.addEventListener('keydown', onKey, true);
     return () => {
-      document.removeEventListener('mousedown', onDown);
+      document.removeEventListener('pointerdown', onPointerDown);
       document.removeEventListener('focusin', onFocusIn);
       document.removeEventListener('keydown', onKey, true);
     };

@@ -116,6 +116,9 @@ export function DatePicker({
           onBlur={commitText}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
+              // Prevent the browser's implicit form submission on Enter in a text input —
+              // this field commits/closes on Enter, it doesn't submit an enclosing form.
+              e.preventDefault();
               commitText();
               setOpen(false);
             } else if (e.key === 'ArrowDown' && !open) {
