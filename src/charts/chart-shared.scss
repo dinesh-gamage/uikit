@@ -1,0 +1,71 @@
+// Shared building blocks used by BarChart, LineChart, and DonutChart:
+// the dashed empty-state box, the wrapping legend row, and the
+// absolutely-positioned hover readout.
+
+.uikit-chart-empty {
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed var(--uikit-border);
+  border-radius: var(--uikit-radius);
+  font-family: var(--uikit-font);
+
+  &__message {
+    color: var(--uikit-text-faint);
+    font-size: var(--uikit-text-sm);
+  }
+}
+
+.uikit-chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px 16px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-family: var(--uikit-font);
+
+  &__item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: var(--uikit-text-sm);
+  }
+
+  &__swatch {
+    flex: none;
+    width: 9px;
+    height: 9px;
+    border-radius: var(--uikit-radius-sm);
+  }
+
+  &__label {
+    color: var(--uikit-text);
+  }
+
+  &__value {
+    color: var(--uikit-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.uikit-chart-hover {
+  position: absolute;
+  z-index: 10;
+  pointer-events: none;
+  transform: translate(-50%, -100%);
+  margin-top: -8px;
+  padding: 4px 8px;
+  box-sizing: border-box;
+  background: var(--uikit-bg-subtle);
+  border: 1px solid var(--uikit-border);
+  border-radius: var(--uikit-radius-sm);
+  box-shadow: var(--uikit-shadow-sm);
+  font-family: var(--uikit-font);
+  font-size: var(--uikit-text-xs);
+  color: var(--uikit-text);
+  white-space: nowrap;
+  line-height: 1.4;
+}

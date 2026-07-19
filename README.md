@@ -32,6 +32,7 @@ Styles are injected automatically with each component import — no separate CSS
 | Pickers | `Select`, `MultiSelect` (async options, pills, custom rendering), `DatePicker`, `DateTimePicker`, `DateRangePicker` (presets), `TimeRangePicker` |
 | Forms | `DynamicForm` (JSON schema, sections/sub-sections, validators, custom fields), `Field` |
 | Data | `ListView` (search, tabs, toolbar, breadcrumb, details panel, paged/infinite loading), `InfoCard` |
+| Charts | `BarChart` (grouped/stacked), `LineChart` (multi-series, area fill), `DonutChart`, `ProgressMeter`, `Sparkline` |
 | Feedback | `toast` (singleton), `alert` (promise-based confirm/show), `Spinner`, `Skeleton`, `NotificationBlock` |
 
 ## Theming

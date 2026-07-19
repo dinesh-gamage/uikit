@@ -1,0 +1,55 @@
+.uikit-bar-chart {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--uikit-font);
+
+  &__legend {
+    padding: 0 4px;
+  }
+
+  &__stage {
+    position: relative;
+    width: 100%;
+  }
+
+  &__svg {
+    display: block;
+    width: 100%;
+    overflow: visible;
+  }
+
+  &__gridline {
+    stroke: var(--uikit-border);
+    stroke-width: 1;
+    opacity: 0.6;
+    vector-effect: non-scaling-stroke;
+  }
+
+  &__tick-label {
+    fill: var(--uikit-text-faint);
+    font-size: 9px;
+    font-family: var(--uikit-font);
+  }
+
+  &__x-label {
+    fill: var(--uikit-text-muted);
+    font-size: 9px;
+    font-family: var(--uikit-font);
+
+    &--rotated {
+      font-size: 8.5px;
+    }
+  }
+
+  &__bar {
+    transition: filter var(--uikit-speed) var(--uikit-ease);
+    cursor: default;
+
+    &--hover {
+      filter: brightness(1.12);
+    }
+  }
+}

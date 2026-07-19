@@ -1,0 +1,56 @@
+.uikit-donut-chart {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  font-family: var(--uikit-font);
+
+  &__ring-wrap {
+    position: relative;
+    flex: none;
+  }
+
+  &__svg {
+    display: block;
+  }
+
+  &__segment {
+    transition: stroke-width var(--uikit-speed) var(--uikit-ease);
+    cursor: default;
+  }
+
+  &__center {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    pointer-events: none;
+    padding: 8px;
+    box-sizing: border-box;
+  }
+
+  &__center-label {
+    color: var(--uikit-text-muted);
+    font-size: var(--uikit-text-xs);
+    margin-bottom: 2px;
+  }
+
+  &__center-value {
+    color: var(--uikit-text);
+    font-size: var(--uikit-text-sm);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+  }
+
+  // Extra specificity (chained with the shared .uikit-chart-legend class) so this
+  // reliably wins over ChartLegend's own default row layout regardless of CSS import order.
+  &__legend.uikit-chart-legend {
+    flex: 1 1 140px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+  }
+}

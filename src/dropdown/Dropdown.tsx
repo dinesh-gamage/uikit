@@ -27,6 +27,13 @@ const GAP = 8;
 
 type Phase = 'measuring' | 'positioned' | 'entered';
 
+// Module-level registry of currently-open Dropdown instances' close callbacks. Any
+// Dropdown-based popover (Select, MultiSelect, date/time pickers, ColorPicker, Tabs' overflow
+// menu, Breadcrumb's overflow menu, ...) shares this, so opening one closes any others still
+// open — the smallest mechanism that keeps only one floating panel on screen at a time. This is
+// what fixes two date fields in the same modal leaving both calendars open/stacked.
+const openPopovers = new Set<() => void>();
+
 /**
  * Anchored floating panel rendered in a body portal. Uses a two-phase measure: the panel is
  * first rendered with `position: fixed` and its width constraints already applied but
@@ -51,6 +58,24 @@ export function Dropdown({
   const panelRef = useRef<HTMLDivElement>(null);
   const [phase, setPhase] = useState<Phase>('measuring');
   const [style, setStyle] = useState<CSSProperties>({});
+
+  // Keep the latest `onClose` available to the registry effect below without making it
+  // re-run (and re-register) on every render — `onClose` is typically a fresh inline closure
+  // per render (e.g. `onClose={() => setOpen(false)}`), so this effect deliberately only
+  // depends on `open`.
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
+
+  // Register this instance while open, closing any other open instance first.
+  useEffect(() => {
+    if (!open) return;
+    const closeSelf = () => onCloseRef.current();
+    for (const close of openPopovers) close();
+    openPopovers.add(closeSelf);
+    return () => {
+      openPopovers.delete(closeSelf);
+    };
+  }, [open]);
 
   const reposition = () => {
     const anchor = anchorRef.current;
@@ -134,14 +159,30 @@ export function Dropdown({
       if (panelRef.current?.contains(t) || anchorRef.current?.contains(t)) return;
       onClose();
     };
+    // Focus moving to anything outside the anchor/panel (e.g. Tab-ing to the next field, or a
+    // programmatic focus change) closes the popover too — not just a mouse click outside.
+    const onFocusIn = (e: FocusEvent) => {
+      const t = e.target as Node;
+      if (panelRef.current?.contains(t) || anchorRef.current?.contains(t)) return;
+      onClose();
+    };
+    // Escape closes only this popover. Listening in the capture phase and calling
+    // stopPropagation ensures this fires — and stops the event — before it can reach a
+    // bubble-phase document listener registered by an ancestor (e.g. Modal's Escape handler),
+    // so Escape doesn't fall through and close a modal the popover happens to be inside.
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === 'Escape') {
+        e.stopPropagation();
+        onClose();
+      }
     };
     document.addEventListener('mousedown', onDown);
-    document.addEventListener('keydown', onKey);
+    document.addEventListener('focusin', onFocusIn);
+    document.addEventListener('keydown', onKey, true);
     return () => {
       document.removeEventListener('mousedown', onDown);
-      document.removeEventListener('keydown', onKey);
+      document.removeEventListener('focusin', onFocusIn);
+      document.removeEventListener('keydown', onKey, true);
     };
   }, [open, onClose, anchorRef]);
 

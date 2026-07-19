@@ -40,4 +40,7 @@ export const demos: DemoEntry[] = [
   { id: 'modal', title: 'Modal', group: 'Feedback', component: lazy(() => import('./demos/ModalDemo')) },
   { id: 'progress-meter', title: 'Progress Meter', group: 'Charts', component: lazy(() => import('./demos/ProgressMeterDemo')) },
   { id: 'sparkline', title: 'Sparkline', group: 'Charts', component: lazy(() => import('./demos/SparklineDemo')) },
+  { id: 'bar-chart', title: 'Bar Chart', group: 'Charts', component: lazy(() => import('./demos/BarChartDemo')) },
+  { id: 'line-chart', title: 'Line Chart', group: 'Charts', component: lazy(() => import('./demos/LineChartDemo')) },
+  { id: 'donut-chart', title: 'Donut Chart', group: 'Charts', component: lazy(() => import('./demos/DonutChartDemo')) },
 ];

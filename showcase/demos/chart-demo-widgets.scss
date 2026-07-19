@@ -1,10 +1,16 @@
-// Shared layout for the Charts group demos (ProgressMeter, Sparkline).
+// Shared layout for the Charts group demos (ProgressMeter, Sparkline, BarChart, LineChart, DonutChart).
 .sc-chart-demo {
   display: flex;
   flex-direction: column;
   gap: 20px;
   width: 100%;
   max-width: 480px;
+
+  // BarChart/LineChart/DonutChart plot on a wider internal canvas than Sparkline's
+  // inline trend line, so their demos opt into extra horizontal room.
+  &--wide {
+    max-width: 620px;
+  }
 
   &__section {
     display: flex;

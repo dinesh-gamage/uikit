@@ -119,6 +119,12 @@ export interface ListViewProps<T extends Record<string, any>> {
   detailsPanel?: ListDetailsPanel<T>;
   /** Overrides the details panel row behavior. */
   onRowClick?: (item: T) => void;
+  /**
+   * Fires whenever the details panel selection changes — a row is selected, the panel is
+   * closed, or the previously-selected item vanishes from static data and the panel auto-closes.
+   * Does not fire on every refetch, only on an actual selection change.
+   */
+  onSelectionChange?: (item: T | null) => void;
   emptyMessage?: ReactNode;
   allowPageSizeChange?: boolean;
   className?: string;
@@ -173,6 +179,7 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
     onSelect,
     detailsPanel,
     onRowClick,
+    onSelectionChange,
     emptyMessage = 'No items',
     allowPageSizeChange = true,
     className,
@@ -197,7 +204,15 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
   const [hasLoaded, setHasLoaded] = useState(isStatic);
   const [error, setError] = useState<string | null>(null);
   const [refreshTick, setRefreshTick] = useState(0);
-  const [detailsItem, setDetailsItem] = useState<T | null>(null);
+  // The details panel selection is stored by id, not by object reference — the object is
+  // re-resolved from the current `items` below on every render, so a refetch that changes the
+  // underlying data (e.g. an edited field) is reflected immediately instead of showing a stale
+  // snapshot captured at click time.
+  const [detailsId, setDetailsId] = useState<unknown>(null);
+  // Fetcher-mode fallback: pagination can page the selected row out of the current `items`
+  // without it having been deleted, so we keep showing its last-known data instead of the panel
+  // going blank. Static-mode absence, in contrast, means the row is actually gone.
+  const [lastResolvedDetails, setLastResolvedDetails] = useState<T | null>(null);
   const [internalSelected, setInternalSelected] = useState<T[]>([]);
   const [filtersOpen, setFiltersOpen] = useState(filters?.defaultOpen ?? false);
 
@@ -263,6 +278,36 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
   const items = isStatic ? staticResult!.items : remote.items;
   const total = isStatic ? staticResult!.total : remote.total;
 
+  // Re-derive the details panel selection from the current `items` by id on every render (see
+  // the `detailsId` comment above). This mirrors the render-phase "adjust state while rendering"
+  // pattern already used for the page-reset logic above: comparisons guard each `setState` call
+  // so it only fires — and only triggers React's render-phase bailout/restart — on an actual
+  // change, which keeps this safe to run unconditionally on every render.
+  const resolvedDetails = detailsId == null ? null : items.find((i) => i[idField] === detailsId) ?? null;
+  if (resolvedDetails != null && resolvedDetails !== lastResolvedDetails) {
+    setLastResolvedDetails(resolvedDetails);
+  } else if (detailsId != null && resolvedDetails == null && isStatic && lastResolvedDetails != null) {
+    // Static data no longer contains this id (e.g. the row was removed) — close the panel.
+    setLastResolvedDetails(null);
+    setDetailsId(null);
+  } else if (detailsId == null && lastResolvedDetails != null) {
+    setLastResolvedDetails(null);
+  }
+  const detailsItem: T | null = detailsId == null ? null : (resolvedDetails ?? (isStatic ? null : lastResolvedDetails));
+
+  // Notify on actual selection changes only (not on every refetch/re-render).
+  const onSelectionChangeRef = useRef(onSelectionChange);
+  onSelectionChangeRef.current = onSelectionChange;
+  const selectionMountedRef = useRef(false);
+  useEffect(() => {
+    if (!selectionMountedRef.current) {
+      selectionMountedRef.current = true;
+      return;
+    }
+    onSelectionChangeRef.current?.(detailsItem);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [detailsId]);
+
   useImperativeHandle(
     ref,
     () => ({
@@ -283,13 +328,13 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
 
   // Escape closes the details panel.
   useEffect(() => {
-    if (detailsItem == null) return;
+    if (detailsId == null) return;
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') setDetailsItem(null);
+      if (e.key === 'Escape') setDetailsId(null);
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [detailsItem]);
+  }, [detailsId]);
 
   // Escape closes the mobile filters drawer.
   useEffect(() => {
@@ -354,14 +399,14 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
     setPage(1);
   };
 
-  const closeDetails = () => setDetailsItem(null);
+  const closeDetails = () => setDetailsId(null);
   const handleRowClick = (item: T) => {
     if (onRowClick) {
       onRowClick(item);
       return;
     }
     if (detailsPanel) {
-      setDetailsItem((cur) => (cur != null && cur[idField] === item[idField] ? null : item));
+      setDetailsId((cur: unknown) => (cur != null && cur === item[idField] ? null : item[idField]));
     }
   };
 
