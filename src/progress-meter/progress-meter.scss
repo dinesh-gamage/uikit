@@ -1,0 +1,79 @@
+.uikit-progress-meter {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--uikit-font);
+  width: 100%;
+  box-sizing: border-box;
+
+  &__row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 8px;
+  }
+
+  &__label {
+    color: var(--uikit-text);
+    font-size: var(--uikit-text-sm);
+    font-weight: 500;
+  }
+
+  &__value {
+    color: var(--uikit-text-muted);
+    font-size: var(--uikit-text-sm);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  &__track {
+    position: relative;
+    width: 100%;
+    background: var(--uikit-bg-muted);
+    border-radius: var(--uikit-radius-full);
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  &__fill {
+    height: 100%;
+    border-radius: var(--uikit-radius-full);
+    transition:
+      width var(--uikit-speed) var(--uikit-ease),
+      background var(--uikit-speed) var(--uikit-ease);
+
+    &--primary {
+      background: var(--uikit-color-primary);
+    }
+
+    &--success {
+      background: var(--uikit-color-success);
+    }
+
+    &--warning {
+      background: var(--uikit-color-warning);
+    }
+
+    &--danger {
+      background: var(--uikit-color-danger);
+    }
+
+    &--overflow {
+      background-image: repeating-linear-gradient(
+        135deg,
+        rgba(255, 255, 255, 0.28) 0 6px,
+        transparent 6px 12px
+      );
+    }
+  }
+
+  /* ---- sizes ---- */
+
+  &--sm .uikit-progress-meter__track {
+    height: 6px;
+  }
+
+  &--md .uikit-progress-meter__track {
+    height: 10px;
+  }
+}

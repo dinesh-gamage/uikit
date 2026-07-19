@@ -66,6 +66,14 @@
   /* breakpoints (informational — JS hooks like useBreakpoint take numbers, not these) */
   --uikit-breakpoint-sm: 640px;
   --uikit-breakpoint-md: 960px;
+
+  /* chart series (categorical palette, shared by all chart primitives) */
+  --uikit-chart-1: #4f6df5;
+  --uikit-chart-2: #a855f7;
+  --uikit-chart-3: #ec4899;
+  --uikit-chart-4: #f59e0b;
+  --uikit-chart-5: #22c55e;
+  --uikit-chart-6: #06b6d4;
 }
 
 [data-theme='dark'] {
@@ -97,4 +105,12 @@
   --uikit-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
   --uikit-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
   --uikit-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.6);
+
+  /* chart series — brightened a step for legibility on dark surfaces */
+  --uikit-chart-1: #6c86ff;
+  --uikit-chart-2: #c084fc;
+  --uikit-chart-3: #f472b6;
+  --uikit-chart-4: #fbbf24;
+  --uikit-chart-5: #4ade80;
+  --uikit-chart-6: #22d3ee;
 }

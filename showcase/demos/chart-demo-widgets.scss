@@ -1,0 +1,58 @@
+// Shared layout for the Charts group demos (ProgressMeter, Sparkline).
+.sc-chart-demo {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 100%;
+  max-width: 480px;
+
+  &__section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  &__section-title {
+    margin: 0;
+    font-size: var(--uikit-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--uikit-text-faint);
+  }
+
+  &__row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  &__row-label {
+    flex: none;
+    width: 72px;
+    font-size: var(--uikit-text-sm);
+    color: var(--uikit-text-muted);
+  }
+
+  &__sparkline-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+
+  &__sparkline-cell {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 12px;
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius);
+    background: var(--uikit-bg-subtle);
+  }
+
+  &__sparkline-caption {
+    font-size: var(--uikit-text-xs);
+    color: var(--uikit-text-faint);
+  }
+}

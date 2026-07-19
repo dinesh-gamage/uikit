@@ -38,4 +38,6 @@ export const demos: DemoEntry[] = [
   { id: 'alert', title: 'Alert', group: 'Feedback', component: lazy(() => import('./demos/AlertDemo')) },
   { id: 'notification-block', title: 'Notification Block', group: 'Feedback', component: lazy(() => import('./demos/NotificationBlockDemo')) },
   { id: 'modal', title: 'Modal', group: 'Feedback', component: lazy(() => import('./demos/ModalDemo')) },
+  { id: 'progress-meter', title: 'Progress Meter', group: 'Charts', component: lazy(() => import('./demos/ProgressMeterDemo')) },
+  { id: 'sparkline', title: 'Sparkline', group: 'Charts', component: lazy(() => import('./demos/SparklineDemo')) },
 ];

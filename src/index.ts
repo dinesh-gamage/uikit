@@ -31,3 +31,5 @@ export * from './breadcrumb';
 export * from './modal';
 export * from './tooltip';
 export * from './icon-button';
+export * from './progress-meter';
+export * from './sparkline';
