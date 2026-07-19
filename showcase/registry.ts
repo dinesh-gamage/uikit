@@ -28,6 +28,7 @@ export const demos: DemoEntry[] = [
   { id: 'time-range', title: 'Time Range', group: 'Pickers', component: lazy(() => import('./demos/TimeRangeDemo')) },
   { id: 'dynamic-form', title: 'Dynamic Form', group: 'Forms', component: lazy(() => import('./demos/DynamicFormDemo')) },
   { id: 'list', title: 'List', group: 'Data', component: lazy(() => import('./demos/ListDemo')) },
+  { id: 'kanban', title: 'Kanban Board', group: 'Data', component: lazy(() => import('./demos/KanbanBoardDemo')) },
   { id: 'tabs', title: 'Tabs', group: 'Navigation', component: lazy(() => import('./demos/TabsDemo')) },
   { id: 'breadcrumb', title: 'Breadcrumb', group: 'Navigation', component: lazy(() => import('./demos/BreadcrumbDemo')) },
   { id: 'pagination', title: 'Pagination', group: 'Navigation', component: lazy(() => import('./demos/PaginationDemo')) },
