@@ -775,15 +775,14 @@
   }
 }
 
+/* Full-screen mobile detail panel: slide the whole panel in from the right edge. */
 @keyframes uikit-list-panel-in-mobile {
   from {
-    transform: translateY(16px);
-    opacity: 0;
+    transform: translateX(100%);
   }
 
   to {
-    transform: none;
-    opacity: 1;
+    transform: translateX(0);
   }
 }
 
@@ -807,5 +806,15 @@
 
   to {
     transform: translateX(0);
+  }
+}
+
+// Honor reduced-motion for the panel/filter slide-ins.
+@media (prefers-reduced-motion: reduce) {
+  .uikit-list__panel,
+  .uikit-list__panel--mobile,
+  .uikit-list__filters,
+  .uikit-list__filters--mobile {
+    animation: none;
   }
 }

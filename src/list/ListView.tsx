@@ -10,6 +10,7 @@ import {
 } from 'react';
 import { cx } from '../utils/cx';
 import { useBreakpoint } from '../utils/use-breakpoint';
+import { useBackDismiss } from '../utils/use-back-dismiss';
 import { Skeleton } from '../skeleton';
 import { Spinner } from '../spinner';
 import { InfoCard, type InfoField } from '../info-card';
@@ -403,6 +404,12 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
   };
 
   const closeDetails = () => setDetailsId(null);
+
+  // Back button (incl. Android WebView hardware back) dismisses an open panel instead of
+  // navigating the page away. Each owns a browser history entry while open.
+  useBackDismiss(detailsItem != null, closeDetails, 'list-details');
+  useBackDismiss(filtersOpen, () => setFiltersOpen(false), 'list-filters');
+
   const handleRowClick = (item: T) => {
     if (onRowClick) {
       onRowClick(item);

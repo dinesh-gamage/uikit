@@ -118,6 +118,16 @@
   }
 }
 
+/* Full-screen mobile modal (forms): slide the whole panel in from the right edge. */
+@keyframes uikit-modal-slide-in-right {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
 // Mobile: modals go full-screen with a fixed header + footer and a scrolling body.
 // 960px matches --uikit-breakpoint-md, the app-wide mobile line.
 @media (max-width: 960px) {
@@ -134,6 +144,8 @@
     height: 100dvh;
     max-height: none;
     border-radius: 0;
+    // Full-screen forms slide in from the right (see back-dismiss / directional-slide pass).
+    animation-name: uikit-modal-slide-in-right;
   }
 
   // Header/footer are already flex:none (fixed); let the body fill + scroll between them.
@@ -193,5 +205,13 @@
     width: 100%;
     min-height: 3rem;
     border-radius: 0;
+  }
+}
+
+// Honor reduced-motion for the entrance animations (the full-screen mobile slide especially).
+@media (prefers-reduced-motion: reduce) {
+  .uikit-modal,
+  .uikit-modal__panel {
+    animation: none;
   }
 }

@@ -3,6 +3,7 @@ import './styles/tokens.css';
 export * from './types';
 export { cx } from './utils/cx';
 export { useBreakpoint } from './utils/use-breakpoint';
+export { useBackDismiss } from './utils/use-back-dismiss';
 export * from './icon';
 export * from './field';
 export * from './dropdown';

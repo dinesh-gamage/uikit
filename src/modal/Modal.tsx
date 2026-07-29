@@ -1,6 +1,7 @@
 import { useEffect, useRef, type MouseEvent as ReactMouseEvent, type ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../utils/cx';
+import { useBackDismiss } from '../utils/use-back-dismiss';
 import './modal.scss';
 
 export interface ModalProps {
@@ -12,6 +13,8 @@ export interface ModalProps {
   footer?: ReactNode;
   /** Whether clicking the backdrop closes the modal. */
   closeOnBackdrop?: boolean;
+  /** Whether the browser/hardware Back button closes the modal (owns a history entry). Default true. */
+  dismissOnBack?: boolean;
   children: ReactNode;
   className?: string;
 }
@@ -46,10 +49,13 @@ export function Modal({
   size = 'md',
   footer,
   closeOnBackdrop = true,
+  dismissOnBack = true,
   children,
   className,
 }: ModalProps) {
   const panelRef = useRef<HTMLDivElement>(null);
+
+  useBackDismiss(dismissOnBack && open, onClose, 'modal');
 
   useEffect(() => {
     if (!open) return;
