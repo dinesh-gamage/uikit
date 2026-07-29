@@ -26,15 +26,20 @@ export interface TabsProps {
   keepMounted?: boolean;
   /** Render the panel content below the header. Defaults to true when any tab has `content`. */
   renderContent?: boolean;
+  /** Extra content slot at the start of the header row (e.g. a context switcher), before the tabs. */
+  leftContent?: ReactNode;
   /** Extra content slot at the end of the header row (e.g. actions). */
   rightContent?: ReactNode;
+  /** Draw a thin vertical divider between `leftContent`/`rightContent` and the tab list. */
+  separator?: boolean;
   className?: string;
 }
 
 const GAP = 4;
 
-export function Tabs({ tabs, active, onChange, variant = 'underline', size = 'md', keepMounted = false, renderContent, rightContent, className }: TabsProps) {
+export function Tabs({ tabs, active, onChange, variant = 'underline', size = 'md', keepMounted = false, renderContent, leftContent, rightContent, separator, className }: TabsProps) {
   const containerRef = useRef<HTMLDivElement>(null);
+  const leftRef = useRef<HTMLDivElement>(null);
   const rightRef = useRef<HTMLDivElement>(null);
   const moreMeasureRef = useRef<HTMLButtonElement>(null);
   const moreBtnRef = useRef<HTMLButtonElement>(null);
@@ -63,8 +68,11 @@ export function Tabs({ tabs, active, onChange, variant = 'underline', size = 'md
   useLayoutEffect(() => {
     if (!containerWidth) return;
     const rightW = rightRef.current?.offsetWidth ?? 0;
+    const leftW = leftRef.current?.offsetWidth ?? 0;
     const moreW = moreMeasureRef.current?.offsetWidth ?? 0;
-    const available = containerWidth - rightW;
+    // The left/right slots (and the header's 8px gaps around them) eat into the width the tab
+    // list has to work with — subtract them or the list overflows into "More" too eagerly.
+    const available = containerWidth - rightW - leftW;
 
     let used = 0;
     const fitIdx = new Set<number>();
@@ -133,6 +141,12 @@ export function Tabs({ tabs, active, onChange, variant = 'underline', size = 'md
   return (
     <div className={cx('uikit-tabs', `uikit-tabs--${variant}`, `uikit-tabs--${size}`, className)}>
       <div className="uikit-tabs__header" ref={containerRef}>
+        {leftContent != null && (
+          <div className="uikit-tabs__left" ref={leftRef}>
+            {leftContent}
+            {separator && <span className="uikit-tabs__sep" aria-hidden="true" />}
+          </div>
+        )}
         <div role="tablist" className="uikit-tabs__list" onKeyDown={onListKeyDown}>
           {visibleTabs.map((tab) => (
             <button
@@ -195,6 +209,7 @@ export function Tabs({ tabs, active, onChange, variant = 'underline', size = 'md
 
         {rightContent != null && (
           <div className="uikit-tabs__right" ref={rightRef}>
+            {separator && <span className="uikit-tabs__sep" aria-hidden="true" />}
             {rightContent}
           </div>
         )}

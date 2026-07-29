@@ -4,7 +4,7 @@ import type { Size } from '../types';
 import { Spinner } from '../spinner';
 import './button.scss';
 
-export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'ghost' | 'link';
+export type ButtonVariant = 'primary' | 'secondary' | 'danger' | 'success' | 'ghost' | 'link';
 
 export interface ButtonProps {
   variant?: ButtonVariant;

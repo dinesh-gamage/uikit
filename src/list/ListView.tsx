@@ -16,6 +16,7 @@ import { InfoCard, type InfoField } from '../info-card';
 import { Pagination } from '../pagination';
 import { Breadcrumb } from '../breadcrumb';
 import { Button } from '../button';
+import { Select } from '../select';
 import { applyQuery, applySort, paginate, type ListSort } from './list-utils';
 import './list.scss';
 
@@ -69,6 +70,8 @@ export interface ListDetailsPanel<T> {
   fields?: (item: T) => InfoField[];
   /** Full custom panel body; wins over `fields`. */
   render?: (item: T, close: () => void) => ReactNode;
+  /** Pinned footer (e.g. action buttons). Fixed below the scrolling body, like a modal footer. */
+  footer?: (item: T, close: () => void) => ReactNode;
 }
 
 export interface ListFiltersConfig {
@@ -131,7 +134,7 @@ export interface ListViewProps<T extends Record<string, any>> {
   ref?: Ref<ListViewHandle>;
   /**
    * Viewport width (px) at or below which the table switches to a stacked card layout. Default
-   * 640 (matches `--uikit-breakpoint-sm`). Sorting stays desktop-only for v1 — cards have no
+   * 960 (matches `--uikit-breakpoint-md`). Sorting stays desktop-only for v1 — cards have no
    * header row to click, so a previously-applied sort still orders the cards but there's no
    * mobile control to change it.
    */
@@ -184,7 +187,7 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
     allowPageSizeChange = true,
     className,
     ref,
-    mobileBreakpoint = 640,
+    mobileBreakpoint = 960,
     mobileColumns,
     renderMobileCard,
     forceMobile,
@@ -509,16 +512,21 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
     );
   });
 
+  // Card-shaped, text-less loading placeholder: a title bar then two label/value rows of bars,
+  // mirroring the real mobile card (no column-label text).
   const mobileSkeletonCards = Array.from({ length: Math.min(pageSize, MAX_SKELETON_ROWS) }, (_, i) => (
     <div className="uikit-list__card uikit-list__card--skeleton" key={i}>
       {selectable && <Skeleton className="uikit-list__card-checkbox" variant="rect" width={15} height={15} />}
-      <div className="uikit-list__card-fields">
-        {mobileCols.map((col, j) => (
-          <div className="uikit-list__card-field" key={col.id}>
-            <span className="uikit-list__card-label">{col.label}</span>
-            <Skeleton width={`${45 + ((i * 17 + j * 23) % 40)}%`} />
-          </div>
-        ))}
+      <div className="uikit-list__card-skeleton">
+        <Skeleton width={`${50 + ((i * 13) % 20)}%`} height={14} />
+        <div className="uikit-list__card-skeleton-row">
+          <Skeleton width={`${34 + ((i * 17) % 12)}%`} />
+          <Skeleton width={`${20 + ((i * 7) % 10)}%`} />
+        </div>
+        <div className="uikit-list__card-skeleton-row">
+          <Skeleton width={`${28 + ((i * 11) % 10)}%`} />
+          <Skeleton width={`${16 + ((i * 5) % 8)}%`} />
+        </div>
       </div>
     </div>
   ));
@@ -557,12 +565,19 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
       filtersOpen && (
         <>
           <div className="uikit-list__filters-backdrop" onClick={() => setFiltersOpen(false)} />
-          <aside
-            className="uikit-list__filters uikit-list__filters--mobile"
-            style={{ width: filters.width ?? '16rem' }}
-            aria-label="Filters"
-          >
-            {filters.content}
+          <aside className="uikit-list__filters uikit-list__filters--mobile" aria-label="Filters">
+            <div className="uikit-list__filters-head">
+              <span className="uikit-list__filters-title">Filters</span>
+              <button
+                type="button"
+                className="uikit-list__filters-close"
+                onClick={() => setFiltersOpen(false)}
+                aria-label="Close filters"
+              >
+                ×
+              </button>
+            </div>
+            <div className="uikit-list__filters-body">{filters.content}</div>
           </aside>
         </>
       )
@@ -596,7 +611,9 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
         </div>
       )}
 
-      {tabs && tabs.length > 0 && (
+      {/* Desktop: a segmented tab row. Mobile: the tabs collapse into a compact dropdown rendered
+          in the toolbar row below (a wrapping 6-tab row wastes vertical space on a phone). */}
+      {!isMobile && tabs && tabs.length > 0 && (
         <div className="uikit-list__tabs" role="tablist">
           {tabs.map((tab) => (
             <button
@@ -614,13 +631,35 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
         </div>
       )}
 
-      {(search?.enabled || toolbar != null || filters) && (
+      {(search?.enabled || toolbar != null || filters || (isMobile && tabs && tabs.length > 0)) && (
         <div className="uikit-list__toolbar-row">
+          {isMobile && tabs && tabs.length > 0 && (
+            <Select
+              className="uikit-list__tabs-select"
+              size="sm"
+              options={tabs.map((tab) => ({
+                value: tab.id,
+                label: tab.count != null ? (
+                  <>
+                    {tab.label} ({tab.count})
+                  </>
+                ) : (
+                  tab.label
+                ),
+              }))}
+              value={activeTab ?? tabs[0]?.id}
+              onChange={(v) => v != null && onTabChange?.(String(v))}
+              clearable={false}
+              searchable={false}
+            />
+          )}
           {filters && (
             <Button
               variant="secondary"
               className="uikit-list__filter-toggle"
               active={filtersOpen}
+              iconOnly={isMobile}
+              title="Filters"
               leftIcon={<FilterIcon />}
               onClick={() => setFiltersOpen((o) => !o)}
             >
@@ -759,6 +798,10 @@ export function ListView<T extends Record<string, any>>(props: ListViewProps<T>)
                 <InfoCard fields={detailsPanel.fields?.(detailsItem) ?? []} columns={1} />
               )}
             </div>
+            {(() => {
+              const foot = detailsPanel.footer?.(detailsItem, closeDetails);
+              return foot ? <div className="uikit-list__panel-foot">{foot}</div> : null;
+            })()}
           </aside>
         )}
       </div>

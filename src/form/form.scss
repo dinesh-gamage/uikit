@@ -190,3 +190,22 @@
     }
   }
 }
+
+/* Mobile: forms get taller touch targets and more breathing room between fields. Scoped to
+   `.uikit-form` (not global tokens) so toolbars/search/filter selects keep their compact size.
+   All `md` controls read `var(--uikit-control-h-md)`, so redefining it here retunes their height
+   with no per-control overrides. 960px = --uikit-breakpoint-md. */
+@media (max-width: 960px) {
+  .uikit-form {
+    --uikit-control-h-md: 40px;
+    gap: 24px;
+  }
+
+  .uikit-form__grid {
+    gap: 20px 20px;
+  }
+
+  .uikit-form .uikit-field {
+    gap: 6px;
+  }
+}

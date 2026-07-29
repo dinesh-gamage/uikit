@@ -202,18 +202,67 @@
     height: 100%;
   }
 
+  /* Mobile: a full-screen sheet (fixed header + close, scrolling padded body) rather than a
+     half-width side rail — mirrors the details-panel--mobile / modal treatment. */
   &__filters--mobile {
     position: fixed;
-    inset: 0 auto 0 0;
+    inset: 0;
     z-index: var(--uikit-z-modal);
+    width: 100%;
     height: 100%;
     max-height: none;
+    padding: 0;
     border: 0;
-    border-right: 1px solid var(--uikit-border);
     border-radius: 0;
-    box-shadow: var(--uikit-shadow-lg);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
     align-self: auto;
-    animation: uikit-list-filters-in var(--uikit-speed) var(--uikit-ease);
+    animation: uikit-list-filters-slide-in var(--uikit-speed) var(--uikit-ease);
+  }
+
+  &__filters-head {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--uikit-border);
+  }
+
+  &__filters-title {
+    font-size: var(--uikit-text-lg);
+    font-weight: 600;
+    color: var(--uikit-text);
+  }
+
+  &__filters-close {
+    appearance: none;
+    background: none;
+    border: 0;
+    padding: 0;
+    width: 26px;
+    height: 26px;
+    flex: none;
+    font-size: 22px;
+    line-height: 1;
+    color: var(--uikit-text-muted);
+    border-radius: var(--uikit-radius-sm);
+    cursor: pointer;
+    transition: background var(--uikit-speed) var(--uikit-ease), color var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      background: var(--uikit-bg-muted);
+      color: var(--uikit-text);
+    }
+  }
+
+  &__filters-body {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    padding: 1.25rem 1rem;
   }
 
   &__filters-backdrop {
@@ -465,11 +514,13 @@
   }
 
   &__panel-head {
+    flex: none;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 8px;
-    padding: 12px 16px;
+    gap: 12px;
+    // Matches the modal header (16px 20px) so all overlays share one header size.
+    padding: 16px 20px;
     border-bottom: 1px solid var(--uikit-border);
   }
 
@@ -503,13 +554,27 @@
   }
 
   &__panel-body {
-    padding: 16px;
+    flex: 1;
+    min-height: 0;
+    padding: 16px 20px;
     overflow-y: auto;
 
     .uikit-info-card {
       border: 0;
       padding: 0;
     }
+  }
+
+  // Pinned footer below the scrolling body (e.g. detail action buttons). Sized like the modal
+  // footer so overlays feel unified.
+  &__panel-foot {
+    flex: none;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 16px 20px;
+    border-top: 1px solid var(--uikit-border);
   }
 
   /* Full-width overlay instead of the 40% side panel, driven by useBreakpoint (not a media
@@ -525,6 +590,21 @@
     border-radius: 0;
     align-self: auto;
     animation: uikit-list-panel-in-mobile var(--uikit-speed) var(--uikit-ease);
+  }
+
+  // Mobile: the detail footer becomes a flush edge-to-edge action bar (like the modal footer) —
+  // equal-width buttons, no gap/padding/rounding. Flex handles 2 or 3 actions.
+  &__panel--mobile &__panel-foot {
+    display: flex;
+    gap: 0;
+    padding: 0;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  &__panel--mobile &__panel-foot > * {
+    flex: 1 1 0;
+    min-height: 3rem;
+    border-radius: 0;
   }
 
   /* ---- mobile cards (rendered instead of the table below `mobileBreakpoint`) ---- */
@@ -587,6 +667,21 @@
     min-width: 0;
   }
 
+  // Text-less loading placeholder shaped like the real card (title bar + label/value rows).
+  &__card-skeleton {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    width: 100%;
+  }
+
+  &__card-skeleton-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+  }
+
   &__card-field {
     display: flex;
     flex-direction: column;
@@ -615,6 +710,46 @@
     font-size: var(--uikit-text-md);
     border: 1px dashed var(--uikit-border);
     border-radius: var(--uikit-radius);
+  }
+}
+
+/* Mobile toolbar: the filter toggle is icon-only (see ListView.tsx), so the search input can
+   fill the rest of line 1 instead of wrapping under it; the quick-add actions drop to their own
+   line. Matches the ListView default mobileBreakpoint (960px = --uikit-breakpoint-md). */
+@media (max-width: 960px) {
+  .uikit-list__search-input {
+    flex: 1 1 auto;
+    width: auto;
+    min-width: 0;
+  }
+
+  /* In-page tabs collapse into a compact dropdown (see ListView.tsx) — size it to its content
+     as the leading control on the toolbar row (the Select otherwise defaults to width:100% /
+     min-width:200px, which would take the whole row and push search + add to a second line). */
+  // Field wrapper defaults to width:100%; scope-override it so the control shrinks to content.
+  .uikit-list__toolbar-row .uikit-list__tabs-select {
+    flex: none;
+    width: auto;
+  }
+
+  .uikit-list__tabs-select .uikit-select {
+    width: auto;
+    min-width: 6.5rem;
+  }
+
+  /* A multi-button quick-add (e.g. Expense/Income/Transfer) drops to its own full-width row and
+     the buttons spread evenly; a single (icon-only) add button stays inline on the toolbar row. */
+  .uikit-list__toolbar:has(> * + *) {
+    flex: 1 1 100%;
+    margin-top: 0.5rem;
+  }
+
+  .uikit-list__toolbar:has(> * + *) > * {
+    flex: 1 1 0;
+  }
+
+  .uikit-list__toolbar-spacer {
+    display: none;
   }
 }
 
@@ -661,5 +796,16 @@
   to {
     transform: none;
     opacity: 1;
+  }
+}
+
+/* Full-screen mobile filter sheet: slide the whole panel in from the left edge. */
+@keyframes uikit-list-filters-slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
   }
 }

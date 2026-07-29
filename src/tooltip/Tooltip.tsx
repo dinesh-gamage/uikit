@@ -11,6 +11,8 @@ import {
 } from 'react';
 import { createPortal } from 'react-dom';
 import { cx } from '../utils/cx';
+import { useBreakpoint } from '../utils/use-breakpoint';
+import { useCoarsePointer } from '../utils/use-coarse-pointer';
 import { computeTooltipPlacement, type TooltipPosition } from './position';
 import './tooltip.scss';
 
@@ -37,6 +39,13 @@ export function Tooltip({ content, children, position = 'top', delayMs = 400, di
   const [open, setOpen] = useState(false);
   const [phase, setPhase] = useState<Phase>('measuring');
   const [style, setStyle] = useState<CSSProperties>({});
+
+  // Tooltips are a hover affordance — pointless (and annoying) on touch / mobile, where a tap
+  // would trigger them. Suppress on coarse pointers and at the mobile width. Both hooks must be
+  // called unconditionally (no `||` short-circuit) to keep hook order stable across renders.
+  const coarsePointer = useCoarsePointer();
+  const narrow = useBreakpoint(960);
+  const suppress = coarsePointer || narrow;
 
   const hasContent = content != null && content !== false;
 
@@ -99,6 +108,10 @@ export function Tooltip({ content, children, position = 'top', delayMs = 400, di
     document.addEventListener('keydown', onKeyDown);
     return () => document.removeEventListener('keydown', onKeyDown);
   }, [open]);
+
+  // Touch / mobile: render the child untouched — no anchor, no portal. The child keeps its own
+  // aria-label, so IconButton and direct <Tooltip> usages stay accessible.
+  if (suppress) return children;
 
   const describedChild = cloneElement(children, {
     'aria-describedby': open ? id : (children.props as { 'aria-describedby'?: string })['aria-describedby'],

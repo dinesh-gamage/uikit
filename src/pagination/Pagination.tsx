@@ -1,5 +1,6 @@
 import { cx } from '../utils/cx';
 import { Skeleton } from '../skeleton';
+import { Select } from '../select';
 import { computeRange } from './pagination-utils';
 import './pagination.scss';
 
@@ -64,20 +65,18 @@ export function Pagination({
       {!compact && <span className="uikit-pagination__range">{range.label}</span>}
       <div className="uikit-pagination__controls">
         {allowPageSizeChange && (
-          <label className="uikit-pagination__page-size">
+          <div className="uikit-pagination__page-size">
             <span>Rows</span>
-            <select
+            <Select
+              options={pageSizeOptions.map((n) => ({ value: n, label: String(n) }))}
               value={pageSize}
-              onChange={(e) => onPageSizeChange?.(Number(e.target.value))}
-              aria-label="Rows per page"
-            >
-              {pageSizeOptions.map((n) => (
-                <option key={n} value={n}>
-                  {n}
-                </option>
-              ))}
-            </select>
-          </label>
+              onChange={(v) => onPageSizeChange?.(Number(v))}
+              size="sm"
+              pill
+              clearable={false}
+              searchable={false}
+            />
+          </div>
         )}
         <button
           type="button"

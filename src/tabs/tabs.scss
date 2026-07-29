@@ -40,6 +40,15 @@
   gap: 4px;
   min-width: 0;
   overflow: hidden;
+  /* Fill the header's free width so a right-floated "More" (margin-left:auto) has room to
+     travel to the far edge; with all tabs fitting this is a no-op (tabs stay left-aligned). */
+  flex: 1 1 auto;
+}
+
+.uikit-tabs__left {
+  flex: none;
+  display: flex;
+  align-items: center;
 }
 
 .uikit-tabs__right {
@@ -47,6 +56,15 @@
   display: flex;
   align-items: center;
   margin-left: auto;
+}
+
+/* Thin divider between a left/right slot and the tab list (opt-in via `separator`). */
+.uikit-tabs__sep {
+  flex: none;
+  align-self: stretch;
+  width: 1px;
+  margin: 6px 4px;
+  background: var(--uikit-border);
 }
 
 .uikit-tabs__tab,
@@ -148,6 +166,9 @@
 
 .uikit-tabs__more-wrap {
   display: inline-flex;
+  /* Float the overflow button to the far right of the header rather than trailing the last
+     visible tab, so it reads as a distinct affordance separated from the tab group. */
+  margin-left: auto;
 }
 
 .uikit-tabs__measure {
@@ -164,23 +185,28 @@
 .uikit-tabs__menu {
   display: flex;
   flex-direction: column;
-  padding: 4px;
+  padding: 6px;
   min-width: 0;
 }
 
 .uikit-tabs__menu-item {
   display: flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 10px;
+  gap: 10px;
+  padding: 10px 14px;
   border: none;
   border-radius: var(--uikit-radius-sm);
   background: transparent;
   color: var(--uikit-text);
   font: inherit;
-  font-size: var(--uikit-text-sm);
+  font-size: var(--uikit-text-md);
   text-align: left;
   cursor: pointer;
+
+  /* Comfortable, mis-tap-resistant targets on touch. */
+  @media (max-width: 640px) {
+    min-height: 2.5rem;
+  }
 
   &:hover:not(:disabled) {
     background: var(--uikit-bg-subtle);

@@ -112,6 +112,21 @@
     }
   }
 
+  &--success {
+    --uikit-btn-bg: var(--uikit-color-success);
+    --uikit-btn-bg-hover: var(--uikit-color-success);
+    --uikit-btn-color: var(--uikit-text-on-primary);
+    --uikit-btn-border: var(--uikit-color-success);
+
+    &:hover:not(:disabled) {
+      filter: brightness(0.92);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 3px var(--uikit-color-success-soft), 0 0 0 1px var(--uikit-color-success);
+    }
+  }
+
   &--ghost {
     --uikit-btn-bg: transparent;
     --uikit-btn-bg-hover: var(--uikit-bg-muted);

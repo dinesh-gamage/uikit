@@ -118,9 +118,80 @@
   }
 }
 
-@media (max-width: 640px) {
-  .uikit-modal__panel {
-    width: calc(100vw - 2rem);
-    max-width: calc(100vw - 2rem);
+// Mobile: modals go full-screen with a fixed header + footer and a scrolling body.
+// 960px matches --uikit-breakpoint-md, the app-wide mobile line.
+@media (max-width: 960px) {
+  .uikit-modal {
+    padding: 0;
+  }
+
+  .uikit-modal__panel,
+  .uikit-modal__panel--sm,
+  .uikit-modal__panel--md,
+  .uikit-modal__panel--lg {
+    width: 100%;
+    max-width: none;
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+  }
+
+  // Header/footer are already flex:none (fixed); let the body fill + scroll between them.
+  .uikit-modal__body {
+    flex: 1;
+    max-height: none;
+  }
+
+  // Footer actions become two equal-width columns (cancel | submit) that fill the bar
+  // edge-to-edge — no gap, no padding, no rounding.
+  .uikit-modal__footer {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    padding: 0;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  .uikit-modal__footer > *,
+  .uikit-modal__footer button {
+    width: 100%;
+    min-height: 3rem;
+    border-radius: 0;
+  }
+
+  // DynamicForm-in-body modals render Cancel/Submit inside the body via .uikit-form__buttons
+  // (not the modal footer). Make the form fill the body and pin the action bar to the bottom so
+  // it behaves like a fixed footer — auto-top seats it at the screen bottom for short forms, and
+  // position:sticky keeps it in view while a long form scrolls.
+  .uikit-modal__body:has(> .uikit-form) {
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 0;
+  }
+
+  .uikit-modal__body > .uikit-form {
+    flex: 1 0 auto;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .uikit-modal__body .uikit-form__buttons {
+    position: sticky;
+    bottom: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0;
+    margin: auto -20px 0; // auto-top pins to the bottom; bleed to the body's side edges
+    padding: 0;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+    background: var(--uikit-bg);
+    border-top: 1px solid var(--uikit-border);
+  }
+
+  .uikit-modal__body .uikit-form__buttons > *,
+  .uikit-modal__body .uikit-form__buttons button {
+    width: 100%;
+    min-height: 3rem;
+    border-radius: 0;
   }
 }
