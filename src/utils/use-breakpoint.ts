@@ -1,22 +1,30 @@
-import { useEffect, useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
 /**
- * SSR-safe media query hook. Returns `true` once the viewport matches
- * `(max-width: ${maxWidthPx}px)`. Always `false` during SSR and on the initial client render
- * (before effects run), so the hydrated markup matches the server-rendered markup; the real value
- * is applied on mount and kept in sync via `matchMedia`'s `change` event.
+ * SSR-safe media query hook. Returns `true` when the viewport matches
+ * `(max-width: ${maxWidthPx}px)`.
+ *
+ * Backed by `useSyncExternalStore` so that on a client mount (including client-side route changes)
+ * the value is read from `matchMedia` synchronously on the first render — no `false`-then-`true`
+ * flip, so a responsive branch (e.g. ListView's desktop table vs. mobile cards) never paints the
+ * wrong layout for a frame. During SSR and the hydration pass the server snapshot is `false`, so the
+ * hydrated markup still matches the server; React reconciles to the real value right after hydration
+ * without a mismatch warning.
  */
 export function useBreakpoint(maxWidthPx: number): boolean {
-  const [matches, setMatches] = useState(false);
+  const query = `(max-width: ${maxWidthPx}px)`;
 
-  useEffect(() => {
-    if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return;
-    const mql = window.matchMedia(`(max-width: ${maxWidthPx}px)`);
-    const onChange = () => setMatches(mql.matches);
-    onChange();
-    mql.addEventListener('change', onChange);
-    return () => mql.removeEventListener('change', onChange);
-  }, [maxWidthPx]);
-
-  return matches;
+  return useSyncExternalStore(
+    (onChange) => {
+      if (typeof window === 'undefined' || typeof window.matchMedia !== 'function') return () => {};
+      const mql = window.matchMedia(query);
+      mql.addEventListener('change', onChange);
+      return () => mql.removeEventListener('change', onChange);
+    },
+    () =>
+      typeof window !== 'undefined' && typeof window.matchMedia === 'function'
+        ? window.matchMedia(query).matches
+        : false,
+    () => false,
+  );
 }
