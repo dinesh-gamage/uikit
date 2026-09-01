@@ -29,6 +29,7 @@ export const demos: DemoEntry[] = [
   { id: 'dynamic-form', title: 'Dynamic Form', group: 'Forms', component: lazy(() => import('./demos/DynamicFormDemo')) },
   { id: 'list', title: 'List', group: 'Data', component: lazy(() => import('./demos/ListDemo')) },
   { id: 'kanban', title: 'Kanban Board', group: 'Data', component: lazy(() => import('./demos/KanbanBoardDemo')) },
+  { id: 'event-calendar', title: 'Event Calendar', group: 'Data', component: lazy(() => import('./demos/EventCalendarDemo')) },
   { id: 'tabs', title: 'Tabs', group: 'Navigation', component: lazy(() => import('./demos/TabsDemo')) },
   { id: 'breadcrumb', title: 'Breadcrumb', group: 'Navigation', component: lazy(() => import('./demos/BreadcrumbDemo')) },
   { id: 'pagination', title: 'Pagination', group: 'Navigation', component: lazy(() => import('./demos/PaginationDemo')) },

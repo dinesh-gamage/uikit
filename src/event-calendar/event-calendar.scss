@@ -1,0 +1,753 @@
+// Geometry the TS side mirrors (MonthView's DATE_STRIP / BAR_LANE, TimeGridView's gutter).
+$month-date-strip: 24px;
+$month-bar-h: 18px;
+$month-bar-lane: 20px;
+
+.uikit-event-calendar {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  height: var(--uikit-ec-height, 100%);
+  font-family: var(--uikit-font);
+  color: var(--uikit-text);
+  background: var(--uikit-bg);
+  --uikit-ec-hour-h: 48px;
+  --uikit-ec-gutter: 56px;
+
+  * {
+    box-sizing: border-box;
+  }
+
+  // ---------------------------------------------------------------- header
+
+  &__header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 4px 10px;
+    flex-wrap: wrap;
+  }
+
+  &__header-left,
+  &__header-right {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  &__nav {
+    display: inline-flex;
+    align-items: center;
+    gap: 2px;
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius);
+    overflow: hidden;
+  }
+
+  &__nav-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: var(--uikit-control-h-sm);
+    border: none;
+    background: transparent;
+    color: var(--uikit-text-muted);
+    cursor: pointer;
+    transition: background var(--uikit-speed) var(--uikit-ease);
+
+    svg {
+      width: 14px;
+      height: 14px;
+    }
+
+    &:hover {
+      background: var(--uikit-bg-muted);
+      color: var(--uikit-text);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+  &__today {
+    height: var(--uikit-control-h-sm);
+    padding: 0 10px;
+    border: none;
+    border-left: 1px solid var(--uikit-border);
+    border-right: 1px solid var(--uikit-border);
+    background: transparent;
+    font-family: inherit;
+    font-size: var(--uikit-text-sm);
+    color: var(--uikit-text);
+    cursor: pointer;
+    transition: background var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      background: var(--uikit-bg-muted);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+  &__label {
+    font-size: var(--uikit-text-lg);
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__view-trigger {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    height: var(--uikit-control-h-sm);
+    padding: 0 10px;
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius);
+    background: var(--uikit-bg);
+    font-family: inherit;
+    font-size: var(--uikit-text-sm);
+    color: var(--uikit-text);
+    cursor: pointer;
+
+    svg {
+      width: 12px;
+      height: 12px;
+      transform: rotate(90deg);
+      color: var(--uikit-text-faint);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+  &__view-menu {
+    padding: 4px;
+  }
+
+  &__view-menu-item {
+    display: block;
+    width: 100%;
+    padding: 7px 10px;
+    border: none;
+    border-radius: var(--uikit-radius-sm);
+    background: transparent;
+    font-family: inherit;
+    font-size: var(--uikit-text-sm);
+    color: var(--uikit-text);
+    text-align: left;
+    cursor: pointer;
+
+    &:hover {
+      background: var(--uikit-bg-muted);
+    }
+
+    &--active {
+      color: var(--uikit-color-primary);
+      font-weight: 600;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+  // ---------------------------------------------------------------- body
+
+  &__body {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--uikit-border);
+    border-radius: var(--uikit-radius);
+    overflow: hidden;
+    transition: opacity var(--uikit-speed) var(--uikit-ease);
+
+    &--loading {
+      opacity: 0.5;
+      pointer-events: none;
+    }
+  }
+
+  &__loading {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  &__empty {
+    padding: 24px 12px;
+    text-align: center;
+    font-size: var(--uikit-text-sm);
+    color: var(--uikit-text-faint);
+  }
+
+  // ---------------------------------------------------------------- chips
+
+  &__chip {
+    position: relative;
+    display: flex;
+    align-items: center;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    border-radius: var(--uikit-radius-sm);
+    background: transparent;
+    font-family: inherit;
+    font-size: var(--uikit-text-xs);
+    color: var(--uikit-text);
+    text-align: left;
+    cursor: pointer;
+    overflow: hidden;
+    user-select: none;
+    touch-action: pan-y;
+    transition: box-shadow var(--uikit-speed) var(--uikit-ease), opacity var(--uikit-speed) var(--uikit-ease);
+
+    // Tint layer: lets an arbitrary event colour become a soft surface without color-mix.
+    &::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: var(--uikit-ec-color, var(--uikit-color-primary));
+      opacity: 0.16;
+      pointer-events: none;
+    }
+
+    &:hover::before {
+      opacity: 0.26;
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+      z-index: 3;
+    }
+
+    &--dragging {
+      opacity: 0.35;
+    }
+
+    &--ghost {
+      box-shadow: var(--uikit-shadow);
+      opacity: 0.92;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    &--readonly {
+      cursor: default;
+    }
+
+    &--continues-before {
+      border-top-left-radius: 0;
+      border-bottom-left-radius: 0;
+    }
+
+    &--continues-after {
+      border-top-right-radius: 0;
+      border-bottom-right-radius: 0;
+    }
+  }
+
+  &__chip-body {
+    position: relative;
+    display: flex;
+    align-items: baseline;
+    gap: 5px;
+    min-width: 0;
+    width: 100%;
+    padding: 0 6px;
+    overflow: hidden;
+  }
+
+  &__chip-dot {
+    flex: none;
+    align-self: center;
+    width: 6px;
+    height: 6px;
+    border-radius: var(--uikit-radius-full);
+    background: var(--uikit-ec-color, var(--uikit-color-primary));
+  }
+
+  &__chip-time {
+    flex: none;
+    color: var(--uikit-text-muted);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__chip-title {
+    min-width: 0;
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__chip--all-day &__chip-dot {
+    display: none;
+  }
+
+  // All-day chips read as a filled band; the tint stays translucent so any event colour keeps
+  // enough contrast against the label without needing a light/dark computation.
+  &__chip--all-day {
+    &::before {
+      opacity: 0.3;
+    }
+
+    &:hover::before {
+      opacity: 0.42;
+    }
+
+    box-shadow: inset 2px 0 0 var(--uikit-ec-color, var(--uikit-color-primary));
+  }
+
+  // Month/all-day bar: absolutely placed over the 7-column row it belongs to.
+  &__chip--bar {
+    position: absolute;
+    left: calc(var(--uikit-ec-col, 0) * 100% / 7 + 2px);
+    width: calc(var(--uikit-ec-span, 1) * 100% / 7 - 4px);
+    top: calc(#{$month-date-strip} + var(--uikit-ec-lane, 0) * #{$month-bar-lane});
+    height: $month-bar-h;
+    z-index: 1;
+  }
+
+  // Time-grid block: absolutely placed inside one day column.
+  &__chip--block {
+    position: absolute;
+    left: calc(var(--uikit-ec-col, 0) * (100% - 6px) / var(--uikit-ec-cols, 1) + 2px);
+    width: calc((100% - 6px) / var(--uikit-ec-cols, 1) - 2px);
+    top: calc(var(--uikit-ec-top, 0) * 1px);
+    height: calc(var(--uikit-ec-h, 20) * 1px);
+    align-items: stretch;
+    border-radius: var(--uikit-radius-sm);
+    box-shadow: inset 2px 0 0 var(--uikit-ec-color, var(--uikit-color-primary));
+    z-index: 1;
+
+    .uikit-event-calendar__chip-body {
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 0;
+      padding: 2px 5px;
+      line-height: 1.25;
+    }
+
+    .uikit-event-calendar__chip-dot {
+      display: none;
+    }
+
+    .uikit-event-calendar__chip-title {
+      white-space: normal;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+    }
+  }
+
+  &__chip--block#{&}__chip--compact {
+    .uikit-event-calendar__chip-body {
+      flex-direction: row;
+      align-items: center;
+      gap: 4px;
+      padding: 0 5px;
+    }
+
+    .uikit-event-calendar__chip-title {
+      white-space: nowrap;
+      -webkit-line-clamp: 1;
+    }
+  }
+
+  &__chip-handle {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 7px;
+    z-index: 2;
+    cursor: ns-resize;
+
+    &--start {
+      top: 0;
+    }
+
+    &--end {
+      bottom: 0;
+    }
+  }
+
+  &__chip--bar &__chip-handle {
+    top: 0;
+    bottom: 0;
+    height: auto;
+    width: 6px;
+    cursor: ew-resize;
+
+    &--start {
+      right: auto;
+      left: 0;
+    }
+
+    &--end {
+      left: auto;
+      right: 0;
+    }
+  }
+
+  // ---------------------------------------------------------------- month
+
+  &__month {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__month-weekdays {
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    border-bottom: 1px solid var(--uikit-border);
+    background: var(--uikit-bg-subtle);
+
+    span {
+      padding: 6px 8px;
+      font-size: var(--uikit-text-xs);
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--uikit-text-faint);
+    }
+  }
+
+  &__month-body {
+    flex: 1;
+    min-height: 0;
+    display: grid;
+    grid-auto-rows: minmax(0, 1fr);
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+
+  &__month-row {
+    position: relative;
+    display: grid;
+    grid-template-columns: repeat(7, minmax(0, 1fr));
+    border-bottom: 1px solid var(--uikit-border);
+    min-height: 0;
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__month-cell {
+    position: static;
+    min-width: 0;
+    padding: 0;
+    border: none;
+    border-right: 1px solid var(--uikit-border);
+    background: transparent;
+    font-family: inherit;
+    color: inherit;
+    text-align: left;
+    cursor: pointer;
+    touch-action: pan-y;
+    transition: background var(--uikit-speed) var(--uikit-ease);
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &:hover {
+      background: var(--uikit-bg-subtle);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+      z-index: 2;
+    }
+
+    &--outside {
+      background: var(--uikit-bg-subtle);
+
+      .uikit-event-calendar__month-date {
+        color: var(--uikit-text-faint);
+      }
+    }
+
+    &--selecting {
+      background: var(--uikit-color-primary-soft);
+    }
+  }
+
+  &__month-date {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 22px;
+    height: 22px;
+    margin: 1px 0 0 2px;
+    border-radius: var(--uikit-radius-full);
+    font-size: var(--uikit-text-sm);
+    font-variant-numeric: tabular-nums;
+  }
+
+  &__month-cell--today &__month-date {
+    background: var(--uikit-color-primary);
+    color: var(--uikit-text-on-primary);
+    font-weight: 600;
+  }
+
+  &__month-more {
+    position: absolute;
+    left: calc(var(--uikit-ec-col, 0) * 100% / 7 + 2px);
+    width: calc(100% / 7 - 4px);
+    top: calc(#{$month-date-strip} + var(--uikit-ec-lane, 0) * #{$month-bar-lane});
+    height: $month-bar-h;
+    padding: 0 4px;
+    border: none;
+    border-radius: var(--uikit-radius-sm);
+    background: transparent;
+    font-family: inherit;
+    font-size: var(--uikit-text-xs);
+    font-weight: 600;
+    color: var(--uikit-text-muted);
+    text-align: left;
+    cursor: pointer;
+    z-index: 1;
+
+    &:hover {
+      background: var(--uikit-bg-muted);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+  &__more-panel {
+    padding: 6px;
+    max-height: 300px;
+    overflow: auto;
+  }
+
+  &__more-heading {
+    padding: 4px 8px 8px;
+    font-size: var(--uikit-text-xs);
+    font-weight: 600;
+    color: var(--uikit-text-muted);
+  }
+
+  // Compact (mobile) month: dots instead of bars, with the tapped day's list below the grid.
+  &__month--compact {
+    .uikit-event-calendar__month-body {
+      flex: none;
+      grid-auto-rows: auto;
+      border-bottom: 1px solid var(--uikit-border);
+    }
+
+    .uikit-event-calendar__month-cell {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      padding: 4px 0 5px;
+      border-right: none;
+    }
+
+    .uikit-event-calendar__month-date {
+      margin: 0;
+    }
+
+    .uikit-event-calendar__month-cell--selected {
+      background: var(--uikit-color-primary-soft);
+    }
+  }
+
+  &__month-dots {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    height: 8px;
+  }
+
+  &__month-dot {
+    width: 5px;
+    height: 5px;
+    border-radius: var(--uikit-radius-full);
+    background: var(--uikit-ec-color, var(--uikit-color-primary));
+  }
+
+  &__month-dot-more {
+    font-size: 9px;
+    line-height: 1;
+    color: var(--uikit-text-faint);
+  }
+
+  &__month-list {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+    padding: 4px 0 8px;
+  }
+
+  &__month-list-heading {
+    margin: 0;
+    padding: 10px 12px 6px;
+    font-size: var(--uikit-text-sm);
+    font-weight: 600;
+    color: var(--uikit-text-muted);
+  }
+
+  &__month-list-empty {
+    display: block;
+    width: 100%;
+    padding: 20px 12px;
+    border: none;
+    background: transparent;
+    font-family: inherit;
+    font-size: var(--uikit-text-sm);
+    color: var(--uikit-text-faint);
+    cursor: pointer;
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+  // ---------------------------------------------------------------- agenda
+
+  &__agenda {
+    flex: 1;
+    min-height: 0;
+    overflow: auto;
+  }
+
+  &__agenda-group {
+    position: relative;
+  }
+
+  &__agenda-heading {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    margin: 0;
+    padding: 7px 12px;
+    background: var(--uikit-bg-subtle);
+    border-bottom: 1px solid var(--uikit-border);
+    font-size: var(--uikit-text-xs);
+    font-weight: 600;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: var(--uikit-text-muted);
+
+    &--today {
+      color: var(--uikit-color-primary);
+    }
+  }
+
+  &__agenda-rows {
+    display: flex;
+    flex-direction: column;
+  }
+
+  &__agenda-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    padding: 9px 12px;
+    border: none;
+    border-bottom: 1px solid var(--uikit-border);
+    background: transparent;
+    font-family: inherit;
+    font-size: var(--uikit-text-sm);
+    color: var(--uikit-text);
+    text-align: left;
+    cursor: pointer;
+    transition: background var(--uikit-speed) var(--uikit-ease);
+
+    &:hover {
+      background: var(--uikit-bg-subtle);
+    }
+
+    &:focus-visible {
+      outline: none;
+      box-shadow: var(--uikit-focus-ring);
+      z-index: 2;
+    }
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &__agenda-time {
+    flex: none;
+    width: 108px;
+    font-size: var(--uikit-text-xs);
+    font-variant-numeric: tabular-nums;
+    color: var(--uikit-text-muted);
+  }
+
+  &__agenda-dot {
+    flex: none;
+    width: 8px;
+    height: 8px;
+    border-radius: var(--uikit-radius-full);
+    background: var(--uikit-ec-color, var(--uikit-color-primary));
+  }
+
+  &__agenda-title {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  // ---------------------------------------------------------------- responsive cosmetics
+  // Structural mobile switches come from `useBreakpoint`/`forceMobile`, not from here.
+
+  @media (max-width: 960px) {
+    &__header {
+      gap: 8px;
+      padding: 4px 0 8px;
+    }
+
+    &__label {
+      font-size: var(--uikit-text-md);
+    }
+
+    &__agenda-time {
+      width: 88px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    * {
+      transition: none !important;
+    }
+  }
+}

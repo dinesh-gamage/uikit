@@ -1,6 +1,15 @@
 import { describe, it, expect } from 'vitest';
 import {
   addDays,
+  addMinutes,
+  addWeeks,
+  differenceInCalendarDays,
+  differenceInMinutes,
+  endOfWeek,
+  isSameMonth,
+  minutesOfDay,
+  setMinutesOfDay,
+  startOfWeek,
   addMonths,
   clampDate,
   daysInMonth,
@@ -152,5 +161,73 @@ describe('time helpers', () => {
     expect(parseTime('12:60')).toBeNull();
     expect(parseTime('12')).toBeNull();
     expect(parseTime('ab:cd')).toBeNull();
+  });
+});
+
+describe('week helpers', () => {
+  it('startOfWeek respects weekStartsOn', () => {
+    const wed = new Date(2026, 8, 2); // Wed 2 Sep 2026
+    expect(isSameDay(startOfWeek(wed, 0), new Date(2026, 7, 30))).toBe(true); // Sun 30 Aug
+    expect(isSameDay(startOfWeek(wed, 1), new Date(2026, 7, 31))).toBe(true); // Mon 31 Aug
+    expect(isSameDay(startOfWeek(wed, 3), wed)).toBe(true); // already Wednesday
+  });
+
+  it('startOfWeek drops the time of day', () => {
+    const s = startOfWeek(new Date(2026, 8, 2, 17, 42), 1);
+    expect(s.getHours()).toBe(0);
+    expect(s.getMinutes()).toBe(0);
+  });
+
+  it('endOfWeek is six days after startOfWeek', () => {
+    const d = new Date(2026, 8, 2);
+    expect(isSameDay(endOfWeek(d, 1), addDays(startOfWeek(d, 1), 6))).toBe(true);
+  });
+
+  it('addWeeks moves whole weeks', () => {
+    expect(isSameDay(addWeeks(new Date(2026, 8, 2), 2), new Date(2026, 8, 16))).toBe(true);
+    expect(isSameDay(addWeeks(new Date(2026, 8, 2), -1), new Date(2026, 7, 26))).toBe(true);
+  });
+
+  it('getMonthGrid honours weekStartsOn', () => {
+    // 1 Sep 2026 is a Tuesday
+    expect(isSameDay(getMonthGrid(2026, 8, 0)[0][0], new Date(2026, 7, 30))).toBe(true);
+    expect(isSameDay(getMonthGrid(2026, 8, 1)[0][0], new Date(2026, 7, 31))).toBe(true);
+    // Feb 2026 starts on a Sunday: weekStartsOn 0 starts exactly on the 1st, 1 starts a week earlier
+    expect(isSameDay(getMonthGrid(2026, 1, 0)[0][0], new Date(2026, 1, 1))).toBe(true);
+    expect(isSameDay(getMonthGrid(2026, 1, 1)[0][0], new Date(2026, 0, 26))).toBe(true);
+  });
+});
+
+describe('minute helpers', () => {
+  it('addMinutes / differenceInMinutes round trip', () => {
+    const base = new Date(2026, 8, 1, 9, 0);
+    expect(differenceInMinutes(addMinutes(base, 90), base)).toBe(90);
+    expect(differenceInMinutes(base, addMinutes(base, 45))).toBe(-45);
+  });
+
+  it('minutesOfDay / setMinutesOfDay', () => {
+    expect(minutesOfDay(new Date(2026, 8, 1, 9, 30))).toBe(570);
+    expect(minutesOfDay(new Date(2026, 8, 1))).toBe(0);
+    const d = setMinutesOfDay(new Date(2026, 8, 1, 23, 59), 570);
+    expect(d.getHours()).toBe(9);
+    expect(d.getMinutes()).toBe(30);
+    expect(isSameDay(d, new Date(2026, 8, 1))).toBe(true);
+  });
+
+  it('setMinutesOfDay rolls over into neighbouring days', () => {
+    expect(isSameDay(setMinutesOfDay(new Date(2026, 8, 1), 1500), new Date(2026, 8, 2))).toBe(true);
+    expect(isSameDay(setMinutesOfDay(new Date(2026, 8, 1), -30), new Date(2026, 7, 31))).toBe(true);
+  });
+
+  it('differenceInCalendarDays ignores time of day', () => {
+    expect(differenceInCalendarDays(new Date(2026, 8, 3, 1, 0), new Date(2026, 8, 1, 23, 0))).toBe(2);
+    expect(differenceInCalendarDays(new Date(2026, 8, 1), new Date(2026, 8, 1))).toBe(0);
+    expect(differenceInCalendarDays(new Date(2026, 8, 1), new Date(2026, 8, 4))).toBe(-3);
+  });
+
+  it('isSameMonth', () => {
+    expect(isSameMonth(new Date(2026, 8, 1), new Date(2026, 8, 30))).toBe(true);
+    expect(isSameMonth(new Date(2026, 8, 30), new Date(2026, 9, 1))).toBe(false);
+    expect(isSameMonth(new Date(2025, 8, 1), new Date(2026, 8, 1))).toBe(false);
   });
 });

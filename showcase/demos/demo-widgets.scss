@@ -210,3 +210,17 @@
     }
   }
 }
+
+.sc-event-calendar-container {
+  width: 100%;
+  height: 640px;
+  overflow: hidden;
+  border: 1px dashed var(--uikit-border);
+  border-radius: var(--uikit-radius);
+  padding: 4px;
+}
+
+.sc-event-calendar-container--mobile {
+  max-width: 390px;
+  height: 680px;
+}
