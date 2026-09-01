@@ -283,10 +283,29 @@ function renderFieldControl(
       return <RadioField field={field} value={value} onChange={onChange} common={common} />;
 
     case 'select':
-      return <Select options={field.options ?? []} value={value ?? null} onChange={(v) => onChange(v)} placeholder={field.placeholder} {...common} />;
+      return (
+        <Select
+          options={field.options ?? []}
+          value={value ?? null}
+          onChange={(v) => onChange(v)}
+          placeholder={field.placeholder}
+          renderOption={field.renderOption}
+          renderValue={field.renderValue}
+          {...common}
+        />
+      );
 
     case 'multiselect':
-      return <MultiSelect options={field.options ?? []} value={value ?? []} onChange={(v) => onChange(v)} placeholder={field.placeholder} {...common} />;
+      return (
+        <MultiSelect
+          options={field.options ?? []}
+          value={value ?? []}
+          onChange={(v) => onChange(v)}
+          placeholder={field.placeholder}
+          renderOption={field.renderOption}
+          {...common}
+        />
+      );
 
     case 'datalist':
       return <DatalistField field={field} value={value} onChange={onChange} common={common} placeholder={field.placeholder} />;

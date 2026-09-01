@@ -47,6 +47,10 @@ export interface FormFieldDef {
 
   /** radio / select / multiselect / datalist */
   options?: SelectOption[] | ((query: string) => Promise<SelectOption[]>);
+  /** Custom option row renderer; select / multiselect only. */
+  renderOption?: (option: SelectOption, state: { highlighted: boolean; selected: boolean }) => ReactNode;
+  /** Custom trigger content for the selected option; select / multiselect only, and ignored by multiselect. */
+  renderValue?: (option: SelectOption) => ReactNode;
   /** textarea */
   rows?: number;
   /** file */
