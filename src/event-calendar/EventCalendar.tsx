@@ -6,6 +6,7 @@ import { addDays, addMonths, addWeeks, startOfDay } from '../datetime/date-utils
 import { AgendaView } from './AgendaView';
 import { CalendarHeader } from './CalendarHeader';
 import { MonthView } from './MonthView';
+import { TimeGridView } from './TimeGridView';
 import {
   cssVars,
   formatRangeLabel,
@@ -128,7 +129,13 @@ export function EventCalendar<T>(props: EventCalendarProps<T>) {
     onDateChange,
     onVisibleRangeChange,
     weekStartsOn = 1,
+    minTime = 0,
+    maxTime = 24,
+    slotMinutes = 30,
+    snapMinutes = slotMinutes,
+    hourHeight = 48,
     agendaDays = 30,
+    showNowIndicator = true,
     timeFormat = '24h',
     locale,
     onEventClick,
@@ -262,6 +269,17 @@ export function EventCalendar<T>(props: EventCalendarProps<T>) {
       <div className={cx('uikit-event-calendar__body', { 'uikit-event-calendar__body--loading': !!loading })}>
         {view === 'month' ? (
           <MonthView {...shared} />
+        ) : view === 'week' || view === 'day' ? (
+          <TimeGridView
+            {...shared}
+            view={view}
+            minTime={minTime}
+            maxTime={maxTime}
+            slotMinutes={slotMinutes}
+            snapMinutes={snapMinutes}
+            hourHeight={hourHeight}
+            showNowIndicator={showNowIndicator}
+          />
         ) : (
           <AgendaView
             events={visibleEvents}

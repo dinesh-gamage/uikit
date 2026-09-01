@@ -101,13 +101,15 @@ export function CalendarHeader({
             )}
           </>
         ) : (
-          <Tabs
-            variant="pills"
-            size="sm"
-            active={view}
-            onChange={(id) => onViewChange(id as CalendarView)}
-            tabs={VIEWS.map((v) => ({ id: v, label: VIEW_LABELS[v] }))}
-          />
+          <div className="uikit-event-calendar__views">
+            <Tabs
+              variant="pills"
+              size="sm"
+              active={view}
+              onChange={(id) => onViewChange(id as CalendarView)}
+              tabs={VIEWS.map((v) => ({ id: v, label: VIEW_LABELS[v] }))}
+            />
+          </div>
         )}
         {headerRight}
       </div>

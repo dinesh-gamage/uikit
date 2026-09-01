@@ -38,6 +38,24 @@ $month-bar-lane: 20px;
     min-width: 0;
   }
 
+  &__header-left {
+    flex: 1 1 auto;
+  }
+
+  // Never shrink: Tabs measures its own container to decide what fits, so a squeezed container
+  // would collapse the view switcher into its overflow menu. The header wraps instead.
+  &__header-right {
+    flex: 0 0 auto;
+  }
+
+  // Tabs sizes its visible pills from its container's measured width, so the container must be
+  // definite — a shrink-to-fit parent would feed the collapsed width back and strand every view
+  // in the overflow menu. This floor comfortably fits Month/Week/Day/Agenda at `size="sm"`.
+  &__views {
+    flex: none;
+    min-width: 16rem;
+  }
+
   &__nav {
     display: inline-flex;
     align-items: center;
@@ -240,8 +258,12 @@ $month-bar-lane: 20px;
       z-index: 3;
     }
 
+    // The dragged chip is the live preview, so it stays opaque and lifts instead of fading. It
+    // must not intercept hit-testing while it tracks the pointer.
     &--dragging {
-      opacity: 0.35;
+      pointer-events: none;
+      box-shadow: var(--uikit-shadow);
+      z-index: 4;
     }
 
     &--ghost {
@@ -321,9 +343,9 @@ $month-bar-lane: 20px;
   // Month/all-day bar: absolutely placed over the 7-column row it belongs to.
   &__chip--bar {
     position: absolute;
-    left: calc(var(--uikit-ec-col, 0) * 100% / 7 + 2px);
-    width: calc(var(--uikit-ec-span, 1) * 100% / 7 - 4px);
-    top: calc(#{$month-date-strip} + var(--uikit-ec-lane, 0) * #{$month-bar-lane});
+    left: calc(var(--uikit-ec-col, 0) * 100% / var(--uikit-ec-days, 7) + 2px);
+    width: calc(var(--uikit-ec-span, 1) * 100% / var(--uikit-ec-days, 7) - 4px);
+    top: calc(var(--uikit-ec-bar-offset, #{$month-date-strip}) + var(--uikit-ec-lane, 0) * #{$month-bar-lane});
     height: $month-bar-h;
     z-index: 1;
   }
@@ -520,9 +542,9 @@ $month-bar-lane: 20px;
 
   &__month-more {
     position: absolute;
-    left: calc(var(--uikit-ec-col, 0) * 100% / 7 + 2px);
-    width: calc(100% / 7 - 4px);
-    top: calc(#{$month-date-strip} + var(--uikit-ec-lane, 0) * #{$month-bar-lane});
+    left: calc(var(--uikit-ec-col, 0) * 100% / var(--uikit-ec-days, 7) + 2px);
+    width: calc(100% / var(--uikit-ec-days, 7) - 4px);
+    top: calc(var(--uikit-ec-bar-offset, #{$month-date-strip}) + var(--uikit-ec-lane, 0) * #{$month-bar-lane});
     height: $month-bar-h;
     padding: 0 4px;
     border: none;
@@ -634,6 +656,231 @@ $month-bar-lane: 20px;
     &:focus-visible {
       outline: none;
       box-shadow: var(--uikit-focus-ring);
+    }
+  }
+
+
+  // ---------------------------------------------------------------- week / day time grid
+
+  &__timegrid {
+    flex: 1;
+    min-height: 0;
+    display: flex;
+  }
+
+  &__tg-scroll {
+    flex: 1;
+    min-height: 0;
+    min-width: 0;
+    overflow: auto;
+    overscroll-behavior: contain;
+  }
+
+  &__tg-inner {
+    display: flex;
+    flex-direction: column;
+    min-width: 100%;
+    width: max-content;
+  }
+
+  &__tg-sticky {
+    position: sticky;
+    top: 0;
+    z-index: 3;
+    background: var(--uikit-bg);
+  }
+
+  &__tg-head,
+  &__tg-allday {
+    display: flex;
+  }
+
+  &__tg-head {
+    border-bottom: 1px solid var(--uikit-border);
+  }
+
+  &__tg-corner {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    flex: none;
+    width: var(--uikit-ec-gutter);
+    background: var(--uikit-bg);
+    border-right: 1px solid var(--uikit-border);
+
+    &--label {
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding: 0 6px;
+      font-size: var(--uikit-text-xs);
+      color: var(--uikit-text-faint);
+    }
+  }
+
+  &__tg-head-cell {
+    flex: 1 1 0;
+    min-width: 0;
+    padding: 7px 8px;
+    border-right: 1px solid var(--uikit-border);
+    font-size: var(--uikit-text-sm);
+    font-weight: 600;
+    color: var(--uikit-text-muted);
+    text-align: center;
+    white-space: nowrap;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &--today {
+      color: var(--uikit-color-primary);
+    }
+  }
+
+  &__tg-allday {
+    border-bottom: 1px solid var(--uikit-border);
+    background: var(--uikit-bg-subtle);
+  }
+
+  &__tg-allday-lanes {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    display: grid;
+    grid-template-columns: repeat(var(--uikit-ec-days, 7), minmax(0, 1fr));
+    min-height: calc(4px + var(--uikit-ec-lanes, 1) * #{$month-bar-lane});
+  }
+
+  &__tg-allday-cell {
+    border-right: 1px solid var(--uikit-border);
+    cursor: pointer;
+    touch-action: pan-y;
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &:hover {
+      background: var(--uikit-bg-muted);
+    }
+
+    &--selecting {
+      background: var(--uikit-color-primary-soft);
+    }
+  }
+
+  &__tg-body {
+    display: flex;
+    height: var(--uikit-ec-total-h, 1152px);
+  }
+
+  &__tg-gutter {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+    flex: none;
+    width: var(--uikit-ec-gutter);
+    background: var(--uikit-bg);
+    border-right: 1px solid var(--uikit-border);
+  }
+
+  &__tg-hour {
+    position: relative;
+    height: var(--uikit-ec-hour-h, 48px);
+
+    span {
+      position: absolute;
+      top: -0.6em;
+      right: 6px;
+      font-size: var(--uikit-text-xs);
+      font-variant-numeric: tabular-nums;
+      color: var(--uikit-text-faint);
+      background: var(--uikit-bg);
+      padding: 0 1px;
+    }
+
+    &:first-child span {
+      top: 0;
+    }
+  }
+
+  &__tg-cols {
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    touch-action: pan-y;
+    // Hour rules as a background so the grid costs no extra DOM.
+    background-image: repeating-linear-gradient(
+      to bottom,
+      var(--uikit-border) 0,
+      var(--uikit-border) 1px,
+      transparent 1px,
+      transparent var(--uikit-ec-hour-h, 48px)
+    );
+  }
+
+  &__tg-col {
+    position: relative;
+    flex: 1 1 0;
+    min-width: 0;
+    border-right: 1px solid var(--uikit-border);
+    cursor: cell;
+
+    &:last-child {
+      border-right: none;
+    }
+  }
+
+  &__tg-selection {
+    position: absolute;
+    left: 2px;
+    right: 2px;
+    top: calc(var(--uikit-ec-top, 0) * 1px);
+    height: calc(var(--uikit-ec-h, 20) * 1px);
+    border: 1px dashed var(--uikit-color-primary);
+    border-radius: var(--uikit-radius-sm);
+    background: var(--uikit-color-primary-soft);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  &__tg-now {
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--uikit-ec-top, 0) * 1px);
+    height: 0;
+    border-top: 2px solid var(--uikit-color-danger);
+    pointer-events: none;
+    z-index: 3;
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: -4px;
+      top: -5px;
+      width: 8px;
+      height: 8px;
+      border-radius: var(--uikit-radius-full);
+      background: var(--uikit-color-danger);
+    }
+  }
+
+  // Mobile week: columns get a floor width so the grid scrolls sideways instead of squashing.
+  &__timegrid--mobile-week {
+    .uikit-event-calendar__tg-col,
+    .uikit-event-calendar__tg-head-cell {
+      flex: 0 0 7rem;
+      min-width: 7rem;
+    }
+
+    .uikit-event-calendar__tg-allday-lanes {
+      grid-template-columns: repeat(var(--uikit-ec-days, 7), 7rem);
+    }
+
+    .uikit-event-calendar__tg-inner {
+      width: max-content;
     }
   }
 

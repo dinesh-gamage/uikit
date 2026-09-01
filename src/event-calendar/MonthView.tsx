@@ -11,6 +11,7 @@ import {
 } from '../datetime/date-utils';
 import { AgendaRow } from './AgendaView';
 import { EventChip } from './EventChip';
+import { useDayDrag } from './use-day-drag';
 import {
   buildMonthRows,
   cssVars,
@@ -41,6 +42,8 @@ export function MonthView<T>(props: MonthViewProps<T>) {
     onDateChange,
     onEventClick,
     onSlotClick,
+    onRangeSelect,
+    onEventMove,
     renderEvent,
     renderAgendaItem,
     emptyMessage = 'No events',
@@ -55,13 +58,27 @@ export function MonthView<T>(props: MonthViewProps<T>) {
   const [laneCap, setLaneCap] = useState(DEFAULT_LANE_CAP);
   const [moreDay, setMoreDay] = useState<Date | null>(null);
 
+  const dayDrag = useDayDrag<T>({ onEventMove, onRangeSelect });
+
   useEffect(() => setFocused(date), [date]);
 
   const weeks = useMemo(
     () => getMonthGrid(date.getFullYear(), date.getMonth(), weekStartsOn),
     [date, weekStartsOn],
   );
-  const rows = useMemo(() => buildMonthRows(weeks, events), [weeks, events]);
+  const laidOut = useMemo(
+    () =>
+      dayDrag.state.kind === 'moving'
+        ? events.map((e) => {
+            const preview = dayDrag.previewFor(e);
+            return preview ? { ...e, start: preview.start, end: preview.end } : e;
+          })
+        : events,
+    // `previewFor` closes over `dayDrag.state`, which is the real dependency here.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [events, dayDrag.state],
+  );
+  const rows = useMemo(() => buildMonthRows(weeks, laidOut), [weeks, laidOut]);
   const today = new Date();
 
   // How many bar lanes fit in a cell before the '+N more' affordance takes over.
@@ -124,10 +141,10 @@ export function MonthView<T>(props: MonthViewProps<T>) {
   };
 
   const weekdayNames = weeks[0].map((d) => formatWeekdayName(d, locale, mobile ? 'narrow' : 'short'));
-  const moreEvents = moreDay ? eventsForDay(events, moreDay) : [];
+  const moreEvents = moreDay ? eventsForDay(laidOut, moreDay) : [];
 
   if (mobile) {
-    const selectedEvents = eventsForDay(events, date);
+    const selectedEvents = eventsForDay(laidOut, date);
     return (
       <div className={cx('uikit-event-calendar__month', 'uikit-event-calendar__month--compact')}>
         <div className="uikit-event-calendar__month-weekdays" aria-hidden="true">
@@ -139,7 +156,7 @@ export function MonthView<T>(props: MonthViewProps<T>) {
           {weeks.map((week, wi) => (
             <div className="uikit-event-calendar__month-row" role="row" key={wi}>
               {week.map((day) => {
-                const dayEvents = eventsForDay(events, day);
+                const dayEvents = eventsForDay(laidOut, day);
                 return (
                   <button
                     key={day.getTime()}
@@ -218,16 +235,20 @@ export function MonthView<T>(props: MonthViewProps<T>) {
         onKeyDown={handleKeyDown}
       >
         {rows.map((row, wi) => {
+          // When the row needs more lanes than fit, the last visible lane is given up to the
+          // '+N more' button so it never spills into the week below.
+          const visibleLanes = row.laneCount > laneCap ? Math.max(0, laneCap - 1) : laneCap;
           const hiddenPerColumn = row.days.map(
             (_, col) =>
-              row.bars.filter((bar) => bar.lane >= laneCap && col >= bar.columnStart && col < bar.columnStart + bar.span)
-                .length,
+              row.bars.filter(
+                (bar) => bar.lane >= visibleLanes && col >= bar.columnStart && col < bar.columnStart + bar.span,
+              ).length,
           );
           return (
             <div className="uikit-event-calendar__month-row" role="row" key={wi}>
               {row.days.map((day, col) => {
                 const isFocused = isSameDay(day, focused);
-                const cellBars = row.bars.filter((bar) => bar.columnStart === col && bar.lane < laneCap);
+                const cellBars = row.bars.filter((bar) => bar.columnStart === col && bar.lane < visibleLanes);
                 const hidden = hiddenPerColumn[col];
                 return (
                   <div
@@ -241,8 +262,13 @@ export function MonthView<T>(props: MonthViewProps<T>) {
                     className={cx('uikit-event-calendar__month-cell', {
                       'uikit-event-calendar__month-cell--outside': !isSameMonth(day, date),
                       'uikit-event-calendar__month-cell--today': isSameDay(day, today),
+                      'uikit-event-calendar__month-cell--selecting': dayDrag.isSelected(day),
                     })}
-                    onClick={() => clickSlot(day)}
+                    onPointerDown={(e) => dayDrag.startSelect(e, day)}
+                    onClick={() => {
+                      if (!dayDrag.takeClick()) return;
+                      clickSlot(day);
+                    }}
                   >
                     <span className="uikit-event-calendar__month-date">{day.getDate()}</span>
                     {cellBars.map((bar) => (
@@ -256,7 +282,12 @@ export function MonthView<T>(props: MonthViewProps<T>) {
                         locale={locale}
                         continuesBefore={bar.continuesBefore}
                         continuesAfter={bar.continuesAfter}
-                        onSelect={onEventClick}
+                        dragging={dayDrag.state.kind === 'moving' && dayDrag.state.eventId === bar.event.id}
+                        onSelect={(source, anchor) => {
+                          if (!dayDrag.takeClick()) return;
+                          onEventClick?.(source, anchor);
+                        }}
+                        onPointerDown={(e) => dayDrag.startMove(e, bar.event)}
                         renderEvent={renderEvent}
                         vars={{
                           '--uikit-ec-col': bar.columnStart,
@@ -269,7 +300,7 @@ export function MonthView<T>(props: MonthViewProps<T>) {
                       <button
                         type="button"
                         className="uikit-event-calendar__month-more"
-                        style={cssVars({ '--uikit-ec-col': col, '--uikit-ec-lane': laneCap })}
+                        style={cssVars({ '--uikit-ec-col': col, '--uikit-ec-lane': visibleLanes })}
                         aria-label={`${hidden} more events on ${formatFullDay(day, locale)}`}
                         onClick={(e) => {
                           e.stopPropagation();
