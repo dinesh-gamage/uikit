@@ -31,7 +31,7 @@ Styles are injected automatically with each component import — no separate CSS
 | Inputs | `Input` (text/password/email/number, prefix/suffix), `Checkbox` (checkbox + switch), `RadioGroup`, `DatalistInput`, `FileInput` (compact/expanded + preview) |
 | Pickers | `Select`, `MultiSelect` (async options, pills, custom rendering), `DatePicker`, `DateTimePicker`, `DateRangePicker` (presets), `TimeRangePicker` |
 | Forms | `DynamicForm` (JSON schema, sections/sub-sections, validators, custom fields), `Field` |
-| Data | `ListView` (search, tabs, toolbar, breadcrumb, details panel, paged/infinite loading), `InfoCard`, `KanbanBoard` (pointer drag-and-drop, `canDrop` workflow gating, accessible move menu) |
+| Data | `ListView` (search, tabs, toolbar, breadcrumb, details panel, paged/infinite loading), `InfoCard`, `KanbanBoard` (pointer drag-and-drop, `canDrop` workflow gating, accessible move menu), `EventCalendar` (month/week/day/agenda, drag move/resize/range-select, mobile layouts) |
 | Charts | `BarChart` (grouped/stacked), `LineChart` (multi-series, area fill), `DonutChart`, `ProgressMeter`, `Sparkline` |
 | Feedback | `toast` (singleton), `alert` (promise-based confirm/show), `Spinner`, `Skeleton`, `NotificationBlock` |
 

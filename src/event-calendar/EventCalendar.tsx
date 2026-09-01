@@ -266,7 +266,10 @@ export function EventCalendar<T>(props: EventCalendarProps<T>) {
         />
       )}
 
-      <div className={cx('uikit-event-calendar__body', { 'uikit-event-calendar__body--loading': !!loading })}>
+      <div
+        className={cx('uikit-event-calendar__body', { 'uikit-event-calendar__body--loading': !!loading })}
+        aria-busy={loading || undefined}
+      >
         {view === 'month' ? (
           <MonthView {...shared} />
         ) : view === 'week' || view === 'day' ? (
@@ -294,8 +297,8 @@ export function EventCalendar<T>(props: EventCalendarProps<T>) {
       </div>
 
       {loading && (
-        <div className="uikit-event-calendar__loading" aria-hidden="true">
-          <Spinner />
+        <div className="uikit-event-calendar__loading">
+          <Spinner label="Loading" />
         </div>
       )}
     </div>

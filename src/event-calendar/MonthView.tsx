@@ -141,6 +141,7 @@ export function MonthView<T>(props: MonthViewProps<T>) {
   };
 
   const weekdayNames = weeks[0].map((d) => formatWeekdayName(d, locale, mobile ? 'narrow' : 'short'));
+  const gridLabel = new Intl.DateTimeFormat(locale, { month: 'long', year: 'numeric' }).format(date);
   const moreEvents = moreDay ? eventsForDay(laidOut, moreDay) : [];
 
   if (mobile) {
@@ -152,7 +153,7 @@ export function MonthView<T>(props: MonthViewProps<T>) {
             <span key={i}>{name}</span>
           ))}
         </div>
-        <div className="uikit-event-calendar__month-body" role="grid" aria-label="Month">
+        <div className="uikit-event-calendar__month-body" role="grid" aria-label={gridLabel}>
           {weeks.map((week, wi) => (
             <div className="uikit-event-calendar__month-row" role="row" key={wi}>
               {week.map((day) => {
@@ -231,7 +232,7 @@ export function MonthView<T>(props: MonthViewProps<T>) {
           gridRef.current = el;
         }}
         role="grid"
-        aria-label="Month"
+        aria-label={gridLabel}
         onKeyDown={handleKeyDown}
       >
         {rows.map((row, wi) => {
