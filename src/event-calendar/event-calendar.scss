@@ -48,6 +48,38 @@ $month-bar-lane: 20px;
     flex: 0 0 auto;
   }
 
+  // Mobile header: the range label sits on its own row above a single toolbar row that holds
+  // headerLeft, the nav, the view switcher and headerRight (pushed to the end).
+  &__header--mobile {
+    flex-direction: column;
+    align-items: stretch;
+    flex-wrap: nowrap;
+    gap: 6px;
+  }
+
+  &__toolbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-width: 0;
+  }
+
+  &__toolbar-end {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  &__header--mobile &__label {
+    font-size: var(--uikit-text-md);
+  }
+
+  &__header--mobile &__view-trigger {
+    flex: 0 1 auto;
+    min-width: 0;
+  }
+
   // Tabs sizes its visible pills from its container's measured width, so the container must be
   // definite — a shrink-to-fit parent would feed the collapsed width back and strand every view
   // in the overflow menu. This floor comfortably fits Month/Week/Day/Agenda at `size="sm"`.

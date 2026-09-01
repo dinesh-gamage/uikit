@@ -185,6 +185,40 @@ describe('EventCalendar mobile month', () => {
   });
 });
 
+describe('EventCalendar mobile header', () => {
+  it('puts the range label on its own row above one toolbar row', () => {
+    const { container } = renderCalendar({
+      forceMobile: true,
+      headerLeft: <button type="button">Menu</button>,
+      headerRight: <button type="button">New event</button>,
+    });
+
+    const header = container.querySelector('.uikit-event-calendar__header--mobile')!;
+    expect(header).toBeTruthy();
+
+    const label = header.querySelector('.uikit-event-calendar__label')!;
+    const toolbar = header.querySelector('.uikit-event-calendar__toolbar')!;
+    const nav = header.querySelector('.uikit-event-calendar__nav')!;
+    expect(label.compareDocumentPosition(toolbar) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(label.compareDocumentPosition(nav) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+    expect(toolbar.contains(nav)).toBe(true);
+  });
+
+  it('renders headerLeft and headerRight inside the toolbar row', () => {
+    const { container } = renderCalendar({
+      forceMobile: true,
+      headerLeft: <button type="button">Menu</button>,
+      headerRight: <button type="button">New event</button>,
+    });
+
+    const toolbar = container.querySelector('.uikit-event-calendar__toolbar')!;
+    expect(toolbar.contains(screen.getByText('Menu'))).toBe(true);
+    const end = toolbar.querySelector('.uikit-event-calendar__toolbar-end')!;
+    expect(end.contains(screen.getByText('New event'))).toBe(true);
+    expect(toolbar.contains(screen.getByLabelText('View: Month'))).toBe(true);
+  });
+});
+
 describe('EventCalendar navigation', () => {
   it('steps by month, and Today jumps to the current day', () => {
     const onDateChange = vi.fn();

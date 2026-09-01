@@ -41,76 +41,99 @@ export function CalendarHeader({
   const [menuOpen, setMenuOpen] = useState(false);
   const menuAnchorRef = useRef<HTMLButtonElement>(null);
 
+  const nav = (
+    <div className="uikit-event-calendar__nav">
+      <button type="button" className="uikit-event-calendar__nav-button" aria-label="Previous" onClick={onPrev}>
+        <ChevronGlyph direction="left" />
+      </button>
+      <button type="button" className="uikit-event-calendar__today" onClick={onToday}>
+        Today
+      </button>
+      <button type="button" className="uikit-event-calendar__nav-button" aria-label="Next" onClick={onNext}>
+        <ChevronGlyph direction="right" />
+      </button>
+    </div>
+  );
+
+  const rangeLabel = (
+    <div className="uikit-event-calendar__label" aria-live="polite">
+      {label}
+    </div>
+  );
+
+  const viewMenu = (
+    <>
+      <button
+        type="button"
+        ref={menuAnchorRef}
+        className="uikit-event-calendar__view-trigger"
+        aria-haspopup="menu"
+        aria-expanded={menuOpen}
+        aria-label={`View: ${VIEW_LABELS[view]}`}
+        onClick={() => setMenuOpen((o) => !o)}
+      >
+        {VIEW_LABELS[view]}
+        <ChevronGlyph direction="right" />
+      </button>
+      {menuOpen && (
+        <Dropdown open onClose={() => setMenuOpen(false)} anchorRef={menuAnchorRef} position="bottom-end" minWidth={140}>
+          <div className="uikit-event-calendar__view-menu" role="menu">
+            {VIEWS.map((v) => (
+              <button
+                key={v}
+                type="button"
+                role="menuitemradio"
+                aria-checked={v === view}
+                className={cx('uikit-event-calendar__view-menu-item', {
+                  'uikit-event-calendar__view-menu-item--active': v === view,
+                })}
+                onClick={() => {
+                  onViewChange(v);
+                  setMenuOpen(false);
+                }}
+              >
+                {VIEW_LABELS[v]}
+              </button>
+            ))}
+          </div>
+        </Dropdown>
+      )}
+    </>
+  );
+
+  // Mobile: the range label gets its own row so the controls all fit one toolbar row below it.
+  if (mobile) {
+    return (
+      <div className="uikit-event-calendar__header uikit-event-calendar__header--mobile">
+        {rangeLabel}
+        <div className="uikit-event-calendar__toolbar">
+          {headerLeft}
+          {nav}
+          {viewMenu}
+          <div className="uikit-event-calendar__toolbar-end">{headerRight}</div>
+        </div>
+      </div>
+    );
+  }
+
   return (
-    <div className={cx('uikit-event-calendar__header', { 'uikit-event-calendar__header--mobile': mobile })}>
+    <div className="uikit-event-calendar__header">
       <div className="uikit-event-calendar__header-left">
         {headerLeft}
-        <div className="uikit-event-calendar__nav">
-          <button type="button" className="uikit-event-calendar__nav-button" aria-label="Previous" onClick={onPrev}>
-            <ChevronGlyph direction="left" />
-          </button>
-          <button type="button" className="uikit-event-calendar__today" onClick={onToday}>
-            Today
-          </button>
-          <button type="button" className="uikit-event-calendar__nav-button" aria-label="Next" onClick={onNext}>
-            <ChevronGlyph direction="right" />
-          </button>
-        </div>
-        <div className="uikit-event-calendar__label" aria-live="polite">
-          {label}
-        </div>
+        {nav}
+        {rangeLabel}
       </div>
 
       <div className="uikit-event-calendar__header-right">
-        {mobile ? (
-          <>
-            <button
-              type="button"
-              ref={menuAnchorRef}
-              className="uikit-event-calendar__view-trigger"
-              aria-haspopup="menu"
-              aria-expanded={menuOpen}
-              aria-label={`View: ${VIEW_LABELS[view]}`}
-              onClick={() => setMenuOpen((o) => !o)}
-            >
-              {VIEW_LABELS[view]}
-              <ChevronGlyph direction="right" />
-            </button>
-            {menuOpen && (
-              <Dropdown open onClose={() => setMenuOpen(false)} anchorRef={menuAnchorRef} position="bottom-end" minWidth={140}>
-                <div className="uikit-event-calendar__view-menu" role="menu">
-                  {VIEWS.map((v) => (
-                    <button
-                      key={v}
-                      type="button"
-                      role="menuitemradio"
-                      aria-checked={v === view}
-                      className={cx('uikit-event-calendar__view-menu-item', {
-                        'uikit-event-calendar__view-menu-item--active': v === view,
-                      })}
-                      onClick={() => {
-                        onViewChange(v);
-                        setMenuOpen(false);
-                      }}
-                    >
-                      {VIEW_LABELS[v]}
-                    </button>
-                  ))}
-                </div>
-              </Dropdown>
-            )}
-          </>
-        ) : (
-          <div className="uikit-event-calendar__views">
-            <Tabs
-              variant="pills"
-              size="sm"
-              active={view}
-              onChange={(id) => onViewChange(id as CalendarView)}
-              tabs={VIEWS.map((v) => ({ id: v, label: VIEW_LABELS[v] }))}
-            />
-          </div>
-        )}
+        <div className="uikit-event-calendar__views">
+          <Tabs
+            variant="pills"
+            size="sm"
+            active={view}
+            onChange={(id) => onViewChange(id as CalendarView)}
+            tabs={VIEWS.map((v) => ({ id: v, label: VIEW_LABELS[v] }))}
+          />
+        </div>
         {headerRight}
       </div>
     </div>
