@@ -3,6 +3,7 @@ import '../styles/tokens.css';
 export { EventCalendar } from './EventCalendar';
 export type { EventCalendarProps } from './EventCalendar';
 export {
+  DEFAULT_AGENDA_DAYS,
   buildMonthRows,
   clampToVisibleWindow,
   compareEventsForDisplay,

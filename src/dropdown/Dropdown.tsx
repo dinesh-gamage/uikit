@@ -32,7 +32,27 @@ type Phase = 'measuring' | 'positioned' | 'entered';
 // menu, Breadcrumb's overflow menu, ...) shares this, so opening one closes any others still
 // open — the smallest mechanism that keeps only one floating panel on screen at a time. This is
 // what fixes two date fields in the same modal leaving both calendars open/stacked.
-const openPopovers = new Set<() => void>();
+const openPopovers = new Map<HTMLElement, OpenPopover>();
+
+interface OpenPopover {
+  close: () => void;
+  anchor: () => HTMLElement | null;
+}
+
+/**
+ * True when `target` is inside `panel` — directly, or via a popover that is *nested* in it
+ * (e.g. a Select's listbox opened from inside a Dropdown panel). Nested popovers are portalled
+ * to body, so `panel.contains(target)` alone can't see them; walk the open registry instead.
+ */
+function panelContains(panel: HTMLElement, target: Node): boolean {
+  if (panel.contains(target)) return true;
+  for (const [childPanel, child] of openPopovers) {
+    if (childPanel === panel) continue;
+    const anchor = child.anchor();
+    if (anchor && panel.contains(anchor) && panelContains(childPanel, target)) return true;
+  }
+  return false;
+}
 
 /**
  * Anchored floating panel rendered in a body portal. Uses a two-phase measure: the panel is
@@ -66,15 +86,24 @@ export function Dropdown({
   const onCloseRef = useRef(onClose);
   onCloseRef.current = onClose;
 
-  // Register this instance while open, closing any other open instance first.
+  // Register this instance while open, closing any other open instance first — except an
+  // ancestor whose panel contains this popover's anchor (a Select inside a Dropdown panel must
+  // not dismiss the panel it lives in).
   useEffect(() => {
     if (!open) return;
-    const closeSelf = () => onCloseRef.current();
-    for (const close of openPopovers) close();
-    openPopovers.add(closeSelf);
+    const self: OpenPopover = { close: () => onCloseRef.current(), anchor: () => anchorRef.current };
+    const ownAnchor = anchorRef.current;
+    for (const [panel, other] of openPopovers) {
+      if (ownAnchor && panelContains(panel, ownAnchor)) continue;
+      other.close();
+    }
+    // Key by the panel element once it exists; until then a placeholder keeps the entry stable.
+    const key = panelRef.current ?? document.createElement('div');
+    openPopovers.set(key, self);
     return () => {
-      openPopovers.delete(closeSelf);
+      openPopovers.delete(key);
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open]);
 
   const reposition = () => {
@@ -159,7 +188,7 @@ export function Dropdown({
     // focusin guard below for why that ordering matters).
     const onPointerDown = (e: PointerEvent) => {
       const t = e.target as Node;
-      if (panelRef.current?.contains(t) || anchorRef.current?.contains(t)) return;
+      if ((panelRef.current && panelContains(panelRef.current, t)) || anchorRef.current?.contains(t)) return;
       onClose();
     };
     // Keyboard-driven focus moving to a real element outside the anchor/panel (e.g. Tab-ing to
@@ -176,7 +205,7 @@ export function Dropdown({
     const onFocusIn = (e: FocusEvent) => {
       const t = e.target as Node | null;
       if (t === null || t === document.body || t === document.documentElement || (t as unknown) === document) return;
-      if (panelRef.current?.contains(t) || anchorRef.current?.contains(t)) return;
+      if ((panelRef.current && panelContains(panelRef.current, t)) || anchorRef.current?.contains(t)) return;
       onClose();
     };
     // Escape closes only this popover. Listening in the capture phase and calling

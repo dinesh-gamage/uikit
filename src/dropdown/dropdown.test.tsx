@@ -1,6 +1,6 @@
 import { useRef, useState } from 'react';
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
-import { render, screen, fireEvent, cleanup } from '@testing-library/react';
+import { render, screen, fireEvent, cleanup, act } from '@testing-library/react';
 import { Dropdown } from './Dropdown';
 import { Modal } from '../modal';
 
@@ -172,5 +172,54 @@ describe('Dropdown outside interaction', () => {
 
     fireEvent.focusIn(document.documentElement);
     expect(screen.getByText('panel')).toBeTruthy();
+  });
+});
+
+/** A Dropdown whose panel hosts a second Dropdown (like a Select inside a prefs popover). */
+function Nested({ onParentClose }: { onParentClose: () => void }) {
+  const parentAnchor = useRef<HTMLButtonElement>(null);
+  const childAnchor = useRef<HTMLButtonElement>(null);
+  const [childOpen, setChildOpen] = useState(false);
+  return (
+    <>
+      <button ref={parentAnchor}>parent</button>
+      <Dropdown open onClose={onParentClose} anchorRef={parentAnchor}>
+        <button ref={childAnchor} onClick={() => setChildOpen(true)}>
+          child-trigger
+        </button>
+        <Dropdown open={childOpen} onClose={() => setChildOpen(false)} anchorRef={childAnchor}>
+          <button>child-item</button>
+        </Dropdown>
+      </Dropdown>
+    </>
+  );
+}
+
+describe('Dropdown nesting', () => {
+  it('opening a popover anchored inside an open panel does not close that panel', () => {
+    const onParentClose = vi.fn();
+    render(<Nested onParentClose={onParentClose} />);
+
+    act(() => {
+      fireEvent.click(screen.getByText('child-trigger'));
+    });
+    expect(screen.getByText('child-item')).toBeTruthy();
+    expect(onParentClose).not.toHaveBeenCalled();
+
+    // Interacting with the nested (body-portalled) panel is "inside" for the parent too.
+    act(() => {
+      fireEvent.pointerDown(screen.getByText('child-item'));
+      fireEvent.focusIn(screen.getByText('child-item'));
+    });
+    expect(onParentClose).not.toHaveBeenCalled();
+  });
+
+  it('still closes on a genuine outside pointerdown', () => {
+    const onParentClose = vi.fn();
+    render(<Nested onParentClose={onParentClose} />);
+    act(() => {
+      fireEvent.pointerDown(document.body);
+    });
+    expect(onParentClose).toHaveBeenCalled();
   });
 });
