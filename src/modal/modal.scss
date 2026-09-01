@@ -154,16 +154,21 @@
     max-height: none;
   }
 
-  // Footer actions become two equal-width columns (cancel | submit) that fill the bar
-  // edge-to-edge — no gap, no padding, no rounding.
+  // Footer actions fill the bar edge-to-edge — no gap, no padding, no rounding. Flex splits the
+  // bar evenly between however many actions there are (1 fills it, 3 take a third each).
   .uikit-modal__footer {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     gap: 0;
     padding: 0;
     padding-bottom: env(safe-area-inset-bottom, 0);
   }
 
+  .uikit-modal__footer > * {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
+  // Direct children and buttons nested inside a wrapper both fill their cell, squared off.
   .uikit-modal__footer > *,
   .uikit-modal__footer button {
     width: 100%;
@@ -190,14 +195,18 @@
   .uikit-modal__body .uikit-form__buttons {
     position: sticky;
     bottom: 0;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    display: flex;
     gap: 0;
     margin: auto -20px 0; // auto-top pins to the bottom; bleed to the body's side edges
     padding: 0;
     padding-bottom: env(safe-area-inset-bottom, 0);
     background: var(--uikit-bg);
     border-top: 1px solid var(--uikit-border);
+  }
+
+  .uikit-modal__body .uikit-form__buttons > * {
+    flex: 1 1 0;
+    min-width: 0;
   }
 
   .uikit-modal__body .uikit-form__buttons > *,
