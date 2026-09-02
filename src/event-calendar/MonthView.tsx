@@ -1,5 +1,6 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState, type KeyboardEvent as ReactKeyboardEvent } from 'react';
 import { cx } from '../utils/cx';
+import { useToday } from './use-today';
 import { Dropdown } from '../dropdown';
 import {
   addDays,
@@ -79,7 +80,7 @@ export function MonthView<T>(props: MonthViewProps<T>) {
     [events, dayDrag.state],
   );
   const rows = useMemo(() => buildMonthRows(weeks, laidOut), [weeks, laidOut]);
-  const today = new Date();
+  const today = useToday();
 
   // How many bar lanes fit in a cell before the '+N more' affordance takes over.
   useLayoutEffect(() => {
@@ -166,10 +167,10 @@ export function MonthView<T>(props: MonthViewProps<T>) {
                     data-ec-day={day.getTime()}
                     aria-label={formatFullDay(day, locale)}
                     aria-selected={isSameDay(day, date)}
-                    aria-current={isSameDay(day, today) ? 'date' : undefined}
+                    aria-current={today != null && isSameDay(day, today) ? 'date' : undefined}
                     className={cx('uikit-event-calendar__month-cell', {
                       'uikit-event-calendar__month-cell--outside': !isSameMonth(day, date),
-                      'uikit-event-calendar__month-cell--today': isSameDay(day, today),
+                      'uikit-event-calendar__month-cell--today': today != null && isSameDay(day, today),
                       'uikit-event-calendar__month-cell--selected': isSameDay(day, date),
                     })}
                     onClick={() => onDateChange(day)}
@@ -259,10 +260,10 @@ export function MonthView<T>(props: MonthViewProps<T>) {
                     tabIndex={isFocused ? 0 : -1}
                     data-focused={isFocused || undefined}
                     aria-label={formatFullDay(day, locale)}
-                    aria-current={isSameDay(day, today) ? 'date' : undefined}
+                    aria-current={today != null && isSameDay(day, today) ? 'date' : undefined}
                     className={cx('uikit-event-calendar__month-cell', {
                       'uikit-event-calendar__month-cell--outside': !isSameMonth(day, date),
-                      'uikit-event-calendar__month-cell--today': isSameDay(day, today),
+                      'uikit-event-calendar__month-cell--today': today != null && isSameDay(day, today),
                       'uikit-event-calendar__month-cell--selecting': dayDrag.isSelected(day),
                     })}
                     onPointerDown={(e) => dayDrag.startSelect(e, day)}

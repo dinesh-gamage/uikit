@@ -244,3 +244,27 @@ describe('EventCalendar navigation', () => {
     expect(screen.getAllByRole('gridcell')).toHaveLength(42);
   });
 });
+
+describe('server rendering', () => {
+  it('emits no now line or today highlight — hydration cannot correct a stale server clock', async () => {
+    const { renderToString } = await import('react-dom/server');
+    const base = {
+      events: [] as { id: string; start: Date; end: Date; title: string }[],
+      eventId: (e: { id: string }) => e.id,
+      eventStart: (e: { start: Date }) => e.start,
+      eventEnd: (e: { end: Date }) => e.end,
+      eventTitle: (e: { title: string }) => e.title,
+      onViewChange: () => {},
+      date: new Date(),
+      onDateChange: () => {},
+    };
+    for (const [view, marker] of [
+      ['day', '__tg-now'],
+      ['month', 'month-cell--today'],
+      ['agenda', 'agenda-heading--today'],
+    ] as const) {
+      const html = renderToString(<EventCalendar {...base} view={view} />);
+      expect(html).not.toContain(marker);
+    }
+  });
+});

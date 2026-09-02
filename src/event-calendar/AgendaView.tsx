@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react';
 import { cx } from '../utils/cx';
+import { useToday } from './use-today';
 import { isSameDay } from '../datetime/date-utils';
 import {
   cssVars,
@@ -69,7 +70,7 @@ export function AgendaView<T>({
   className,
 }: AgendaViewProps<T>) {
   const groups = groupByDay(events, range);
-  const today = new Date();
+  const today = useToday();
 
   if (!groups.length) {
     return <div className={cx('uikit-event-calendar__agenda', className)}><div className="uikit-event-calendar__empty">{emptyMessage}</div></div>;
@@ -81,7 +82,7 @@ export function AgendaView<T>({
         <section className="uikit-event-calendar__agenda-group" key={group.day.getTime()}>
           <h3
             className={cx('uikit-event-calendar__agenda-heading', {
-              'uikit-event-calendar__agenda-heading--today': isSameDay(group.day, today),
+              'uikit-event-calendar__agenda-heading--today': today != null && isSameDay(group.day, today),
             })}
           >
             {formatFullDay(group.day, locale)}

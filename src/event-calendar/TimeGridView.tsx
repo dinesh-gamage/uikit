@@ -100,7 +100,8 @@ export function TimeGridView<T>(props: TimeGridViewProps<T>) {
   const coarse = useCoarsePointer();
 
   const [drag, setDrag] = useState<DragState>(IDLE);
-  const [now, setNow] = useState(() => new Date());
+  // Null until mounted — see use-today.ts for why SSR must not render the line.
+  const [now, setNow] = useState<Date | null>(null);
 
   const dayDrag = useDayDrag<T>({ onEventMove, onRangeSelect });
 
@@ -118,8 +119,18 @@ export function TimeGridView<T>(props: TimeGridViewProps<T>) {
 
   useEffect(() => {
     if (!showNowIndicator) return;
-    const timer = setInterval(() => setNow(new Date()), NOW_TICK_MS);
-    return () => clearInterval(timer);
+    const refresh = () => setNow(new Date());
+    refresh();
+    const timer = setInterval(refresh, NOW_TICK_MS);
+    // A suspended background tab misses interval ticks; snap to the real time
+    // the moment the user comes back instead of waiting out the next tick.
+    document.addEventListener('visibilitychange', refresh);
+    window.addEventListener('focus', refresh);
+    return () => {
+      clearInterval(timer);
+      document.removeEventListener('visibilitychange', refresh);
+      window.removeEventListener('focus', refresh);
+    };
   }, [showNowIndicator]);
 
   // Land on the working day rather than at midnight.
@@ -386,8 +397,8 @@ export function TimeGridView<T>(props: TimeGridViewProps<T>) {
         }
       : null;
 
-  const nowMinutes = minutesOfDay(now);
-  const showNow = showNowIndicator && nowMinutes >= minTime * 60 && nowMinutes <= maxTime * 60;
+  const nowMinutes = now == null ? null : minutesOfDay(now);
+  const showNow = showNowIndicator && nowMinutes != null && nowMinutes >= minTime * 60 && nowMinutes <= maxTime * 60;
 
   return (
     <div
@@ -524,7 +535,7 @@ export function TimeGridView<T>(props: TimeGridViewProps<T>) {
                     />
                   )}
 
-                  {showNow && isSameDay(day, now) && (
+                  {showNow && now != null && nowMinutes != null && isSameDay(day, now) && (
                     <div
                       className="uikit-event-calendar__tg-now"
                       aria-hidden="true"
