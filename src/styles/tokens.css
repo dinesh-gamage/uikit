@@ -59,6 +59,8 @@
 
   /* z-index layers */
   --uikit-z-modal: 1100;
+  /* Alerts block input and must top every other layer, tooltips included. */
+  --uikit-z-alert: 1300;
   --uikit-z-dropdown: 1150; /* above modal, so a Select opened inside a Modal isn't hidden behind it */
   --uikit-z-toast: 1200;
   --uikit-z-tooltip: 1250; /* above everything, including dropdowns and toasts */

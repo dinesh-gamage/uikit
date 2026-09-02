@@ -1,7 +1,7 @@
 .uikit-alert {
   position: fixed;
   inset: 0;
-  z-index: var(--uikit-z-modal);
+  z-index: var(--uikit-z-alert);
   display: flex;
   align-items: center;
   justify-content: center;

@@ -19,6 +19,9 @@ function AlertDialog({ item }: { item: AlertDialogItem }) {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         e.preventDefault();
+        // Capture + stop: an alert can sit above a Modal, whose own document
+        // Escape listener would otherwise also fire and close it underneath.
+        e.stopPropagation();
         settleCurrent(false);
       } else if (e.key === 'Enter') {
         // Let a focused button handle its own activation (e.g. Cancel).
@@ -27,8 +30,8 @@ function AlertDialog({ item }: { item: AlertDialogItem }) {
         settleCurrent(true);
       }
     };
-    document.addEventListener('keydown', onKeyDown);
-    return () => document.removeEventListener('keydown', onKeyDown);
+    document.addEventListener('keydown', onKeyDown, true);
+    return () => document.removeEventListener('keydown', onKeyDown, true);
   }, []);
 
   const isConfirm = item.kind === 'confirm';
