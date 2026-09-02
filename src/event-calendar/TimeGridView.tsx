@@ -416,7 +416,7 @@ export function TimeGridView<T>(props: TimeGridViewProps<T>) {
                 <div
                   key={day.getTime()}
                   className={cx('uikit-event-calendar__tg-head-cell', {
-                    'uikit-event-calendar__tg-head-cell--today': isSameDay(day, now),
+                    'uikit-event-calendar__tg-head-cell--today': now != null && isSameDay(day, now),
                   })}
                 >
                   {formatDayHeader(day, locale)}
